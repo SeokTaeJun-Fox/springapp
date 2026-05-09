@@ -4,24 +4,43 @@ import com.app.springapp.domain.dto.MemberDTO;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+//ID                          NUMBER          CONSTRAINT PK_MEMBER PRIMARY KEY,
+//MEMBER_EMAIL                VARCHAR2(255)   NOT NULL,
+//MEMBER_PASSWORD             VARCHAR2(255)   NULL,
+//MEMBER_NAME                 VARCHAR2(255)   NOT NULL,
+//MEMBER_PHONE                VARCHAR2(255)   NOT NULL,
+//MEMBER_NICKNAME             VARCHAR2(255)   NOT NULL,
+//MEMBER_CREATED_AT            TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
+//MEMBER_PROFILE_IMAGE_URL    VARCHAR2(255)   NULL,
+//MEMBER_EMAIL_VERIFIED_AT    TIMESTAMP       NULL,
+//MEMBER_PHONE_VERIFIED_AT    TIMESTAMP       NULL
+
 @Component
 @Data
 public class MemberVO {
     private Long id;
     private String memberEmail;
     private String memberPassword;
-    private String memberPicture;
     private String memberName;
+    private String memberPhone;
     private String memberNickname;
+    private String memberCreatedAt;
+    private String memberProfileImageUrl;
+    private String memberEmailVerifiedAt;
+    private String memberPhoneVerifiedAt;
 
-    public static MemberVO from(MemberDTO memberJoinDTO){
+    public static MemberVO from(MemberDTO memberDTO) {
         MemberVO memberVO = new MemberVO();
-        memberVO.setId(memberJoinDTO.getId());
-        memberVO.setMemberEmail(memberJoinDTO.getMemberEmail());
-        memberVO.setMemberPassword(memberJoinDTO.getMemberPassword());
-        memberVO.setMemberPicture(memberJoinDTO.getMemberPicture() != null ? memberJoinDTO.getMemberPicture() : "https://testapp-codefuling.s3.ap-northeast-2.amazonaws.com/cat.jpg");
-        memberVO.setMemberName(memberJoinDTO.getMemberName());
-        memberVO.setMemberNickname(memberJoinDTO.getMemberNickname() != null ? memberJoinDTO.getMemberNickname() : "개복치 1단계");
+        memberVO.setId(memberDTO.getId());
+        memberVO.setMemberEmail(memberDTO.getMemberEmail());
+        memberVO.setMemberPassword(memberDTO.getMemberPassword());
+        memberVO.setMemberName(memberDTO.getMemberName());
+        memberVO.setMemberPhone(memberDTO.getMemberPhone());
+        memberVO.setMemberNickname(memberDTO.getMemberNickname() != null ? memberDTO.getMemberNickname() : "개복치 1단계");
+        memberVO.setMemberCreatedAt(memberDTO.getMemberCreatedAt());
+        memberVO.setMemberProfileImageUrl(memberDTO.getMemberProfileImageUrl() != null ? memberDTO.getMemberProfileImageUrl() : "https://testapp-codefuling.s3.ap-northeast-2.amazonaws.com/cat.jpg");
+        memberVO.setMemberEmailVerifiedAt(memberDTO.getMemberEmailVerifiedAt());
+        memberVO.setMemberPhoneVerifiedAt(memberDTO.getMemberPhoneVerifiedAt());
         return memberVO;
     }
 }
