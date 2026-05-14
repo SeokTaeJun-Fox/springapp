@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@Schema(description = "게시글 읽기 첫진입시 응답DTO")
+@Schema(description = "댓글 좋아요 응답DTO")
 public class ReplyLikeResponseDTO {
 
     @Schema(description = "좋아요 수", example = "3")
