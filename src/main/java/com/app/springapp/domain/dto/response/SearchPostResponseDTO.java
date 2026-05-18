@@ -11,7 +11,7 @@ import java.util.List;
 @Schema(description = "커뮤니티 게시글 검색 응답")
 public class SearchPostResponseDTO {
 
-    @Schema(description = "검색 게시글 갯수" examples="100")
+    @Schema(description = "검색 게시글 갯수" ,examples="100")
     private String postCount;
 
     @Schema(description = "게시글 목록")

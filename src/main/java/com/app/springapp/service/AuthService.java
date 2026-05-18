@@ -39,4 +39,7 @@ public interface AuthService {
 
     // 이메일 인증 코드 검증
     public boolean verifyMemberEmailVerificationCode(String memberEmail, String code);
+
+    // 비밀번호 재설정
+    public boolean resetPassword(String email, String newPassword);
 }

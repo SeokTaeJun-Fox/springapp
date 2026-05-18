@@ -50,8 +50,12 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // 시큐리티 검증 경로
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .anonymous(anonymous -> anonymous.disable())
             .authorizeHttpRequests(authorize -> authorize
+                    .requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui/**",
+                            "/swagger-ui.html"
+                    ).permitAll()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
                     .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
             ) // 모든 경로 해제

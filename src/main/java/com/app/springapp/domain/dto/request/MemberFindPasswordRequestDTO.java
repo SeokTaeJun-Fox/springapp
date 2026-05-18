@@ -11,4 +11,7 @@ public class MemberFindPasswordRequestDTO {
 
     @Schema(description = "이메일", example = "user@example.com", required = true)
     private String memberEmail;
+
+    @Schema(description = "새 비밀번호", example = "newPassword123!", required = true)
+    private String newPassword;
 }
