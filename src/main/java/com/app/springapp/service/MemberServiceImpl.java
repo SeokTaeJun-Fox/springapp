@@ -1,6 +1,8 @@
 package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.MemberDTO;
+import com.app.springapp.domain.dto.request.MemberPasswordUpdateRequestDTO;
+import com.app.springapp.domain.dto.request.MemberUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.domain.dto.response.MemberResponseDTO;
 import com.app.springapp.domain.vo.MemberVO;
@@ -79,8 +81,52 @@ public class MemberServiceImpl implements MemberService {
     public ApiResponseDTO updatePicture(MemberVO memberVO) {
         Map<String, Object> datas = new HashMap<>();
         memberDAO.updatePicture(memberVO);
-        datas.put("updatedMemberPictureUrl", memberVO.getMemberPicture());
+        datas.put("updatedMemberPictureUrl", memberVO.getMemberProfileImageUrl());
         return ApiResponseDTO.of(true, "사진 변경 완료", datas);
+    }
+
+    // 회원 정보 수정 (닉네임, 프로필 이미지, 전화번호)
+    @Override
+    public ApiResponseDTO update(Long id, MemberUpdateRequestDTO memberUpdateRequestDTO) {
+        memberDAO.findMemberById(id)
+                .orElseThrow(() -> new MemberException("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND));
+
+        MemberVO memberVO = new MemberVO();
+        memberVO.setId(id);
+        memberVO.setMemberNickname(memberUpdateRequestDTO.getMemberNickname());
+        memberVO.setMemberProfileImageUrl(memberUpdateRequestDTO.getMemberProfileImageUrl());
+        memberVO.setMemberPhone(memberUpdateRequestDTO.getMemberPhone());
+
+        memberDAO.update(memberVO);
+        return ApiResponseDTO.of(true, "회원 정보가 수정되었습니다.");
+    }
+
+    // 비밀번호 변경
+    @Override
+    public ApiResponseDTO updatePassword(Long id, MemberPasswordUpdateRequestDTO memberPasswordUpdateRequestDTO) {
+        MemberDTO foundMember = memberDAO.findMemberById(id)
+                .orElseThrow(() -> new MemberException("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND));
+
+        if (!passwordEncoder.matches(memberPasswordUpdateRequestDTO.getCurrentPassword(), foundMember.getMemberPassword())) {
+            throw new MemberException("현재 비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
+
+        MemberVO memberVO = new MemberVO();
+        memberVO.setId(id);
+        memberVO.setMemberPassword(passwordEncoder.encode(memberPasswordUpdateRequestDTO.getNewPassword()));
+
+        memberDAO.update(memberVO);
+        return ApiResponseDTO.of(true, "비밀번호가 변경되었습니다.");
+    }
+
+    // 회원 탈퇴
+    @Override
+    public ApiResponseDTO withdraw(Long id) {
+        memberDAO.findMemberById(id)
+                .orElseThrow(() -> new MemberException("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND));
+
+        memberDAO.delete(id);
+        return ApiResponseDTO.of(true, "회원 탈퇴가 완료되었습니다.");
     }
 }
 

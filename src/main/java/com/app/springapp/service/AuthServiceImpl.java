@@ -251,15 +251,11 @@ public class AuthServiceImpl implements AuthService {
     // 핸드폰 인증 코드 발송
     @Override
     public boolean sendMemberPhoneVerificationCode(String memberPhone) {
-        String message = null;
         String code = AuthCodeGenerator.generateAuthCode();
-        message = "[낮잠 자다만 고양이]\n인증코드를 입력해주세요.\n["+ code +"]";
+        String message = "[낮잠 자다만 고양이]\n인증코드를 입력해주세요.\n["+ code +"]";
         smsUtil.sendOneMemberPhone(memberPhone, message);
 
-        // redis 저장
-        // phone:01078787878:1234587
-        String key = "phone:" + memberPhone + ":" + code;
-
+        String key = "phone:" + memberPhone;
         try {
             redisTemplate.opsForValue().set(key, code, 3, TimeUnit.MINUTES);
             return true;
@@ -271,11 +267,12 @@ public class AuthServiceImpl implements AuthService {
     // 핸드폰 인증 코드 검증
     @Override
     public boolean verifyMemberPhoneVerificationCode(String memberPhone, String code) {
-        String key = "phone:" + memberPhone + ":" + code;
+        String key = "phone:" + memberPhone;
         try {
-            String storedCode = String.valueOf(redisTemplate.opsForValue().get(key));
+            String storedCode = (String) redisTemplate.opsForValue().get(key);
+            if (storedCode == null || !storedCode.equals(code)) return false;
             redisTemplate.delete(key);
-            return code.equals(storedCode);
+            return true;
         } catch (Exception e) {
             return false;
         }
@@ -284,13 +281,56 @@ public class AuthServiceImpl implements AuthService {
     // 이메일 인증 코드 발송
     @Override
     public boolean sendMemberEmailVerificationCode(String memberEmail) {
-        return false;
+        try {
+            String code = AuthCodeGenerator.generateAuthCode();
+            String subject = "[FAIL LOG] 이메일 인증 코드";
+            String content = "[FAIL LOG]\n이메일 인증 코드를 입력해주세요.\n[" + code + "]";
+
+            smsUtil.sendMemberEmail(memberEmail, subject, content);
+
+            String key = "email:" + memberEmail;
+            redisTemplate.opsForValue().set(key, code, 3, TimeUnit.MINUTES);
+            log.info("[이메일 인증] 저장 완료 - key: {}, code: {}", key, code);
+            return true;
+        } catch (Exception e) {
+            log.error("[이메일 인증] 발송/저장 실패: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    // 비밀번호 재설정
+    @Override
+    public boolean resetPassword(String email, String newPassword) {
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setMemberEmail(email);
+        memberDTO.setSocialMemberProvider("local");
+
+        MemberDTO foundMember = memberDAO
+                .findMemberByMemberEmailAndSocialMemberProvider(memberDTO)
+                .orElseThrow(() -> new MemberException("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND));
+
+        MemberVO memberVO = new MemberVO();
+        memberVO.setId(foundMember.getId());
+        memberVO.setMemberPassword(passwordEncoder.encode(newPassword));
+
+        memberDAO.update(memberVO);
+        return true;
     }
 
     // 이메일 인증 코드 검증
     @Override
     public boolean verifyMemberEmailVerificationCode(String memberEmail, String code) {
-        return false;
+        String key = "email:" + memberEmail;
+        try {
+            String storedCode = (String) redisTemplate.opsForValue().get(key);
+            log.info("[이메일 인증] 검증 시도 - key: {}, 입력코드: {}, 저장코드: {}", key, code, storedCode);
+            if (storedCode == null || !storedCode.equals(code)) return false;
+            redisTemplate.delete(key);
+            return true;
+        } catch (Exception e) {
+            log.error("[이메일 인증] 검증 오류: {}", e.getMessage());
+            return false;
+        }
     }
 }
 

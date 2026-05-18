@@ -63,7 +63,7 @@ public class SmsUtil {
             helper.setTo(to);
             helper.setSubject(subject); // 제목
             helper.setText(content); // 내용
-            helper.setFrom("codefuling@gmail.com", "잠자다만 고양이"); // 보낸 이메일 , 보낸 사람 이름
+            helper.setFrom(emailUsername, "FAIL LOG"); // 보낸 이메일 , 보낸 사람 이름
 
             mailSender.send(mineMessage);
 

@@ -16,6 +16,7 @@ public class MemberDTO {
     private String memberNickname;
     private String memberCreatedAt;
     private String memberProfileImageUrl;
+    private String memberPicture;
     private String memberEmailVerifiedAt;
     private String memberPhoneVerifiedAt;
     private String socialMemberProviderId;
