@@ -56,6 +56,7 @@ public class SecurityConfig {
                             "/swagger-ui/**",
                             "/swagger-ui.html"
                     ).permitAll()
+                    .requestMatchers("/api/ai/**").permitAll()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
                     .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
             ) // 모든 경로 해제
