@@ -20,4 +20,14 @@ public class LogCreateRequestDTO {
 
     @Schema(description = "카테고리 ID", example = "1", required = true)
     private Long categoryId;
+
+    @Schema(description = "로그 상태 (DRAFT / PUBLISHED)", example = "PUBLISHED", required = false,
+            allowableValues = {"DRAFT", "PUBLISHED"})
+    private String logStatus;       // DEFAULT 'PUBLISHED'
+
+    @Schema(description = "진행률 (0~100)", example = "0", required = false)
+    private Integer logProgress;    // DEFAULT 0
+
+    @Schema(description = "썸네일 이미지 URL", example = "https://example.com/thumb.jpg", required = false)
+    private String logThumbnailUrl;
 }

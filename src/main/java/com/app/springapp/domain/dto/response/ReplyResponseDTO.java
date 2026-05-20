@@ -19,7 +19,7 @@ public class ReplyResponseDTO {
     private String replyContent;
 
     @Schema(description = "작성 일시", example = "2024-01-01T11:00:00")
-    private String replyCreateAt;
+    private String replyCreatedAt;
 
     @Schema(description = "작성자 ID", example = "2")
     private Long memberId;

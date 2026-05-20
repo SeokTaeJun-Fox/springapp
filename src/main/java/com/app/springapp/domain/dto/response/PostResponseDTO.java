@@ -19,7 +19,7 @@ public class PostResponseDTO {
     private String postContent;
 
     @Schema(description = "작성 일시", example = "2024-01-01T10:00:00")
-    private String postCreateAt;
+    private String postCreatedAt;
 
     @Schema(description = "조회 수", example = "100")
     private Integer postReadCount;

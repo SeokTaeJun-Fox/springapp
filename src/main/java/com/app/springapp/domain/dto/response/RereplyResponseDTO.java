@@ -19,7 +19,7 @@ public class RereplyResponseDTO {
     private String rereplyContent;
 
     @Schema(description = "작성 일시", example = "2024-01-01T11:30:00")
-    private String rereplyCreateAt;
+    private String rereplyCreatedAt;
 
     @Schema(description = "작성자 ID", example = "3")
     private Long memberId;

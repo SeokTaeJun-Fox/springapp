@@ -64,4 +64,25 @@
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
 
+    <!-- 내 로그 목록 조회 (프로젝트 생성 모달용) -->
+    <select id="findAllByMemberId" parameterType="long" resultType="LogListResponseDTO">
+        SELECT
+        TBL.ID AS id,
+        TBL.LOG_TITLE AS logTitle,
+        TBL.VISION_TITLE AS visionTitle,
+        TO_CHAR(TBL.LOG_CREATE_AT, 'YYYY.MM.DD') AS logCreatedAt,
+        TBL.LOG_READ_COUNT AS readCount,
+        TBL.LOG_THUMBNAIL_URL AS thumbnailUrl,
+        TBM.MEMBER_NICKNAME AS memberNickname,
+        TBM.MEMBER_PROFILE_IMAGE_URL AS memberProfileImageUrl,
+        TBC.CATEGORY_NAME AS categoryName,
+        (SELECT COUNT(*) FROM TBL_LOG_LIKE TBL_LIKE WHERE TBL_LIKE.LOG_ID = TBL.ID) AS likeCount
+        FROM TBL_LOG TBL
+        JOIN TBL_MEMBER TBM ON TBL.MEMBER_ID = TBM.ID
+        JOIN TBL_CATEGORY TBC ON TBL.CATEGORY_ID = TBC.ID
+        WHERE TBL.MEMBER_ID = #{memberId}
+        AND TBL.LOG_DELETED_AT IS NULL
+        ORDER BY TBL.LOG_CREATE_AT DESC
+    </select>
+
 </mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.repository.ChecklistDAO">
+
+    <!-- 체크리스트 추가 -->
+    <insert id="insertChecklist" parameterType="ChecklistVO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO TBL_CHECKLIST (
+            ID,
+            CHECKLIST_TITLE,
+            CHECKLIST_MEMO,
+            CHECKLIST_COMPLETED,
+            CHECKLIST_FAILED,
+            CHECKLIST_PRIORITY,
+            PROJECT_ID,
+            MEMBER_ID
+        ) VALUES (
+                     SEQ_CHECKLIST.NEXTVAL,
+                     #{checklistTitle},
+                     #{checklistMemo},
+                     #{checklistCompleted},
+                     #{checklistFailed},
+                     #{checklistPriority},
+                     #{projectId},
+                     #{memberId}
+                 )
+    </insert>
+
+    <!-- 프로젝트별 체크리스트 목록 조회 -->
+    <select id="findAllByProjectId" parameterType="long" resultType="ChecklistVO">
+        SELECT
+            ID                  AS id,
+            CHECKLIST_TITLE     AS checklistTitle,
+            CHECKLIST_MEMO      AS checklistMemo,
+            CHECKLIST_COMPLETED AS checklistCompleted,
+            CHECKLIST_FAILED    AS checklistFailed,
+            CHECKLIST_PRIORITY  AS checklistPriority,
+            PROJECT_ID          AS projectId,
+            MEMBER_ID           AS memberId
+        FROM TBL_CHECKLIST
+        WHERE PROJECT_ID = #{projectId}
+        ORDER BY ID ASC
+    </select>
+
+    <!-- 체크리스트 수정 -->
+    <update id="updateChecklist" parameterType="ChecklistVO">
+        UPDATE TBL_CHECKLIST SET
+                                 CHECKLIST_TITLE     = #{checklistTitle},
+                                 CHECKLIST_MEMO      = #{checklistMemo},
+                                 CHECKLIST_COMPLETED = #{checklistCompleted},
+                                 CHECKLIST_FAILED    = #{checklistFailed},
+                                 CHECKLIST_PRIORITY  = #{checklistPriority}
+        WHERE ID = #{id}
+    </update>
+
+    <!-- 체크리스트 삭제 -->
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM TBL_CHECKLIST WHERE ID = #{id}
+    </delete>
+
+</mapper>

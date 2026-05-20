@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 //MEMBER_CREATED_AT            TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
 //MEMBER_PROFILE_IMAGE_URL    VARCHAR2(255)   NULL,
 //MEMBER_EMAIL_VERIFIED_AT    TIMESTAMP       NULL,
-//MEMBER_PHONE_VERIFIED_AT    TIMESTAMP       NULL
+//MEMBER_PHONE_VERIFIED_AT    TIMESTAMP       NULL,
+//MEMBER_LOGIN_STREAK         NUMBER          DEFAULT 0 NOT NULL,
+//MEMBER_LAST_LOGIN_AT        TIMESTAMP       NULL
 
 @Component
 @Data
@@ -28,6 +30,8 @@ public class MemberVO {
     private String memberProfileImageUrl;
     private String memberEmailVerifiedAt;
     private String memberPhoneVerifiedAt;
+    private int memberLoginStreak;       // MEMBER_LOGIN_STREAK DEFAULT 0
+    private String memberLastLoginAt;    // MEMBER_LAST_LOGIN_AT
 
     public static MemberVO from(MemberDTO memberDTO) {
         MemberVO memberVO = new MemberVO();

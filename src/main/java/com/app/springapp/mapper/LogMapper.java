@@ -27,4 +27,7 @@ public interface LogMapper {
             @Param("size") int size,
             @Param("sort") String sort
     );
+
+    List<LogListResponseDTO> findAllByMemberId(Long memberId);
+
 }

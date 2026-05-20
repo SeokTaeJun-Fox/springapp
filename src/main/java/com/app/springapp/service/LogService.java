@@ -14,4 +14,6 @@ public interface LogService {
 
     // 카테고리 필터
     public ApiResponseDTO getLogListByCategory(String category, int page, int size, String sort);
+
+    ApiResponseDTO getMyLogList(Long memberId);
 }

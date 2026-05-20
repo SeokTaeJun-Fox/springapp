@@ -13,5 +13,8 @@
         <typeAlias type="com.app.springapp.domain.dto.response.AiChatResponseDTO" alias="AiChatResponseDTO"/>
         <!-- VO Alias -->
         <typeAlias type="com.app.springapp.domain.vo.AiChatVO" alias="AiChatVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogResultVO" alias="LogResultVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ProjectVO" alias="ProjectVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ChecklistVO" alias="ChecklistVO"/>
     </typeAliases>
 </configuration>
