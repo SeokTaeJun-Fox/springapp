@@ -15,7 +15,7 @@ public class PostResponseDTO {
     @Schema(description = "게시글 제목", example = "실패에서 배운 점을 공유합니다")
     private String postTitle;
 
-    @Schema(description = "게시글 내용", example = "이번 프로젝트에서 가장 크게 느낀 점은...")
+    @Schema(description = "게시글 내용", example = "<p>이번 프로젝트에서 가장 크게 느낀 점은...</p>")
     private String postContent;
 
     @Schema(description = "작성 일시", example = "2024-01-01T10:00:00")
