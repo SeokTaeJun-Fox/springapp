@@ -8,8 +8,10 @@
 
     <typeAliases>
         <!-- DTO Alias -->
-
+        <typeAlias type="com.app.springapp.domain.dto.response.LogListResponseDTO" alias="LogListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.AiChatRequestDTO" alias="AiChatRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.AiChatResponseDTO" alias="AiChatResponseDTO"/>
         <!-- VO Alias -->
-<!--        <typeAlias type="com.app.springapp.domain.vo.MemberVO" alias="MemberVO"></typeAlias>-->
+        <typeAlias type="com.app.springapp.domain.vo.AiChatVO" alias="AiChatVO"/>
     </typeAliases>
 </configuration>
