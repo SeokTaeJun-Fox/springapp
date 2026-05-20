@@ -3,6 +3,8 @@ package com.app.springapp.domain.vo;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @Data
 public class AiChatVO {
@@ -14,6 +16,7 @@ public class AiChatVO {
 
     private Long id;
     private String aiChatContent;
-    private String aiChatCreatedAt;
+    private String aiChatRole;      // 추가 필요
+    private LocalDateTime aiChatCreateAt;
     private Long memberId;
 }

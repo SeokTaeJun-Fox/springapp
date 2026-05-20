@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.mapper.AiChatMapper">
+
+    <insert id="insertAiChat">
+        INSERT INTO TBL_AI_CHAT (ID, AI_CHAT_CONTENT, AI_CHAT_ROLE, MEMBER_ID)
+        VALUES (SEQ_AI_CHAT.NEXTVAL, #{content}, #{role}, #{memberId})
+    </insert>
+
+    <select id="selectChatHistory" resultType="AiChatVO">
+        SELECT ID          as id,
+               AI_CHAT_CONTENT   as aiChatContent,
+               AI_CHAT_ROLE      as aiChatRole,
+               AI_CHAT_CREATE_AT as aiChatCreateAt,
+               MEMBER_ID         as memberId
+        FROM TBL_AI_CHAT
+        WHERE MEMBER_ID = #{memberId}
+        ORDER BY AI_CHAT_CREATE_AT ASC
+    </select>
+
+</mapper>

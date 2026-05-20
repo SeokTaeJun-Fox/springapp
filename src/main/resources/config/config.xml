@@ -11,6 +11,5 @@
 
         <!-- VO Alias -->
 <!--        <typeAlias type="com.app.springapp.domain.vo.MemberVO" alias="MemberVO"></typeAlias>-->
-        <typeAlias type="com.app.springapp.domain.vo.PostVO" alias="PostVO"></typeAlias>
     </typeAliases>
 </configuration>

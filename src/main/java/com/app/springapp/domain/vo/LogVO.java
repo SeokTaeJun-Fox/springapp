@@ -16,11 +16,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class LogVO {
-    private Long  id;
+    private Long   id;
     private String logTitle;
     private String visionTitle;
     private String logContent;
     private String logCreatedAt;
-    private Long memberId;
-    private Long categoryId;
+    private int    logReadCount;
+    private String logThumbnailUrl;
+    private Long   memberId;
+    private Long   categoryId;
 }

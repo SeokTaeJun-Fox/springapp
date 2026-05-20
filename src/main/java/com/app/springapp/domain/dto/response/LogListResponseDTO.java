@@ -24,9 +24,18 @@ public class LogListResponseDTO {
     @Schema(description = "작성자 닉네임", example = "길동이")
     private String memberNickname;
 
+    @Schema(description = "작성자 프로필 이미지 URL", example = "profile.png")
+    private String memberProfileImageUrl;
+
     @Schema(description = "카테고리명", example = "개발")
     private String categoryName;
 
+    @Schema(description = "조회수", example = "45")
+    private int readCount;
+
     @Schema(description = "좋아요 수", example = "10")
     private int likeCount;
+
+    @Schema(description = "썸네일 이미지 URL (첫 번째 첨부 이미지)", example = "logthumbnail.png")
+    private String thumbnailUrl;
 }
