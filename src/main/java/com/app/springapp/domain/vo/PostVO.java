@@ -20,6 +20,8 @@ public class PostVO {
     private String postTitle;
     private String postContent;
     private String postCreatedAt;
+    private String postDeletedAt;
+    private String postThumbnailUrl;
     private Integer postReadCount;
     private Long memberId;
     private Long categoryId;

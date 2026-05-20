@@ -1,6 +1,5 @@
 package com.app.springapp.domain.dto.response;
 
-import com.app.springapp.domain.vo.PostPictureVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -31,7 +30,7 @@ public class PostReadResponseDTO {
     private List<PostReadReplyResponseDTO> replies;
 
     @Schema(description = "이미지 목록")
-    private List<PostPictureVO> postPictures;
+    private List<String> postPictures;
 
     @Schema(description = "이전 글")
     private PostBeforeResponseDTO beforePost;

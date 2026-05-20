@@ -12,12 +12,18 @@
         <typeAlias type="com.app.springapp.domain.dto.request.AiChatRequestDTO" alias="AiChatRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.AiChatResponseDTO" alias="AiChatResponseDTO"/>
 
-        <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
-        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
-
         <!-- VO Alias -->
         <typeAlias type="com.app.springapp.domain.vo.AiChatVO" alias="AiChatVO"/>
 
+
+        <!-- 커뮤니티 vo-->
         <typeAlias type="com.app.springapp.domain.vo.PostVO" alias="PostVO"/>
+
+        <!-- 커뮤니티 dto -->
+        <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
+
+        <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
     </typeAliases>
 </configuration>
