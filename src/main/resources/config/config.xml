@@ -16,5 +16,12 @@
         <typeAlias type="com.app.springapp.domain.vo.LogResultVO" alias="LogResultVO"/>
         <typeAlias type="com.app.springapp.domain.vo.ProjectVO" alias="ProjectVO"/>
         <typeAlias type="com.app.springapp.domain.vo.ChecklistVO" alias="ChecklistVO"/>
+
+        <!-- 커뮤니티 dto -->
+        <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
+
+        <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
     </typeAliases>
 </configuration>
