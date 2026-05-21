@@ -11,4 +11,7 @@ public class PostLikeResponseDTO {
 
     @Schema(description = "좋아요 수", example = "25")
     private int likeCount;
+
+    @Schema(description = "좋아요 클릭 여부", example = "1")
+    private int isLiked;
 }

@@ -15,7 +15,7 @@ public class PostResponseDTO {
     @Schema(description = "게시글 제목", example = "실패에서 배운 점을 공유합니다")
     private String postTitle;
 
-    @Schema(description = "게시글 내용", example = "이번 프로젝트에서 가장 크게 느낀 점은...")
+    @Schema(description = "게시글 내용", example = "<p>이번 프로젝트에서 가장 크게 느낀 점은...</p>")
     private String postContent;
 
     @Schema(description = "작성 일시", example = "2024-01-01T10:00:00")
@@ -23,6 +23,9 @@ public class PostResponseDTO {
 
     @Schema(description = "조회 수", example = "100")
     private Integer postReadCount;
+
+    @Schema(description = "게시판 썸네일 주소", example = "https://img.freepik.com/free-photo/business-failure-concept_23-2148238430.jpg")
+    private String postThumbnailUrl;
 
     @Schema(description = "작성자 ID", example = "1")
     private Long memberId;

@@ -21,6 +21,9 @@ public class PostAiListResponseDTO {
     @Schema(description = "조회 수", example = "100")
     private Integer postReadCount;
 
+    @Schema(description = "작성자 ID", example = "1")
+    private Long memberId;
+
     @Schema(description = "작성자 닉네임", example = "길동이")
     private String memberNickname;
 

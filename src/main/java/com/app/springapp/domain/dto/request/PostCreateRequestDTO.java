@@ -1,8 +1,11 @@
 package com.app.springapp.domain.dto.request;
 
+import com.app.springapp.domain.vo.PostPictureVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Data
@@ -17,4 +20,7 @@ public class PostCreateRequestDTO {
 
     @Schema(description = "카테고리 ID", example = "1", required = true)
     private Long categoryId;
+
+    @Schema(description = "첨부 이미지 목록")
+    private List<PostPictureRequestDTO> postPictureRequestDTO;
 }

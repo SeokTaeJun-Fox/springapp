@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.springapp.mapper.PostMapper">
+
+    <select id="selectByMemberIdAndId" parameterType="PostReadRequestDTO" resultType="PostResponseDTO">
+        SELECT
+            TBP.ID,
+            TBP.POST_CONTENT,                                                     -- CLOB 서브쿼리 밖에서 조회
+            TBP.POST_TITLE,
+            TBP.POST_CREATED_AT,
+            TBP.POST_READ_COUNT,
+            TBP.POST_THUMBNAIL_URL,
+            TBS.MEMBER_ID,
+            TBS.MEMBER_NICKNAME,
+            TBS.MEMBER_PROFILE_IMAGE_URL,
+            TBS.CATEGORY_ID,
+            TBS.CATEGORY_NAME,
+            TBS.LIKE_COUNT,
+            TBS.IS_LIKE
+        FROM TBL_POST TBP
+                 JOIN (
+            SELECT
+                TBP.ID                                                                AS POST_ID,
+                TBM.ID                                                                AS MEMBER_ID,
+                TBM.MEMBER_NICKNAME,
+                TBM.MEMBER_PROFILE_IMAGE_URL,
+                TBC.ID                                                                AS CATEGORY_ID,
+                TBC.CATEGORY_NAME,
+                COUNT(TBPL.ID)                                                        AS LIKE_COUNT,
+                MAX(CASE WHEN TBPL.MEMBER_ID = #{memberId} THEN 1 ELSE 0 END)        AS IS_LIKE
+            FROM TBL_POST TBP
+                     JOIN TBL_MEMBER   TBM  ON TBP.MEMBER_ID   = TBM.ID
+                     JOIN TBL_CATEGORY TBC  ON TBP.CATEGORY_ID = TBC.ID
+                     LEFT JOIN TBL_POST_LIKE TBPL ON TBP.ID    = TBPL.POST_ID
+            WHERE TBP.ID = #{postId}
+              AND TBP.POST_DELETED_AT IS NULL
+            GROUP BY
+                TBP.ID,
+                TBM.ID,
+                TBM.MEMBER_NICKNAME,
+                TBM.MEMBER_PROFILE_IMAGE_URL,
+                TBC.ID,
+                TBC.CATEGORY_NAME
+        ) TBS ON TBP.ID = TBS.POST_ID
+    </select>
+</mapper>
