@@ -11,9 +11,6 @@ import java.util.List;
 @Schema(description = "게시글 읽기 첫진입시 응답DTO")
 public class PostReadResponseDTO {
 
-    @Schema(description = "좋아요 눌렀는지 여부", example = "false")
-    private boolean isPostLike;
-
     @Schema(description = "작성자가 썼던 게시글수", example = "790")
     private Integer memberPostCount;
 
