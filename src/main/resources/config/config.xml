@@ -23,5 +23,7 @@
 
         <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
+
+        <typeAlias type="com.app.springapp.domain.dto.response.ReplyResponseDTO" alias="RereplyResponseDTO"/>
     </typeAliases>
 </configuration>

@@ -6,6 +6,8 @@ import com.app.springapp.mapper.PostLikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class PostLikeDAO {
@@ -18,7 +20,7 @@ public class PostLikeDAO {
     }
 
     //게시글 좋아요 갯수, 해당 멤버가 좋아요를 클릭했는지 확인하는 기능
-    public PostLikeResponseDTO findPostLikeCountAndIsLiked(PostLikeRequestDTO postLikeRequestDTO) {
-        return postLikeMapper.selectLikeCountAndIsLiked(postLikeRequestDTO);
+    public Optional<PostLikeResponseDTO> findPostLikeCountAndIsLiked(PostLikeRequestDTO postLikeRequestDTO) {
+        return Optional.ofNullable(postLikeMapper.selectLikeCountAndIsLiked(postLikeRequestDTO));
     }
 }

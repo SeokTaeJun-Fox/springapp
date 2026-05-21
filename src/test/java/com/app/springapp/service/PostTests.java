@@ -17,8 +17,8 @@ public class PostTests {
     @Test
     public void FindPostByMemberIdandIdTest() {
         PostReadRequestDTO postReadRequestDTO = new PostReadRequestDTO();
-        postReadRequestDTO.setMemberId(19L);
-        postReadRequestDTO.setPostId(2L);
-        po
+        postReadRequestDTO.setMemberId(2L);
+        postReadRequestDTO.setPostId(20L);
+        log.info("Post Read RequestDTO : {}", postService.FindPost(postReadRequestDTO));
     }
 }
