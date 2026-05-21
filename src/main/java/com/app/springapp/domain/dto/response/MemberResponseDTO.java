@@ -4,6 +4,8 @@ import com.app.springapp.domain.dto.MemberDTO;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @Data
 public class MemberResponseDTO {
@@ -15,6 +17,8 @@ public class MemberResponseDTO {
     private String socialMemberProviderId;
     private String socialMemberProvider;
     private Long memberId;
+    private Long memberLoginStreak;
+    private LocalDateTime memberLastLoginAt;
 
     public static MemberResponseDTO from(MemberDTO memberDTO){
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO();
@@ -26,6 +30,9 @@ public class MemberResponseDTO {
         memberResponseDTO.setSocialMemberProviderId(memberDTO.getSocialMemberProviderId());
         memberResponseDTO.setSocialMemberProvider(memberDTO.getSocialMemberProvider());
         memberResponseDTO.setMemberId(memberDTO.getMemberId());
+        memberResponseDTO.setMemberLoginStreak(memberDTO.getMemberLoginStreak());
+        memberResponseDTO.setMemberLastLoginAt(memberDTO.getMemberLastLoginAt());
+
         return memberResponseDTO;
     }
 

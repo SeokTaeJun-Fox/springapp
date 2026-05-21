@@ -3,6 +3,9 @@ package com.app.springapp.domain.dto;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Component
 @Data
 public class MemberDTO {
@@ -22,6 +25,8 @@ public class MemberDTO {
     private String socialMemberProviderId;
     private String socialMemberProvider;
     private Long memberId;
+    private Long memberLoginStreak;
+    private LocalDateTime memberLastLoginAt;
 
 
 //    {

@@ -4,6 +4,8 @@ import com.app.springapp.domain.dto.MemberDTO;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 //ID                          NUMBER          CONSTRAINT PK_MEMBER PRIMARY KEY,
 //MEMBER_EMAIL                VARCHAR2(255)   NOT NULL,
 //MEMBER_PASSWORD             VARCHAR2(255)   NULL,
@@ -13,9 +15,7 @@ import org.springframework.stereotype.Component;
 //MEMBER_CREATED_AT            TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
 //MEMBER_PROFILE_IMAGE_URL    VARCHAR2(255)   NULL,
 //MEMBER_EMAIL_VERIFIED_AT    TIMESTAMP       NULL,
-//MEMBER_PHONE_VERIFIED_AT    TIMESTAMP       NULL,
-//MEMBER_LOGIN_STREAK         NUMBER          DEFAULT 0 NOT NULL,
-//MEMBER_LAST_LOGIN_AT        TIMESTAMP       NULL
+//MEMBER_PHONE_VERIFIED_AT    TIMESTAMP       NULL
 
 @Component
 @Data
@@ -30,8 +30,8 @@ public class MemberVO {
     private String memberProfileImageUrl;
     private String memberEmailVerifiedAt;
     private String memberPhoneVerifiedAt;
-    private int memberLoginStreak;       // MEMBER_LOGIN_STREAK DEFAULT 0
-    private String memberLastLoginAt;    // MEMBER_LAST_LOGIN_AT
+    private Long MemberLoginStreak;
+    private LocalDateTime MemberLastLoginAt;
 
     public static MemberVO from(MemberDTO memberDTO) {
         MemberVO memberVO = new MemberVO();
@@ -45,6 +45,8 @@ public class MemberVO {
         memberVO.setMemberProfileImageUrl(memberDTO.getMemberProfileImageUrl() != null ? memberDTO.getMemberProfileImageUrl() : "https://testapp-codefuling.s3.ap-northeast-2.amazonaws.com/cat.jpg");
         memberVO.setMemberEmailVerifiedAt(memberDTO.getMemberEmailVerifiedAt());
         memberVO.setMemberPhoneVerifiedAt(memberDTO.getMemberPhoneVerifiedAt());
+        memberVO.setMemberLoginStreak(memberDTO.getMemberLoginStreak());
+        memberVO.setMemberLastLoginAt(memberDTO.getMemberLastLoginAt());
         return memberVO;
     }
 }

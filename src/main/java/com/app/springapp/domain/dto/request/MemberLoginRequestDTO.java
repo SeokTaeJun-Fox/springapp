@@ -14,4 +14,5 @@ public class MemberLoginRequestDTO {
 
     @Schema(description = "비밀번호", example = "password123!", required = true)
     private String memberPassword;
+
 }
