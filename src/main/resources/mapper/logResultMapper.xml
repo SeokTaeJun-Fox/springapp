@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.app.springapp.repository.LogResultDAO">
+<mapper namespace="com.app.springapp.mapper.LogResultMapper">
 
     <!-- 로그 결과 조회 (logId 기준) -->
     <select id="findByLogId" parameterType="long" resultType="LogResultVO">

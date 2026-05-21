@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.app.springapp.repository.ProjectDAO">
+<mapper namespace="com.app.springapp.mapper.ProjectMapper">
 
     <!-- 프로젝트 생성 (AI가 생성한 내용으로 INSERT) -->
     <insert id="insertProject" parameterType="ProjectVO"
