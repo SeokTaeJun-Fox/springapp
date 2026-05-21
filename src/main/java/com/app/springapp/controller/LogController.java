@@ -16,6 +16,7 @@ public class LogController {
 
     private final LogService logService;
 
+    // 전체 로그 목록 조회 (최신순/좋아요순/조회순 정렬, 페이징)
     @Operation(summary = "로그 목록 조회", description = "최신순으로 로그 목록을 페이징하여 반환합니다.")
     @GetMapping
     public ResponseEntity<ApiResponseDTO> getLogList(
@@ -25,6 +26,7 @@ public class LogController {
         return ResponseEntity.ok(logService.getLogList(page, size, sort));
     }
 
+    // 로그 키워드 검색 (제목 기준, 페이징)
     @Operation(summary = "로그 키워드 검색", description = "로그 제목으로 검색합니다.")
     @GetMapping("/search")
     public ResponseEntity<ApiResponseDTO> searchLogList(
@@ -35,6 +37,7 @@ public class LogController {
         return ResponseEntity.ok(logService.getLogListByKeyword(keyword, page, size, sort));
     }
 
+    // 로그 카테고리 필터 조회 (페이징)
     @Operation(summary = "카테고리 필터", description = "카테고리별 로그 목록을 조회합니다.")
     @GetMapping("/category")
     public ResponseEntity<ApiResponseDTO> getLogListByCategory(
@@ -43,5 +46,12 @@ public class LogController {
             @RequestParam(defaultValue = "9")  int size,
             @RequestParam(defaultValue = "최신순") String sort) {
         return ResponseEntity.ok(logService.getLogListByCategory(category, page, size, sort));
+    }
+
+    // 내 로그 목록 전체 조회 (프로젝트 생성 모달용 — 로그인 구현 전 임시로 memberId 1L 고정)
+    @Operation(summary = "내 로그 목록 조회", description = "로그인한 사용자의 로그 목록을 전체 반환합니다.")
+    @GetMapping("/my-list")
+    public ResponseEntity<ApiResponseDTO> getMyLogList() {
+        return ResponseEntity.ok(logService.getMyLogList(1L)); // 로그인 구현 후 memberVO.getId()로 교체
     }
 }

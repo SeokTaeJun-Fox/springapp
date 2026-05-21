@@ -23,4 +23,14 @@ public class LogUpdateRequestDTO {
 
     @Schema(description = "카테고리 ID", example = "2", required = false)
     private Long categoryId;
+
+    @Schema(description = "로그 상태 (DRAFT / PUBLISHED)", example = "DRAFT", required = false,
+            allowableValues = {"DRAFT", "PUBLISHED"})
+    private String logStatus;
+
+    @Schema(description = "진행률 (0~100)", example = "50", required = false)
+    private Integer logProgress;
+
+    @Schema(description = "썸네일 이미지 URL", example = "https://example.com/thumb.jpg", required = false)
+    private String logThumbnailUrl;
 }

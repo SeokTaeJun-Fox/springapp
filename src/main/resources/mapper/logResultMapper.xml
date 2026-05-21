@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.repository.LogResultDAO">
+
+    <!-- 로그 결과 조회 (logId 기준) -->
+    <select id="findByLogId" parameterType="long" resultType="LogResultVO">
+        SELECT
+            ID                              AS id,
+            LOG_ID                          AS logId,
+            LOG_RESULT_FAILURE_TYPE         AS logResultFailureType,
+            LOG_RESULT_FAILURE_TITLE        AS logResultFailureTitle,
+            LOG_RESULT_FAILURE_DESC         AS logResultFailureDesc,
+            LOG_RESULT_ONE_LINE_SUMMARY     AS logResultOneLineSummary,
+            LOG_RESULT_ONE_LINE_SUB         AS logResultOneLineSub,
+            LOG_RESULT_EXTERNAL_RATIO       AS logResultExternalRatio,
+            LOG_RESULT_INTERNAL_RATIO       AS logResultInternalRatio,
+            LOG_RESULT_FLOW_SITUATION       AS logResultFlowSituation,
+            LOG_RESULT_FLOW_DECISION        AS logResultFlowDecision,
+            LOG_RESULT_FLOW_RESULT          AS logResultFlowResult,
+            LOG_RESULT_LOG_KEY_DECISION     AS logResultLogKeyDecision,
+            LOG_RESULT_LOG_EXTERNAL_FACTOR  AS logResultLogExternalFactor,
+            LOG_RESULT_LOG_INTERNAL_FACTOR  AS logResultLogInternalFactor
+        FROM TBL_LOG_RESULT
+        WHERE LOG_ID = #{logId}
+    </select>
+
+    <!-- 로그 결과 조회 (id 기준) -->
+    <select id="findById" parameterType="long" resultType="LogResultVO">
+        SELECT
+            ID                              AS id,
+            LOG_ID                          AS logId,
+            LOG_RESULT_FAILURE_TYPE         AS logResultFailureType,
+            LOG_RESULT_FAILURE_TITLE        AS logResultFailureTitle,
+            LOG_RESULT_FAILURE_DESC         AS logResultFailureDesc,
+            LOG_RESULT_ONE_LINE_SUMMARY     AS logResultOneLineSummary,
+            LOG_RESULT_ONE_LINE_SUB         AS logResultOneLineSub,
+            LOG_RESULT_EXTERNAL_RATIO       AS logResultExternalRatio,
+            LOG_RESULT_INTERNAL_RATIO       AS logResultInternalRatio,
+            LOG_RESULT_FLOW_SITUATION       AS logResultFlowSituation,
+            LOG_RESULT_FLOW_DECISION        AS logResultFlowDecision,
+            LOG_RESULT_FLOW_RESULT          AS logResultFlowResult,
+            LOG_RESULT_LOG_KEY_DECISION     AS logResultLogKeyDecision,
+            LOG_RESULT_LOG_EXTERNAL_FACTOR  AS logResultLogExternalFactor,
+            LOG_RESULT_LOG_INTERNAL_FACTOR  AS logResultLogInternalFactor
+        FROM TBL_LOG_RESULT
+        WHERE ID = #{id}
+    </select>
+
+</mapper>
