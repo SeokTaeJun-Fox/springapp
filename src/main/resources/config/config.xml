@@ -8,22 +8,115 @@
 
     <typeAliases>
         <!-- DTO Alias -->
-        <typeAlias type="com.app.springapp.domain.dto.response.LogListResponseDTO" alias="LogListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.JwtTokenDTO." alias="JwtTokenDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.MemberDTO." alias="MemberDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.ReplyDTO" alias="ReplyDTO"/>
+
+        <!-- DTO Request Alias -->
         <typeAlias type="com.app.springapp.domain.dto.request.AiChatRequestDTO" alias="AiChatRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ChecklistCreateRequestDTO" alias="ChecklistCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ChecklistUpdateRequestDTO" alias="ChecklistUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.EmailVerificationConfirmRequestDTO" alias="EmailVerificationConfirmRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.EmailVerificationSendRequestDTO" alias="EmailVerificationSendRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.GuestbookCreateRequestDTO" alias="GuestbookCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.GuestbookReplyCreateRequestDTO" alias="GuestbookReplyCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogActionPlanCreateRequestDTO" alias="LogActionPlanCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogCreateRequestDTO" alias="LogCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogPatternCreateRequestDTO" alias="LogPatternCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogResultCreateRequestDTO" alias="LogResultCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogUpdateRequestDTO" alias="LogUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberFindEmailRequestDTO" alias="MemberFindEmailRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberFindPasswordRequestDTO" alias="MemberFindPasswordRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberJoinRequestDTO" alias="MemberJoinRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberLoginRequestDTO" alias="MemberLoginRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberOauthRequestDTO" alias="MemberOauthRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberPasswordUpdateRequestDTO" alias="MemberPasswordUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.MemberUpdateRequestDTO" alias="MemberUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PhoneVerificationConfirmRequestDTO" alias="PhoneVerificationConfirmRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PhoneVerificationSendRequestDTO" alias="PhoneVerificationSendRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostCreateRequestDTO" alias="PostCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostPictureRequestDTO" alias="PostPictureRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostReportCreateRequestDTO" alias="PostReportCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.PostUpdateRequestDTO" alias="PostUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ProjectCreateRequestDTO" alias="ProjectCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.RadarScoreCreateRequestDTO" alias="RadarScoreCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyCreateRequestDTO" alias="ReplyCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyLikeRequestDTO" alias="ReplyLikeRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyReportCreateRequestDTO" alias="ReplyReportCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyUpdateRequestDTO" alias="ReplyUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.RereplyCreateRequestDTO" alias="RereplyCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.RereplyReportCreateRequestDTO" alias="RereplyReportCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.RereplyUpdateRequestDTO" alias="RereplyUpdateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.SuggestionCreateRequestDTO" alias="SuggestionCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.VerificationRequestDTO" alias="VerificationRequestDTO"/>
+
+        <!-- DTO Response Alias -->
         <typeAlias type="com.app.springapp.domain.dto.response.AiChatResponseDTO" alias="AiChatResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ApiResponseDTO" alias="ApiResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ChecklistResponseDTO" alias="ChecklistResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.CommunityResponseDTO" alias="CommunityResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.GuestbookReplyResponseDTO" alias="GuestbookReplyResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.GuestbookResponseDTO" alias="GuestbookResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogActionPlanResponseDTO" alias="LogActionPlanResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogListResponseDTO" alias="LogListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogPatternResponseDTO" alias="LogPatternResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogResponseDTO" alias="LogResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogResultResponseDTO" alias="LogResultResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.MemberResponseDTO" alias="MemberResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostAfterResponseDTO" alias="PostAfterResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostAiListResponseDTO" alias="PostAiListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostBeforeResponseDTO" alias="PostBeforeResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostListResponseDTO" alias="PostListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostMonthResponseDTO" alias="PostMonthResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostPopularListResponseDTO" alias="PostPopularListResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostReadReplyResponseDTO" alias="PostReadReplyResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostReadResponseDTO" alias="PostReadResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ProfileVisitResponseDTO" alias="ProfileVisitResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ProjectResponseDTO" alias="ProjectResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.RadarScoreResponseDTO" alias="RadarScoreResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ReplyLikeResponseDTO" alias="ReplyLikeResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ReplyResponseDTO" alias="ReplyResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.RereplyResponseDTO" alias="RereplyResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.SearchPostResponseDTO" alias="SearchPostResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.SuggestionResponseDTO" alias="SuggestionResponseDTO"/>
+
         <!-- VO Alias -->
         <typeAlias type="com.app.springapp.domain.vo.AiChatVO" alias="AiChatVO"/>
-        <typeAlias type="com.app.springapp.domain.vo.LogResultVO" alias="LogResultVO"/>
-        <typeAlias type="com.app.springapp.domain.vo.ProjectVO" alias="ProjectVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.CategoryVO" alias="CategoryVO"/>
         <typeAlias type="com.app.springapp.domain.vo.ChecklistVO" alias="ChecklistVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.EmailVerificationVO" alias="EmailVerificationVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.GuestbookLikeVO" alias="GuestbookLikeVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.GuestbookReplyLikeVO" alias="GuestbookReplyLikeVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.GuestbookReplyVO" alias="GuestbookReplyVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.GuestbookVO" alias="GuestbookVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogActionPlanVO" alias="LogActionPlanVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogLikeVO" alias="LogLikeVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogPatternVO" alias="LogPatternVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogResultVO" alias="LogResultVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.LogVO" alias="LogVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.MemberOauthVO" alias="MemberOauthVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.MemberVO" alias="MemberVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.PhoneVerificationVO" alias="PhoneVerificationVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.PostLikeVO" alias="PostLikeVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.PostPictureVO" alias="PostPictureVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.PostReportVO" alias="PostReportVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.PostVO" alias="PostVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ProfileVisitVO" alias="ProfileVisitVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ProjectVO" alias="ProjectVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.RadarScoreVO" alias="RadarScoreVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ReplyLikeVO" alias="ReplyLikeVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ReplyReportVO" alias="ReplyReportVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ReplyVO" alias="ReplyVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.ReportReasonCategoryVO" alias="ReportReasonCategoryVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.RereplyReportVO" alias="RereplyReportVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.RereplyVO" alias="RereplyVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.SocialMemberVO" alias="SocialMemberVO"/>
+        <typeAlias type="com.app.springapp.domain.vo.SuggestionVO" alias="SuggestionVO"/>
 
-        <!-- 커뮤니티 dto -->
-        <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
-        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
 
-        <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
-        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
-
-        <typeAlias type="com.app.springapp.domain.dto.response.ReplyResponseDTO" alias="RereplyResponseDTO"/>
     </typeAliases>
 </configuration>

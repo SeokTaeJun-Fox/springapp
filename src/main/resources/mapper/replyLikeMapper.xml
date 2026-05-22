@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.springapp.mapper.ReplyLikeMapper">
+
+    <!--  댓글 좋아요  -->
+    <insert id="insert" parameterType="ReplyLikeRequestDTO">
+        INSERT INTO TBL_REPLY_LIKE
+        VALUES (SEQ_REPLY_LIKE.NEXTVAL, #{replyId}, #{memberId})
+    </insert>
+
+    <!-- 댓글 좋아요수와 해당 멤버가 댓글을 좋아요를 했는지 확인한다. -->
+    <select id="selectLikeCountAndIsLiked" parameterType="ReplyLikeRequestDTO" resultType="ReplyLikeResponseDTO">
+        SELECT
+            COUNT(*)                                         AS LIKE_COUNT,
+            MAX(CASE WHEN MEMBER_ID = #{memberId} THEN 1 ELSE 0 END)   AS IS_LIKED
+        FROM TBL_REPLY_LIKE
+        WHERE REPLY_ID = #{replyId}
+    </select>
+</mapper>

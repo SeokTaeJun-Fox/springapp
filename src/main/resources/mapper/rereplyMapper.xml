@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.app.springapp.mapper.TimeMapper">
+<mapper namespace="com.app.springapp.mapper.RereplyMapper">
 
+    <!-- 댓글id로 대댓글 목록 보여주기 -->
+    <select id="selectAll" parameterType="Long" resultType="RereplyResponseDTO">
+        SELECT TBR.ID, TBR.REPLY_ID, TBR.REREPLY_CONTENT, TBR.REREPLY_CREATED_AT, TBR.MEMBER_ID, TBM.MEMBER_NICKNAME
+        FROM TBL_REREPLY TBR
+                 JOIN TBL_MEMBER TBM
+                      ON TBR.MEMBER_ID = TBM.ID
+        WHERE TBR.REPLY_ID = #{id}
+    </select>
 </mapper>
