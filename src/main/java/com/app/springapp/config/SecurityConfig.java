@@ -58,7 +58,7 @@ public class SecurityConfig {
                     ).permitAll()
                     .requestMatchers("/api/ai/**").permitAll()
                     .requestMatchers("/api/project/**").permitAll() // SecurityConfig.java 내 permitAll 또는 authenticated 설정
-                    .requestMatchers("/api/logs/my-list").permitAll()
+                    .requestMatchers("/api/logs/my-list").authenticated()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
                     .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
             ) // 모든 경로 해제
@@ -66,7 +66,11 @@ public class SecurityConfig {
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .oauth2Login(oauth2 -> oauth2
-                    .successHandler(oauth2LoginSuccessHandler))
+                    .successHandler(oauth2LoginSuccessHandler)
+                    .failureHandler((request, response, exception) -> {
+                        log.error("[소셜 로그인 실패]: {}", exception.getMessage());
+                        response.sendRedirect("http://localhost:3000/login?error=social");
+                    }))
             .logout(logout -> logout
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("http://localhost:3000/member/login")

@@ -111,6 +111,22 @@
         WHERE ID = #{id}
     </delete>
 
+    <!-- 이름 + 전화번호로 회원 조회 (이메일 찾기) -->
+    <select id="selectByMemberNameAndMemberPhone"
+            parameterType="com.app.springapp.domain.dto.MemberDTO"
+            resultType="com.app.springapp.domain.dto.MemberDTO">
+        SELECT
+            M.ID,
+            M.MEMBER_EMAIL,
+            M.MEMBER_NAME,
+            M.MEMBER_PHONE,
+            M.MEMBER_NICKNAME
+        FROM TBL_MEMBER M
+        WHERE M.MEMBER_NAME  = #{memberName}
+        AND   M.MEMBER_PHONE = #{memberPhone}
+        FETCH FIRST 1 ROWS ONLY
+    </select>
+
     <!--    충돌 해결 기원 주석 1    -->
     <!--    충돌 해결 기원 주석 2    -->
     <!--    충돌 해결 기원 주석 3    -->

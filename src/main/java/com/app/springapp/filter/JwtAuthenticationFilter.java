@@ -32,11 +32,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final MemberDAO memberDAO;
     private final ObjectMapper objectMapper;
 
-    // /private으로 시작하는 모든 경로는 검사
+    // /private으로 시작하거나 인증이 필요한 특정 경로는 검사
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return !path.startsWith("/private");
+        if (path.startsWith("/private"))       return false;
+        if (path.equals("/api/logs/my-list"))  return false;
+        return true;
     }
 
     private String getAccessTokenFromCookie(HttpServletRequest request){

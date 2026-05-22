@@ -1,11 +1,13 @@
 package com.app.springapp.controller;
 
+import com.app.springapp.domain.dto.MemberDTO;
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.service.LogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 // 로그 관련 요청을 처리하는 컨트롤러 (목록 조회, 검색, 카테고리 필터, 내 로그 조회) - 기본 URL: /api/logs
@@ -49,10 +51,11 @@ public class LogController {
         return ResponseEntity.ok(logService.getLogListByCategory(category, page, size, sort));
     }
 
-    // 내 로그 목록 전체 조회 - GET /api/logs/my-list (프로젝트 생성 모달용, 로그인 구현 전 임시로 memberId 1L 고정)
+    // 내 로그 목록 전체 조회 - GET /api/logs/my-list (프로젝트 생성 모달용, JWT 필요)
     @Operation(summary = "내 로그 목록 조회", description = "로그인한 사용자의 로그 목록을 전체 반환합니다.")
     @GetMapping("/my-list")
-    public ResponseEntity<ApiResponseDTO> getMyLogList() {
-        return ResponseEntity.ok(logService.getMyLogList(1L)); // 로그인 구현 후 memberVO.getId()로 교체
+    public ResponseEntity<ApiResponseDTO> getMyLogList(Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.getMyLogList(memberDTO.getId()));
     }
 }
