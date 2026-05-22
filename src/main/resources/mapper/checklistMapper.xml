@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!-- 체크리스트 관련 SQL Mapper (ChecklistMapper 인터페이스와 매핑) -->
 <mapper namespace="com.app.springapp.mapper.ChecklistMapper">
 
-    <!-- 체크리스트 추가 -->
+    <!-- 체크리스트 추가 (시퀀스로 ID 자동 생성, 생성된 ID를 keyProperty로 반환) -->
     <insert id="insertChecklist" parameterType="ChecklistVO"
             useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
         INSERT INTO TBL_CHECKLIST (
@@ -28,7 +29,7 @@
                  )
     </insert>
 
-    <!-- 프로젝트별 체크리스트 목록 조회 -->
+    <!-- 프로젝트 ID로 체크리스트 목록 조회 (ID 오름차순 정렬) -->
     <select id="findAllByProjectId" parameterType="long" resultType="ChecklistVO">
         SELECT
             ID                  AS id,
@@ -44,7 +45,7 @@
         ORDER BY ID ASC
     </select>
 
-    <!-- 체크리스트 수정 -->
+    <!-- 체크리스트 수정 (제목, 메모, 완료 여부, 실패 여부, 우선순위 수정) -->
     <update id="updateChecklist" parameterType="ChecklistVO">
         UPDATE TBL_CHECKLIST SET
                                  CHECKLIST_TITLE     = #{checklistTitle},

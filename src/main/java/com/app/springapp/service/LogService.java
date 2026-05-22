@@ -7,8 +7,9 @@ import com.app.springapp.domain.dto.response.LogListResponseDTO;
 
 import java.util.List;
 
+// 로그 서비스 인터페이스
 public interface LogService {
-    
+
     // 전체 로그 목록 조회 (정렬 기준, 페이징 적용)
     public ApiResponseDTO getLogList(int page, int size, String sort);
 

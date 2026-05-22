@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// 체크리스트 관련 요청을 처리하는 컨트롤러 (추가, 조회, 수정, 삭제) - 기본 URL: /api/checklist
 @RestController
 @RequestMapping("/api/checklist")
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class ChecklistController {
 
     private final ChecklistService checklistService;
 
-    // 체크리스트 추가 (로그인 구현 전 임시로 memberId 1L 고정)
+    // 체크리스트 추가 - POST /api/checklist/create (로그인 구현 전 임시로 memberId 1L 고정)
     @Operation(summary = "체크리스트 추가")
     @PostMapping("/create")
     public ResponseEntity<ApiResponseDTO<ChecklistResponseDTO>> createChecklist(
@@ -30,7 +31,7 @@ public class ChecklistController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "체크리스트가 추가되었습니다.", response));
     }
 
-    // 프로젝트별 체크리스트 목록 조회
+    // 프로젝트별 체크리스트 목록 조회 - GET /api/checklist/list/{projectId}
     @Operation(summary = "체크리스트 목록 조회")
     @GetMapping("/list/{projectId}")
     public ResponseEntity<ApiResponseDTO<List<ChecklistResponseDTO>>> getChecklists(
@@ -39,7 +40,7 @@ public class ChecklistController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공", response));
     }
 
-    // 체크리스트 수정
+    // 체크리스트 수정 - PUT /api/checklist/update
     @Operation(summary = "체크리스트 수정")
     @PutMapping("/update")
     public ResponseEntity<ApiResponseDTO<ChecklistResponseDTO>> updateChecklist(
@@ -48,7 +49,7 @@ public class ChecklistController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "체크리스트가 수정되었습니다.", response));
     }
 
-    // 체크리스트 삭제
+    // 체크리스트 삭제 - DELETE /api/checklist/{id}
     @Operation(summary = "체크리스트 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDTO<?>> deleteChecklist(

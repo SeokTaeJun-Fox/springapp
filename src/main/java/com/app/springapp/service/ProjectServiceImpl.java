@@ -6,8 +6,8 @@ import com.app.springapp.domain.dto.response.ProjectResponseDTO;
 import com.app.springapp.domain.vo.LogResultVO;
 import com.app.springapp.domain.vo.ProjectVO;
 import com.app.springapp.repository.ChecklistDAO;
-import com.app.springapp.repository.ProjectDAO;
 import com.app.springapp.repository.LogResultDAO;
+import com.app.springapp.repository.ProjectDAO;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+// 프로젝트 서비스 구현체 - 프로젝트 생성(AI), 조회, 수정, 삭제 비즈니스 로직 처리
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,6 +44,16 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // 프로젝트 생성 (AI)
     // ────────────────────────────────────────────────
+
+    /**
+     * AI 기반 프로젝트 자동 생성
+     * - 로그 분석 결과를 기반으로 OpenAI API를 호출하여 프로젝트 정보 및 행동 추천 4개를 생성
+     * - 생성된 프로젝트를 DB에 저장 후 저장된 데이터를 다시 조회하여 반환
+     *
+     * @param requestDTO 프로젝트 생성 요청 정보 (로그 ID 포함)
+     * @param memberId   현재 로그인한 회원 ID
+     * @return 생성된 프로젝트 정보 (ProjectResponseDTO)
+     */
     @Override
     public ProjectResponseDTO createProjectByAI(ProjectCreateRequestDTO requestDTO, Long memberId) {
 
@@ -88,6 +99,15 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // OpenAI 호출
     // ────────────────────────────────────────────────
+
+    /**
+     * OpenAI API를 호출하여 프로젝트 정보 생성
+     * - 로그 분석 결과를 프롬프트로 변환 후 OpenAI에 전송
+     * - 응답받은 JSON을 AiProjectResult 객체로 파싱하여 반환
+     *
+     * @param logResult 로그 분석 결과 (LogResultVO)
+     * @return AI가 생성한 프로젝트 정보 (AiProjectResult)
+     */
     private AiProjectResult generateProjectByAI(LogResultVO logResult) {
 
         log.info("===== OpenAI API 호출 시작 - logId: {} =====", logResult.getLogId());
@@ -125,6 +145,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+    // 로그 분석 결과를 OpenAI 프롬프트로 변환
     private String buildPrompt(LogResultVO logResult, String today) {
         return String.format("""
         아래는 사용자의 실패 분석 결과입니다.
@@ -174,6 +195,7 @@ public class ProjectServiceImpl implements ProjectService {
         );
     }
 
+    // OpenAI 응답 JSON을 AiProjectResult 객체로 파싱
     private AiProjectResult parseAiResponse(String responseBody) throws Exception {
         JsonNode root = objectMapper.readTree(responseBody);
         String content = root.path("choices").get(0).path("message").path("content").asText();
@@ -215,6 +237,14 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // 목록 조회
     // ────────────────────────────────────────────────
+
+    /**
+     * 회원 ID로 내 프로젝트 목록 조회
+     * - 각 프로젝트에 체크리스트 최대 2개를 포함하여 반환
+     *
+     * @param memberId 현재 로그인한 회원 ID
+     * @return 프로젝트 목록 (List<ProjectResponseDTO>)
+     */
     @Override
     public List<ProjectResponseDTO> getMyProjects(Long memberId) {
         return projectDAO.findAllByMemberId(memberId)
@@ -244,6 +274,15 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // 단건 조회
     // ────────────────────────────────────────────────
+
+    /**
+     * 프로젝트 ID로 단건 조회
+     * - 본인 소유 프로젝트가 아닐 경우 예외 발생
+     *
+     * @param projectId 조회할 프로젝트 ID
+     * @param memberId  현재 로그인한 회원 ID
+     * @return 프로젝트 상세 정보 (ProjectResponseDTO)
+     */
     @Override
     public ProjectResponseDTO getProject(Long projectId, Long memberId) {
         ProjectVO projectVO = projectDAO.findById(projectId);
@@ -256,6 +295,14 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // 삭제
     // ────────────────────────────────────────────────
+
+    /**
+     * 프로젝트 삭제
+     * - 본인 소유 프로젝트가 아닐 경우 예외 발생
+     *
+     * @param projectId 삭제할 프로젝트 ID
+     * @param memberId  현재 로그인한 회원 ID
+     */
     @Override
     public void deleteProject(Long projectId, Long memberId) {
         ProjectVO projectVO = projectDAO.findById(projectId);
@@ -268,6 +315,8 @@ public class ProjectServiceImpl implements ProjectService {
     // ────────────────────────────────────────────────
     // 내부 클래스 — AI 응답 파싱용
     // ────────────────────────────────────────────────
+
+    // OpenAI 응답을 담는 내부 클래스
     @lombok.Data
     private static class AiProjectResult {
         private String projectTitle;
@@ -278,6 +327,7 @@ public class ProjectServiceImpl implements ProjectService {
         private List<ProjectResponseDTO.AiSuggestionItem> aiSuggestions;
     }
 
+    // ProjectVO → ProjectResponseDTO 변환 헬퍼 메서드
     private ProjectResponseDTO toResponseDTO(ProjectVO vo) {
         ProjectResponseDTO dto = new ProjectResponseDTO();
         dto.setId(vo.getId());
@@ -310,5 +360,24 @@ public class ProjectServiceImpl implements ProjectService {
         item.setTitle(title);
         item.setDesc(desc);
         return item;
+    }
+
+    /**
+     * 프로젝트 수정
+     * - 본인 소유 프로젝트가 아닐 경우 예외 발생
+     * - 프로젝트 ID를 설정한 후 DB 업데이트
+     *
+     * @param projectId  수정할 프로젝트 ID
+     * @param memberId   현재 로그인한 회원 ID
+     * @param projectVO  수정할 프로젝트 정보 (ProjectVO)
+     */
+    @Override
+    public void updateProject(Long projectId, Long memberId, ProjectVO projectVO) {
+        ProjectVO existing = projectDAO.findById(projectId);
+        if (existing == null || !existing.getMemberId().equals(memberId)) {
+            throw new RuntimeException("프로젝트를 찾을 수 없습니다.");
+        }
+        projectVO.setId(projectId);
+        projectDAO.updateProject(projectVO);
     }
 }

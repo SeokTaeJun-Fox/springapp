@@ -13,5 +13,5 @@ public class ReplyLikeResponseDTO {
     private int likeCount;
 
     @Schema(description = "좋아요 클릭 여부", example = "1")
-    private int isLike;
+    private int isLiked;
 }

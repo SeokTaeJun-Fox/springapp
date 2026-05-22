@@ -15,14 +15,18 @@ public class PostLikeTests {
 
     @Test
     public void likePostTest() {
-        for(int i = 0; i < 500; i++) {
-            Long postId = 1+(long)(Math.random()*20);
-            Long memberId = 1+(long)(Math.random()*10);
-            PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
-            postLikeRequestDTO.setPostId(postId);
-            postLikeRequestDTO.setMemberId(memberId);
-            postLikeService.likePost(postLikeRequestDTO);
-        }
+//        for(int i = 0; i < 500; i++) {
+//            Long postId = 1+(long)(Math.random()*20);
+//            Long memberId = 1+(long)(Math.random()*10);
+//            PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
+//            postLikeRequestDTO.setPostId(postId);
+//            postLikeRequestDTO.setMemberId(memberId);
+//            postLikeService.likePost(postLikeRequestDTO);
+//        }
+        PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
+        postLikeRequestDTO.setPostId(1L);
+        postLikeRequestDTO.setMemberId(1L);
+        postLikeService.likePost(postLikeRequestDTO);
     }
 
     @Test

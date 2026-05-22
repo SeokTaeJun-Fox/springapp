@@ -27,6 +27,6 @@ public class PostLikeServiceImpl implements PostLikeService {
     //게시글 좋아요 갯수, 해당 멤버가 좋아요를 클릭했는지 확인하는 기능
     @Override
     public PostLikeResponseDTO findPostLikeCountAndIsLiked(PostLikeRequestDTO postLikeRequestDTO) {
-        return postLikeDAO.findPostLikeCountAndIsLiked(postLikeRequestDTO).orElseThrow(() -> new PostLikeException("게시글 좋아요, 좋아요 여부를 불러오지 못했습니다.", HttpStatus.NOT_FOUND));
+        return postLikeDAO.findPostLikeCountAndIsLiked(postLikeRequestDTO).orElseThrow(() -> new PostLikeException("게시글 좋아요, 좋아요 여부를 불러오지 못했습니다.", HttpStatus.BAD_REQUEST));
     }
 }

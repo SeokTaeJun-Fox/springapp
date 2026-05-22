@@ -38,7 +38,6 @@ public interface LogMapper {
 
     // 회원 ID로 내 로그 목록 전체 조회
     List<LogListResponseDTO> findAllByMemberId(Long memberId);
-
     // 로그 작성
     void insert(LogVO logVO);
 

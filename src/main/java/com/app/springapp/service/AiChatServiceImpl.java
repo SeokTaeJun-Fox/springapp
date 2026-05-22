@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+// AI 챗봇 서비스 구현체 - 대화 히스토리 기반으로 OpenAI API를 호출하고 응답을 반환
 @Service
 @RequiredArgsConstructor
 public class AiChatServiceImpl implements AiChatService {
@@ -26,6 +27,15 @@ public class AiChatServiceImpl implements AiChatService {
     @Value("${openai.model}")
     private String model;
 
+    /**
+     * 사용자 메시지를 OpenAI에 전송하고 AI 응답을 반환
+     * - 이전 대화 히스토리를 함께 전송하여 문맥을 유지
+     * - 사용자 메시지와 AI 응답을 DB에 저장
+     *
+     * @param request  사용자가 입력한 채팅 메시지 (AiChatRequestDTO)
+     * @param memberId 현재 로그인한 회원 ID
+     * @return AI가 생성한 응답 메시지 (AiChatResponseDTO)
+     */
     @Override
     public AiChatResponseDTO chat(AiChatRequestDTO request, Long memberId) {
 

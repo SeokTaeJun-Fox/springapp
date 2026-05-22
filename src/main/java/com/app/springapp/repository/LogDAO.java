@@ -11,9 +11,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+// 로그 관련 DB 접근을 담당하는 DAO 클래스
 @Repository
 @RequiredArgsConstructor
 public class LogDAO {
+
     private final LogMapper logMapper;
 
     // 전체 로그 목록 조회 (최신순/좋아요순/조회순 정렬, 페이징 적용)
