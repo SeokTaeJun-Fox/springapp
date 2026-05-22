@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 @Schema(description = "방명록 작성 요청 DTO")
 public class GuestbookCreateRequestDTO {
 
+    @Schema(description = "방명록 ID", hidden = true)
+    private Long id;
+
     @Schema(description = "방명록 주인 회원 ID", example = "1", required = true)
     private Long ownerMemberId;
 
