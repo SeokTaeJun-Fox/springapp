@@ -44,4 +44,37 @@
                 TBC.CATEGORY_NAME
         ) TBS ON TBP.ID = TBS.POST_ID
     </select>
+
+    <!-- POST ID로 이전글 찾기 "<"는 열린 태그로 인식되기때문에 오류가뜬다. "&lt;로 수정-->
+    <!-- 혹은 ![CDATA]로 감싸면 오류가 안난다 -->
+    <select id="selectBeforePost" parameterType="Long" resultType="PostBeforeResponseDTO">
+    <![CDATA[
+        SELECT ID, POST_TITLE
+        FROM TBL_POST
+        WHERE ID = (
+            SELECT MAX(ID)
+            FROM TBL_POST
+            WHERE ID < #{id}
+              AND POST_DELETED_AT IS NULL
+        )
+        ]]>
+    </select>
+
+    <!-- POST ID로 다음글 찾기 -->
+    <select id="selectAfterPost" parameterType="Long" resultType="PostAfterResponseDTO">
+        SELECT ID, POST_TITLE
+        FROM TBL_POST
+        WHERE ID = (
+            SELECT MIN(ID)
+            FROM TBL_POST
+            WHERE ID > #{id}
+                AND POST_DELETED_AT IS NULL
+        )
+    </select>
+
+    <!-- 작성자가 작성한 게시글 수 -->
+    <select id="selectPostCountByMemberId" parameterType="Long" resultType="Integer">
+        SELECT COUNT(*) AS POST_COUNT FROM TBL_POST
+        WHERE MEMBER_ID = #{id}
+    </select>
 </mapper>

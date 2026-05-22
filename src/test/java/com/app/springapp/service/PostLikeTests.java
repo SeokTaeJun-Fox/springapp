@@ -15,32 +15,25 @@ public class PostLikeTests {
 
     @Test
     public void likePostTest() {
-//        for(int i = 0; i < 500; i++) {
-//            Long postId = 1+(long)(Math.random()*20);
-//            Long memberId = 1+(long)(Math.random()*10);
-//            PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
-//            postLikeRequestDTO.setPostId(postId);
-//            postLikeRequestDTO.setMemberId(memberId);
-//            postLikeService.likePost(postLikeRequestDTO);
-//        }
-
-
-//        for(Long i = 0L; i < 10; i++) {
-//            for(Long j = 0L; j < 20; j++) {
-//                if(Math.random() < 0.5) {
-//                    PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
-//                    postLikeRequestDTO.setPostId(j);
-//                    postLikeRequestDTO.setMemberId(i);
-//                }
-//            }
-//        }
+        for(int i = 1; i <= 10; i++) {
+            for(int j = 1; j <= 20; j++) {
+                if(Math.random() < 0.5) {
+                    Long l1 = (long)i;
+                    Long l2 = (long)j;
+                    PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
+                    postLikeRequestDTO.setPostId(l2);
+                    postLikeRequestDTO.setMemberId(l1);
+                    postLikeService.likePost(postLikeRequestDTO);
+                }
+            }
+        }
     }
 
     @Test
     public void findPostLikeCountAndIsLikedTest() {
         PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
-        postLikeRequestDTO.setPostId(19L);
-        postLikeRequestDTO.setMemberId(1L);
+        postLikeRequestDTO.setPostId(20L);
+        postLikeRequestDTO.setMemberId(3L);
         log.info("{}",postLikeService.findPostLikeCountAndIsLiked(postLikeRequestDTO));
     }
 

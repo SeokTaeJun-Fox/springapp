@@ -1,11 +1,14 @@
 package com.app.springapp.repository;
 
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
+import com.app.springapp.domain.dto.response.PostAfterResponseDTO;
+import com.app.springapp.domain.dto.response.PostBeforeResponseDTO;
 import com.app.springapp.domain.dto.response.PostResponseDTO;
 import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import retrofit2.http.POST;
 
 import java.util.Optional;
 
@@ -19,5 +22,20 @@ public class PostDAO {
     //게시글 리스트, 게시글 열람페이지에서 사용된다.
     public Optional<PostResponseDTO> findById(PostReadRequestDTO postReadRequestDTO) {
         return Optional.ofNullable(postMapper.selectById(postReadRequestDTO));
+    }
+
+    // POST ID로 이전글 찾기
+    public PostBeforeResponseDTO findBeforePost(Long postId) {
+        return postMapper.selectBeforePost(postId);
+    }
+
+    //POST ID로 다음글 찾기
+    public PostAfterResponseDTO findAfterPost(Long postId) {
+        return postMapper.selectAfterPost(postId);
+    }
+
+    //작성자가 작성한 게시글 수
+    public Integer countPost(Long memberId) {
+        return postMapper.selectPostCountByMemberId(memberId);
     }
 }
