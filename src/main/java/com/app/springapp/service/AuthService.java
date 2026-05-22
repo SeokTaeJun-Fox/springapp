@@ -2,6 +2,7 @@ package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.JwtTokenDTO;
 import com.app.springapp.domain.dto.MemberDTO;
+import com.app.springapp.domain.dto.response.ApiResponseDTO;
 
 public interface AuthService {
     // 로컬 로그인
@@ -42,4 +43,7 @@ public interface AuthService {
 
     // 비밀번호 재설정
     public boolean resetPassword(String email, String newPassword);
+
+    // 이메일(아이디) 찾기 - 이름 + 전화번호로 조회
+    public ApiResponseDTO findMemberEmail(String memberName, String memberPhone);
 }

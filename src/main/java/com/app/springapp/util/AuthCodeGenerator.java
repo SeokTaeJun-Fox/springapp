@@ -12,7 +12,7 @@ public class AuthCodeGenerator {
 
     public static String generateAuthCode(){
         // 100000 ~ 999999 범위 랜덤한 6자리 숫자
-        int code = random.nextInt(999999) + 100000;
+        int code = random.nextInt(900000) + 100000;
         return String.valueOf(code);
     }
 

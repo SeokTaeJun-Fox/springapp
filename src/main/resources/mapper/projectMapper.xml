@@ -90,6 +90,134 @@
         ORDER BY TBP.PROJECT_CREATED_AT DESC
     </select>
 
+    <!-- 다른 사람들의 프로젝트 목록 조회 (내 프로젝트 제외, 체크리스트 포함, 최신순) -->
+    <select id="findAllOtherProjects" parameterType="long" resultType="ProjectVO">
+        SELECT
+            TBP.ID                                                      AS id,
+            TBP.PROJECT_TITLE                                           AS projectTitle,
+            TBP.PROJECT_CONTENT                                         AS projectContent,
+            TO_CHAR(TBP.PROJECT_START_DATE, 'YYYY-MM-DD')               AS projectStartDate,
+            TO_CHAR(TBP.PROJECT_END_DATE,   'YYYY-MM-DD')               AS projectEndDate,
+            TBP.PROGRESS_DAY                                            AS progressDay,
+            TO_CHAR(TBP.PROJECT_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS')   AS projectCreatedAt,
+            TBP.MEMBER_ID                                               AS memberId,
+            TBP.LOG_ID                                                  AS logId,
+            TBM.MEMBER_NICKNAME                                         AS memberNickname,
+            TBM.MEMBER_PROFILE_IMAGE_URL                                AS memberProfileImageUrl
+        FROM TBL_PROJECT TBP
+                 JOIN TBL_MEMBER TBM ON TBP.MEMBER_ID = TBM.ID
+        WHERE TBP.MEMBER_ID != #{memberId}
+        ORDER BY TBP.PROJECT_CREATED_AT DESC
+    </select>
+
+    <!-- 프로젝트 ID로 체크리스트 목록 조회 -->
+    <select id="findChecklistsByProjectId" parameterType="long" resultType="ChecklistVO">
+        SELECT
+            ID                  AS id,
+            CHECKLIST_TITLE     AS checklistTitle,
+            CHECKLIST_MEMO      AS checklistMemo,
+            CHECKLIST_COMPLETED AS checklistCompleted,
+            CHECKLIST_FAILED    AS checklistFailed,
+            CHECKLIST_PRIORITY  AS checklistPriority,
+            PROJECT_ID          AS projectId,
+            MEMBER_ID           AS memberId
+        FROM TBL_CHECKLIST
+        WHERE PROJECT_ID = #{projectId}
+    </select>
+
+    <!-- 프로젝트 ID로 단건 조회 (소유자 검증 없음 - 다른 사람 프로젝트 조회용) -->
+    <select id="findByIdPublic" parameterType="long" resultType="ProjectVO">
+        SELECT
+            TBP.ID                                                      AS id,
+            TBP.PROJECT_TITLE                                           AS projectTitle,
+            TBP.PROJECT_CONTENT                                         AS projectContent,
+            TO_CHAR(TBP.PROJECT_START_DATE, 'YYYY-MM-DD')               AS projectStartDate,
+            TO_CHAR(TBP.PROJECT_END_DATE,   'YYYY-MM-DD')               AS projectEndDate,
+            TBP.PROGRESS_DAY                                            AS progressDay,
+            TO_CHAR(TBP.PROJECT_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS')   AS projectCreatedAt,
+            TBP.MEMBER_ID                                               AS memberId,
+            TBP.LOG_ID                                                  AS logId,
+            TBL.VISION_TITLE                                            AS visionTitle,
+            TBM.MEMBER_NICKNAME                                         AS memberNickname,
+            TBM.MEMBER_PROFILE_IMAGE_URL                                AS memberProfileImageUrl,
+            TBP.AI_SUGGESTION_1_TITLE                                   AS aiSuggestion1Title,
+            TBP.AI_SUGGESTION_1_DESC                                    AS aiSuggestion1Desc,
+            TBP.AI_SUGGESTION_2_TITLE                                   AS aiSuggestion2Title,
+            TBP.AI_SUGGESTION_2_DESC                                    AS aiSuggestion2Desc,
+            TBP.AI_SUGGESTION_3_TITLE                                   AS aiSuggestion3Title,
+            TBP.AI_SUGGESTION_3_DESC                                    AS aiSuggestion3Desc,
+            TBP.AI_SUGGESTION_4_TITLE                                   AS aiSuggestion4Title,
+            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc
+        FROM TBL_PROJECT TBP
+                 JOIN TBL_LOG TBL ON TBP.LOG_ID = TBL.ID
+                 JOIN TBL_MEMBER TBM ON TBP.MEMBER_ID = TBM.ID
+        WHERE TBP.ID = #{id}
+    </select>
+
+    <!-- 다른 사람의 프로젝트를 내 프로젝트로 복사 (제목, 내용, AI추천 복사) -->
+    <insert id="copyProject" parameterType="ProjectVO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+        INSERT INTO TBL_PROJECT (
+            ID,
+            PROJECT_TITLE,
+            PROJECT_CONTENT,
+            PROJECT_START_DATE,
+            PROJECT_END_DATE,
+            PROGRESS_DAY,
+            PROJECT_CREATED_AT,
+            MEMBER_ID,
+            LOG_ID,
+            AI_SUGGESTION_1_TITLE,
+            AI_SUGGESTION_1_DESC,
+            AI_SUGGESTION_2_TITLE,
+            AI_SUGGESTION_2_DESC,
+            AI_SUGGESTION_3_TITLE,
+            AI_SUGGESTION_3_DESC,
+            AI_SUGGESTION_4_TITLE,
+            AI_SUGGESTION_4_DESC
+        ) VALUES (
+                     SEQ_PROJECT.NEXTVAL,
+                     #{projectTitle},
+                     #{projectContent},
+                     TO_TIMESTAMP(#{projectStartDate}, 'YYYY-MM-DD'),
+                     TO_TIMESTAMP(#{projectEndDate},   'YYYY-MM-DD'),
+                     #{progressDay},
+                     CURRENT_TIMESTAMP,
+                     #{memberId},
+                     #{logId},
+                     #{aiSuggestion1Title},
+                     #{aiSuggestion1Desc},
+                     #{aiSuggestion2Title},
+                     #{aiSuggestion2Desc},
+                     #{aiSuggestion3Title},
+                     #{aiSuggestion3Desc},
+                     #{aiSuggestion4Title},
+                     #{aiSuggestion4Desc}
+                 )
+    </insert>
+
+    <!-- 체크리스트 복사 (프로젝트 복사 시 체크리스트도 함께 복사) -->
+    <insert id="copyChecklist" parameterType="ChecklistVO">
+        INSERT INTO TBL_CHECKLIST (
+            ID,
+            CHECKLIST_TITLE,
+            CHECKLIST_MEMO,
+            CHECKLIST_COMPLETED,
+            CHECKLIST_FAILED,
+            CHECKLIST_PRIORITY,
+            PROJECT_ID,
+            MEMBER_ID
+        ) VALUES (
+                     SEQ_CHECKLIST.NEXTVAL,
+                     #{checklistTitle},
+                     #{checklistMemo},
+                     'N',
+                     'N',
+                     #{checklistPriority},
+                     #{projectId},
+                     #{memberId}
+                 )
+    </insert>
+
     <!-- 프로젝트 삭제 (상세 페이지에서 삭제 버튼 클릭 시) -->
     <delete id="deleteById" parameterType="long">
         DELETE FROM TBL_PROJECT WHERE ID = #{id}
@@ -104,5 +232,26 @@
             PROJECT_END_DATE   = TO_TIMESTAMP(#{projectEndDate},   'YYYY-MM-DD')
         WHERE ID = #{id}
     </update>
+
+    <!-- 프로젝트 제목으로 검색 (내 프로젝트 제외, 최신순) -->
+    <select id="searchOtherProjects" parameterType="map" resultType="ProjectVO">
+        SELECT
+            TBP.ID                                                      AS id,
+            TBP.PROJECT_TITLE                                           AS projectTitle,
+            TBP.PROJECT_CONTENT                                         AS projectContent,
+            TO_CHAR(TBP.PROJECT_START_DATE, 'YYYY-MM-DD')               AS projectStartDate,
+            TO_CHAR(TBP.PROJECT_END_DATE,   'YYYY-MM-DD')               AS projectEndDate,
+            TBP.PROGRESS_DAY                                            AS progressDay,
+            TO_CHAR(TBP.PROJECT_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS')   AS projectCreatedAt,
+            TBP.MEMBER_ID                                               AS memberId,
+            TBP.LOG_ID                                                  AS logId,
+            TBM.MEMBER_NICKNAME                                         AS memberNickname,
+            TBM.MEMBER_PROFILE_IMAGE_URL                                AS memberProfileImageUrl
+        FROM TBL_PROJECT TBP
+                 JOIN TBL_MEMBER TBM ON TBP.MEMBER_ID = TBM.ID
+        WHERE TBP.MEMBER_ID != #{memberId}
+          AND UPPER(TBP.PROJECT_TITLE) LIKE UPPER('%' || #{keyword} || '%')
+        ORDER BY TBP.PROJECT_CREATED_AT DESC
+    </select>
 
 </mapper>

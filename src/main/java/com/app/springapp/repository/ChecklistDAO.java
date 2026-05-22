@@ -32,4 +32,9 @@ public class ChecklistDAO {
     public void deleteById(Long id) {
         checklistMapper.deleteById(id);
     }
+
+    // 프로젝트 ID로 체크리스트 전체 삭제
+    public void deleteAllByProjectId(Long projectId) {
+        checklistMapper.deleteAllByProjectId(projectId);
+    }
 }

@@ -2,6 +2,7 @@ package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.JwtTokenDTO;
 import com.app.springapp.domain.dto.MemberDTO;
+import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.domain.vo.MemberVO;
 import com.app.springapp.domain.vo.SocialMemberVO;
 import com.app.springapp.exception.JwtTokenException;
@@ -251,15 +252,16 @@ public class AuthServiceImpl implements AuthService {
     // 핸드폰 인증 코드 발송
     @Override
     public boolean sendMemberPhoneVerificationCode(String memberPhone) {
-        String code = AuthCodeGenerator.generateAuthCode();
-        String message = "[낮잠 자다만 고양이]\n인증코드를 입력해주세요.\n["+ code +"]";
-        smsUtil.sendOneMemberPhone(memberPhone, message);
-
-        String key = "phone:" + memberPhone;
         try {
+            String code = AuthCodeGenerator.generateAuthCode();
+            String message = "[FAIL LOG]\n인증코드를 입력해주세요.\n[" + code + "]";
+            smsUtil.sendOneMemberPhone(memberPhone, message);
+
+            String key = "phone:" + memberPhone;
             redisTemplate.opsForValue().set(key, code, 3, TimeUnit.MINUTES);
             return true;
         } catch (Exception e) {
+            log.error("[SMS 인증] 발송/저장 실패: {}", e.getMessage());
             return false;
         }
     }
@@ -331,6 +333,26 @@ public class AuthServiceImpl implements AuthService {
             log.error("[이메일 인증] 검증 오류: {}", e.getMessage());
             return false;
         }
+    }
+
+    // 이메일(아이디) 찾기 - 이름 + 전화번호로 조회 후 마스킹 처리
+    @Override
+    public ApiResponseDTO findMemberEmail(String memberName, String memberPhone) {
+        MemberDTO foundMember = memberDAO.findMemberByNameAndPhone(memberName, memberPhone)
+                .orElseThrow(() -> new MemberException("일치하는 회원 정보가 없습니다.", HttpStatus.NOT_FOUND));
+
+        String email = foundMember.getMemberEmail();
+        int atIdx = email.indexOf('@');
+        String local = email.substring(0, atIdx);
+        String domain = email.substring(atIdx);
+        // 앞 2자리 외 마스킹: test@example.com → te**@example.com
+        String maskedEmail = (local.length() > 2
+                ? local.substring(0, 2) + "*".repeat(local.length() - 2)
+                : local) + domain;
+
+        Map<String, String> data = new HashMap<>();
+        data.put("memberEmail", maskedEmail);
+        return ApiResponseDTO.of(true, "이메일 찾기 성공", data);
     }
 }
 

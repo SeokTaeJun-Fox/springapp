@@ -8,7 +8,7 @@
     <select id="selectLogList" parameterType="Map" resultType="LogListResponseDTO">
         SELECT
         TBL.ID AS id, TBL.LOG_TITLE AS logTitle, TBL.VISION_TITLE AS visionTitle,
-        TO_CHAR(TBL.LOG_CREATE_AT, 'YYYY.MM.DD') AS logCreatedAt,
+        TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
         TBL.LOG_READ_COUNT AS readCount, TBL.LOG_THUMBNAIL_URL AS thumbnailUrl,
         TBM.MEMBER_NICKNAME AS memberNickname, TBM.MEMBER_PROFILE_IMAGE_URL AS memberProfileImageUrl,
         TBC.CATEGORY_NAME AS categoryName,
@@ -19,7 +19,7 @@
         <choose>
             <when test="sort == '좋아요순'">ORDER BY likeCount DESC</when>
             <when test="sort == '조회순'">ORDER BY TBL.LOG_READ_COUNT DESC</when>
-            <otherwise>ORDER BY TBL.LOG_CREATE_AT DESC</otherwise>
+            <otherwise>ORDER BY TBL.LOG_CREATED_AT DESC</otherwise>
         </choose>
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
@@ -28,7 +28,7 @@
     <select id="selectLogListByKeyword" parameterType="Map" resultType="LogListResponseDTO">
         SELECT
         TBL.ID AS id, TBL.LOG_TITLE AS logTitle, TBL.VISION_TITLE AS visionTitle,
-        TO_CHAR(TBL.LOG_CREATE_AT, 'YYYY.MM.DD') AS logCreatedAt,
+        TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
         TBL.LOG_READ_COUNT AS readCount, TBL.LOG_THUMBNAIL_URL AS thumbnailUrl,
         TBM.MEMBER_NICKNAME AS memberNickname, TBM.MEMBER_PROFILE_IMAGE_URL AS memberProfileImageUrl,
         TBC.CATEGORY_NAME AS categoryName,
@@ -40,7 +40,7 @@
         <choose>
             <when test="sort == '좋아요순'">ORDER BY likeCount DESC</when>
             <when test="sort == '조회순'">ORDER BY TBL.LOG_READ_COUNT DESC</when>
-            <otherwise>ORDER BY TBL.LOG_CREATE_AT DESC</otherwise>
+            <otherwise>ORDER BY TBL.LOG_CREATED_AT DESC</otherwise>
         </choose>
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
@@ -49,7 +49,7 @@
     <select id="selectLogListByCategory" parameterType="Map" resultType="LogListResponseDTO">
         SELECT
         TBL.ID AS id, TBL.LOG_TITLE AS logTitle, TBL.VISION_TITLE AS visionTitle,
-        TO_CHAR(TBL.LOG_CREATE_AT, 'YYYY.MM.DD') AS logCreatedAt,
+        TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
         TBL.LOG_READ_COUNT AS readCount, TBL.LOG_THUMBNAIL_URL AS thumbnailUrl,
         TBM.MEMBER_NICKNAME AS memberNickname, TBM.MEMBER_PROFILE_IMAGE_URL AS memberProfileImageUrl,
         TBC.CATEGORY_NAME AS categoryName,
@@ -61,7 +61,7 @@
         <choose>
             <when test="sort == '좋아요순'">ORDER BY likeCount DESC</when>
             <when test="sort == '조회순'">ORDER BY TBL.LOG_READ_COUNT DESC</when>
-            <otherwise>ORDER BY TBL.LOG_CREATE_AT DESC</otherwise>
+            <otherwise>ORDER BY TBL.LOG_CREATED_AT DESC</otherwise>
         </choose>
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
@@ -72,7 +72,7 @@
         TBL.ID AS id,
         TBL.LOG_TITLE AS logTitle,
         TBL.VISION_TITLE AS visionTitle,
-        TO_CHAR(TBL.LOG_CREATE_AT, 'YYYY.MM.DD') AS logCreatedAt,
+        TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
         TBL.LOG_READ_COUNT AS readCount,
         TBL.LOG_THUMBNAIL_URL AS thumbnailUrl,
         TBM.MEMBER_NICKNAME AS memberNickname,
@@ -84,7 +84,7 @@
         JOIN TBL_CATEGORY TBC ON TBL.CATEGORY_ID = TBC.ID
         WHERE TBL.MEMBER_ID = #{memberId}
         AND TBL.LOG_DELETED_AT IS NULL
-        ORDER BY TBL.LOG_CREATE_AT DESC
+        ORDER BY TBL.LOG_CREATED_AT DESC
     </select>
 
 </mapper>

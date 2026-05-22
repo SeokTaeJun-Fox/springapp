@@ -14,6 +14,12 @@ public class ProjectResponseDTO {
     @Schema(description = "작성자 회원 ID", example = "1")
     private Long memberId;
 
+    @Schema(description = "작성자 닉네임", example = "영어원주민")
+    private String memberNickname;
+
+    @Schema(description = "작성자 프로필 이미지 URL", example = "https://...")
+    private String memberProfileImageUrl;
+
     @Schema(description = "프로젝트 ID", example = "1")
     private Long id;
 
@@ -47,7 +53,6 @@ public class ProjectResponseDTO {
     @Schema(description = "제안 목록")
     private List<SuggestionResponseDTO> suggestions;
 
-    // ── AI 행동 추천 목록 (DB 저장 없이 생성 시점에만 전달) ──
     @Schema(description = "AI 행동 추천 목록")
     private List<AiSuggestionItem> aiSuggestions;
 

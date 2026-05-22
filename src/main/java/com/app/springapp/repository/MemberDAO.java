@@ -48,6 +48,11 @@ public class MemberDAO {
         memberMapper.delete(id);
     }
 
-
-
+//    이름 + 전화번호로 회원 조회 (이메일 찾기)
+    public Optional<MemberDTO> findMemberByNameAndPhone(String memberName, String memberPhone){
+        MemberDTO memberDTO = new MemberDTO();
+        memberDTO.setMemberName(memberName);
+        memberDTO.setMemberPhone(memberPhone);
+        return Optional.ofNullable(memberMapper.selectByMemberNameAndMemberPhone(memberDTO));
+    }
 }

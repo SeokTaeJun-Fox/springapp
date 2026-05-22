@@ -1,12 +1,12 @@
 package com.app.springapp.repository;
 
+import com.app.springapp.domain.vo.ChecklistVO;
 import com.app.springapp.domain.vo.ProjectVO;
 import com.app.springapp.mapper.ProjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
-// 프로젝트 관련 DB 접근을 담당하는 DAO 클래스
 @Repository
 @RequiredArgsConstructor
 public class ProjectDAO {
@@ -36,5 +36,35 @@ public class ProjectDAO {
     // 프로젝트 수정
     public void updateProject(ProjectVO projectVO) {
         projectMapper.updateProject(projectVO);
+    }
+
+    // 다른 사람들의 프로젝트 목록 조회
+    public List<ProjectVO> findAllOtherProjects(Long memberId) {
+        return projectMapper.findAllOtherProjects(memberId);
+    }
+
+    // 프로젝트 ID로 단건 조회 (소유자 검증 없음 - 다른 사람 프로젝트 조회용)
+    public ProjectVO findByIdPublic(Long id) {
+        return projectMapper.findByIdPublic(id);
+    }
+
+    // 프로젝트 ID로 체크리스트 목록 조회
+    public List<ChecklistVO> findChecklistsByProjectId(Long projectId) {
+        return projectMapper.findChecklistsByProjectId(projectId);
+    }
+
+    // 다른 사람의 프로젝트를 내 프로젝트로 복사
+    public void copyProject(ProjectVO projectVO) {
+        projectMapper.copyProject(projectVO);
+    }
+
+    // 체크리스트 복사 (프로젝트 복사 시 함께 복사)
+    public void copyChecklist(ChecklistVO checklistVO) {
+        projectMapper.copyChecklist(checklistVO);
+    }
+
+    // 프로젝트 제목으로 검색 (내 프로젝트 제외)
+    public List<ProjectVO> searchOtherProjects(Long memberId, String keyword) {
+        return projectMapper.searchOtherProjects(memberId, keyword);
     }
 }

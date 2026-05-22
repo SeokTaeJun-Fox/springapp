@@ -61,4 +61,9 @@
         DELETE FROM TBL_CHECKLIST WHERE ID = #{id}
     </delete>
 
+    <!-- 프로젝트 ID로 체크리스트 전체 삭제 (프로젝트 삭제 시 함께 삭제) -->
+    <delete id="deleteAllByProjectId" parameterType="long">
+        DELETE FROM TBL_CHECKLIST WHERE PROJECT_ID = #{projectId}
+    </delete>
+
 </mapper>

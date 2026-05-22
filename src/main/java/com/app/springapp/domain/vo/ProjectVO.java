@@ -43,4 +43,11 @@ public class ProjectVO {
     private String aiSuggestion3Desc;
     private String aiSuggestion4Title;
     private String aiSuggestion4Desc;
+
+    // 다른 사람 프로젝트 목록 조회 시 필요한 필드
+    private String memberNickname;
+    private String memberProfileImageUrl;
+
+    // 프로젝트에 속한 체크리스트 목록
+    private java.util.List<ChecklistVO> checklists;
 }

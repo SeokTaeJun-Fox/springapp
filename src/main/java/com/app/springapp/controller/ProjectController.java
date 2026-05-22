@@ -29,6 +29,14 @@ public class ProjectController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 생성되었습니다.", response));
     }
 
+    // 다른 사람들의 프로젝트 목록 조회 - GET /api/project/others
+    @Operation(summary = "다른 사람들의 프로젝트 목록 조회")
+    @GetMapping("/others")
+    public ResponseEntity<ApiResponseDTO<?>> getOtherProjects() {
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공",
+                projectService.getOtherProjects(1L))); // 로그인 구현 후 memberVO.getId()로 교체
+    }
+
     // 내 프로젝트 목록 조회 - GET /api/project/list (프로젝트 메인 페이지 캐러셀용, 로그인 구현 전 임시로 memberId 1L 고정)
     @Operation(summary = "내 프로젝트 목록 조회")
     @GetMapping("/list")
@@ -63,5 +71,33 @@ public class ProjectController {
             @RequestBody ProjectVO projectVO) {
         projectService.updateProject(projectId, 1L, projectVO); // 로그인 구현 후 memberVO.getId()로 교체
         return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 수정되었습니다."));
+    }
+
+    // 다른 사람 프로젝트 공개 단건 조회 - GET /api/project/public/{projectId}
+    // 소유자 검증 없이 누구나 조회 가능
+    @Operation(summary = "프로젝트 공개 단건 조회", description = "다른 사람의 프로젝트를 조회합니다.")
+    @GetMapping("/public/{projectId}")
+    public ResponseEntity<ApiResponseDTO<ProjectResponseDTO>> getProjectPublic(
+            @PathVariable Long projectId) {
+        ProjectResponseDTO response = projectService.getProjectPublic(projectId);
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공", response));
+    }
+
+    // 다른 사람의 프로젝트 복사 - POST /api/project/copy/{projectId}
+    @Operation(summary = "다른 사람의 프로젝트 복사", description = "다른 사람의 프로젝트를 내 프로젝트로 복사합니다.")
+    @PostMapping("/copy/{projectId}")
+    public ResponseEntity<ApiResponseDTO<?>> copyProject(
+            @PathVariable Long projectId) {
+        projectService.copyProject(projectId, 1L); // 로그인 구현 후 memberVO.getId()로 교체
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 내 목록에 추가되었습니다."));
+    }
+
+    // 프로젝트 제목으로 검색 - GET /api/project/search?keyword=검색어
+    @Operation(summary = "프로젝트 검색", description = "프로젝트 제목으로 검색합니다.")
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponseDTO<?>> searchOtherProjects(
+            @RequestParam String keyword) {
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "검색 성공",
+                projectService.searchOtherProjects(1L, keyword))); // 로그인 구현 후 memberVO.getId()로 교체
     }
 }

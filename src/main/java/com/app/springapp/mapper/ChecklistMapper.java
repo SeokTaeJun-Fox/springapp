@@ -19,4 +19,7 @@ public interface ChecklistMapper {
 
     // 체크리스트 삭제
     void deleteById(Long id);
+
+    // 프로젝트 ID로 체크리스트 전체 삭제
+    void deleteAllByProjectId(Long projectId);
 }
