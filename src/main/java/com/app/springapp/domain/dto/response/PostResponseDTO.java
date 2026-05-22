@@ -1,5 +1,7 @@
 package com.app.springapp.domain.dto.response;
 
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -45,6 +47,15 @@ public class PostResponseDTO {
     @Schema(description = "좋아요 수", example = "25")
     private int likeCount;
 
-    @Schema(description = "좋아요 클릭 여부", example = "1")
+    @Schema(description = "좋아요 클릭 여부",
+            example = "1",
+            allowableValues = {"0", "1"},
+            type = "integer",
+            format = "int32",
+            extensions = {
+                    @Extension(properties = {
+                            @ExtensionProperty(name = "x-enum-values", value = "0: false(좋아요 안누름), 1: true(좋아요 누름)")
+                    })
+            })
     private int isLike;
 }

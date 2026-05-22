@@ -1,5 +1,6 @@
 package com.app.springapp.service;
 
+import com.app.springapp.domain.dto.request.PostLikeRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyLikeRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,17 @@ public class ReplyLikeTests {
 
     @Test
     public void ReplyLikeTest() {
-        for(int i = 0; i < 1300; i++) {
-            Long replyId = 1+(long)(Math.random()*55);
-            Long memberId = 1+(long)(Math.random()*10);
-            ReplyLikeRequestDTO replyLikeRequestDTO = new ReplyLikeRequestDTO();
-            replyLikeRequestDTO.setReplyId(replyId);
-            replyLikeRequestDTO.setMemberId(memberId);
-            replyLikeService.likeReply(replyLikeRequestDTO);
+        for(int i = 1; i <= 10; i++) {
+            for(int j = 1; j <= 55; j++) {
+                if(Math.random() < 0.5) {
+                    Long l1 = (long)i;
+                    Long l2 = (long)j;
+                    ReplyLikeRequestDTO replyLikeRequestDTO = new ReplyLikeRequestDTO();
+                    replyLikeRequestDTO.setReplyId(l2);
+                    replyLikeRequestDTO.setMemberId(l1);
+                    replyLikeService.likeReply(replyLikeRequestDTO);
+                }
+            }
         }
     }
 
@@ -29,7 +34,7 @@ public class ReplyLikeTests {
     public void findPostLikeCountAndIsLikedTest() {
         ReplyLikeRequestDTO replyLikeRequestDTO = new ReplyLikeRequestDTO();
         replyLikeRequestDTO.setReplyId(55L);
-        replyLikeRequestDTO.setMemberId(2L);
+        replyLikeRequestDTO.setMemberId(1L);
         log.info("{}",replyLikeService.findReplyLikeCountAndIsLiked(replyLikeRequestDTO));
     }
 

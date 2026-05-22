@@ -26,4 +26,7 @@ public class RereplyResponseDTO {
 
     @Schema(description = "작성자 닉네임", example = "성장중")
     private String memberNickname;
+
+    @Schema(description = "작성자 프로필 이미지 url", example = "https://example.com/image.jpg")
+    private String memberProfileImageUrl;
 }

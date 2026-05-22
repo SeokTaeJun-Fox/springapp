@@ -19,7 +19,7 @@ public class RereplyServiceImpl implements RereplyService {
 
     //댓글id로 대댓글 목록 보여준다
     @Override
-    public List<RereplyResponseDTO> findAll(Long postId) {
-        return rereplyDAO.findAll(postId);
+    public List<RereplyResponseDTO> findAll(Long replyId) {
+        return rereplyDAO.findAll(replyId);
     }
 }

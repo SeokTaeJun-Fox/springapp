@@ -14,6 +14,6 @@ public class RereplyServiceTests {
 
     @Test
     public void findAllTest() {
-        log.info("findAll : {}", rereplyService.findAll(3L));
+        log.info("findAll : {}", rereplyService.findAll(49L));
     }
 }

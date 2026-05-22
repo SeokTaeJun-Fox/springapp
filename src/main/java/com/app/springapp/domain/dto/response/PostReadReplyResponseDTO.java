@@ -30,6 +30,9 @@ public class PostReadReplyResponseDTO {
     @Schema(description = "작성자 닉네임", example = "개발러")
     private String memberNickname;
 
+    @Schema(description = "작성자 프로필 이미지 url", example = "https://example.com/image.jpg")
+    private String memberProfileImageUrl;
+
     @Schema(description = "좋아요 수", example = "3")
     private int likeCount;
 
