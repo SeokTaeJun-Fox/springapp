@@ -49,4 +49,25 @@
         WHERE ID = #{id}
     </select>
 
+    <!-- 로그 결과 등록 -->
+    <insert id="insert" parameterType="LogResultVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_LOG_RESULT.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_LOG_RESULT (
+            ID, LOG_ID, LOG_RESULT_FAILURE_TYPE, LOG_RESULT_FAILURE_TITLE,
+            LOG_RESULT_FAILURE_DESC, LOG_RESULT_ONE_LINE_SUMMARY, LOG_RESULT_ONE_LINE_SUB,
+            LOG_RESULT_EXTERNAL_RATIO, LOG_RESULT_INTERNAL_RATIO, LOG_RESULT_FLOW_SITUATION,
+            LOG_RESULT_FLOW_DECISION, LOG_RESULT_FLOW_RESULT, LOG_RESULT_LOG_KEY_DECISION,
+            LOG_RESULT_LOG_EXTERNAL_FACTOR, LOG_RESULT_LOG_INTERNAL_FACTOR
+        ) VALUES (
+            #{id}, #{logId}, #{logResultFailureType}, #{logResultFailureTitle},
+            #{logResultFailureDesc}, #{logResultOneLineSummary}, #{logResultOneLineSub},
+            #{logResultExternalRatio}, #{logResultInternalRatio}, #{logResultFlowSituation},
+            #{logResultFlowDecision}, #{logResultFlowResult}, #{logResultLogKeyDecision},
+            #{logResultLogExternalFactor}, #{logResultLogInternalFactor}
+        )
+    </insert>
+
+
 </mapper>

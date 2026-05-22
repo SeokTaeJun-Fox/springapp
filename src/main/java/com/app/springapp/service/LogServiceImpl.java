@@ -1,16 +1,22 @@
 package com.app.springapp.service;
 
+import com.app.springapp.domain.dto.request.LogCreateRequestDTO;
+
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogResponseDTO;
+import com.app.springapp.domain.vo.LogVO;
 import com.app.springapp.repository.LogDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 // 로그 서비스 구현체 - 로그 목록 조회, 검색, 카테고리 필터, 내 로그 조회 비즈니스 로직 처리
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class LogServiceImpl implements LogService {
 
     private final LogDAO logDAO;
@@ -77,4 +83,32 @@ public class LogServiceImpl implements LogService {
         List<LogListResponseDTO> list = logDAO.findAllByMemberId(memberId);
         return ApiResponseDTO.of(true, "내 로그 목록 조회 성공", list);
     }
+
+    // 로그 작성
+    @Override
+    public ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId) {
+        LogVO logVO = new LogVO();
+        logVO.setLogTitle(dto.getLogTitle());
+        logVO.setVisionTitle(dto.getVisionTitle());
+        logVO.setLogContent(dto.getLogContent());
+        logVO.setLogThumbnailUrl(dto.getLogThumbnailUrl());
+        logVO.setCategoryId(dto.getCategoryId());
+        logVO.setLogStatus(dto.getLogStatus() != null ? dto.getLogStatus() : "PUBLISHED");
+        logVO.setLogProgress(dto.getLogProgress() != null ? dto.getLogProgress() : 0);
+        logVO.setMemberId(memberId);
+        logDAO.save(logVO);
+        return ApiResponseDTO.of(true, "로그 작성 성공", logVO.getId());
+    }
+
+    // 로그 상세 조회 (조회수 +1)
+    @Override
+    @Transactional
+    public ApiResponseDTO getLog(Long id) {
+        LogResponseDTO log = logDAO.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그입니다."));
+        logDAO.increaseReadCount(id);
+        return ApiResponseDTO.of(true, "로그 상세 조회 성공", log);
+    }
+
+
 }

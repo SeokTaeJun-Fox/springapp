@@ -87,4 +87,54 @@
         ORDER BY TBL.LOG_CREATED_AT DESC
     </select>
 
+    <!-- AI 회고 기본 정보 저장 -->
+    <insert id="insert" parameterType="com.app.springapp.domain.vo.LogVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_LOG.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_LOG (
+            ID, LOG_TITLE, VISION_TITLE, LOG_CONTENT,
+            LOG_THUMBNAIL_URL, MEMBER_ID, CATEGORY_ID,
+            LOG_STATUS, LOG_PROGRESS
+        ) VALUES (
+            #{id}, #{logTitle}, #{visionTitle}, #{logContent},
+            #{logThumbnailUrl}, #{memberId}, #{categoryId},
+            #{logStatus, jdbcType=VARCHAR}, #{logProgress}
+        )
+    </insert>
+
+    <!-- 로그 상세 조회 (단건) -->
+    <select id="selectById" parameterType="long" resultType="LogResponseDTO">
+        SELECT
+            TBL.ID              AS id,
+            TBL.LOG_TITLE       AS logTitle,
+            TBL.VISION_TITLE    AS visionTitle,
+            TBL.LOG_CONTENT     AS logContent,
+            TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
+            TBL.LOG_READ_COUNT  AS logReadCount,
+            TBL.LOG_THUMBNAIL_URL AS logThumbnailUrl,
+            TBL.LOG_STATUS      AS logStatus,
+            TBL.LOG_PROGRESS    AS logProgress,
+            TBM.ID              AS memberId,
+            TBM.MEMBER_NICKNAME AS memberNickname,
+            TBC.ID              AS categoryId,
+            TBC.CATEGORY_NAME   AS categoryName,
+            (SELECT COUNT(*) FROM TBL_LOG_LIKE TLL WHERE TLL.LOG_ID = TBL.ID) AS likeCount
+        FROM TBL_LOG TBL
+        JOIN TBL_MEMBER   TBM ON TBL.MEMBER_ID   = TBM.ID
+        JOIN TBL_CATEGORY TBC ON TBL.CATEGORY_ID  = TBC.ID
+        WHERE TBL.ID = #{id}
+          AND TBL.LOG_DELETED_AT IS NULL
+    </select>
+
+
+
+    <!-- 로그 조회수 +1 -->
+    <update id="increaseReadCount" parameterType="long">
+        UPDATE TBL_LOG
+        SET LOG_READ_COUNT = LOG_READ_COUNT + 1
+        WHERE ID = #{id}
+          AND LOG_DELETED_AT IS NULL
+    </update>
+
 </mapper>

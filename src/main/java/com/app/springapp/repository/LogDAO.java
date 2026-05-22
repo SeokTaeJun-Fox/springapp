@@ -1,11 +1,15 @@
 package com.app.springapp.repository;
 
+
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogResponseDTO;
+import com.app.springapp.domain.vo.LogVO;
 import com.app.springapp.mapper.LogMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 // 로그 관련 DB 접근을 담당하는 DAO 클래스
 @Repository
@@ -32,5 +36,22 @@ public class LogDAO {
     // 회원 ID로 내 로그 목록 전체 조회 (프로젝트 생성 모달용)
     public List<LogListResponseDTO> findAllByMemberId(Long memberId) {
         return logMapper.findAllByMemberId(memberId);
+    }
+
+    // 로그 작성
+    public void save(LogVO logVO) {
+        logMapper.insert(logVO);
+    }
+
+    // 로그 상세 조회
+    public Optional<LogResponseDTO> findById(Long id) {
+        return logMapper.selectById(id);
+    }
+
+
+
+    // 조회수 +1
+    public void increaseReadCount(Long id) {
+        logMapper.increaseReadCount(id);
     }
 }

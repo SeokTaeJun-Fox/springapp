@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.mapper.LogPatternMapper">
+
+    <insert id="insert" parameterType="LogPatternVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_LOG_PATTERN.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_LOG_PATTERN (
+            ID, PATTERN_TYPE, PATTERN_TITLE, PATTERN_CONTENT, LOG_RESULT_ID
+        ) VALUES (
+            #{id}, #{patternType}, #{patternTitle}, #{patternContent}, #{logResultId}
+        )
+    </insert>
+
+    <select id="findByLogResultId" parameterType="long" resultType="LogPatternVO">
+        SELECT
+            ID              AS id,
+            PATTERN_TYPE    AS patternType,
+            PATTERN_TITLE   AS patternTitle,
+            PATTERN_CONTENT AS patternContent,
+            LOG_RESULT_ID   AS logResultId
+        FROM TBL_LOG_PATTERN
+        WHERE LOG_RESULT_ID = #{logResultId}
+    </select>
+
+</mapper>

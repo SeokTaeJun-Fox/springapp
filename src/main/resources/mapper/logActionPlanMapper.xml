@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.mapper.LogActionPlanMapper">
+
+    <insert id="insert" parameterType="LogActionPlanVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_LOG_ACTION_PLAN.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_LOG_ACTION_PLAN (
+            ID, LOG_ACTION_PLAN_TYPE, LOG_ACTION_PLAN_TITLE, LOG_ACTION_PLAN_CONTENT,
+            LOG_ACTION_PLAN_CURRENT_PATTERN, LOG_ACTION_PLAN_CURRENT_CONTENT,
+            LOG_ACTION_PLAN_IMPROVED_PATTERN, LOG_ACTION_PLAN_IMPROVED_CONTENT, LOG_RESULT_ID
+        ) VALUES (
+            #{id}, #{logActionPlanType}, #{logActionPlanTitle}, #{logActionPlanContent, jdbcType=VARCHAR},
+            #{logActionPlanCurrentPattern, jdbcType=VARCHAR}, #{logActionPlanCurrentContent, jdbcType=VARCHAR},
+            #{logActionPlanImprovedPattern, jdbcType=VARCHAR}, #{logActionPlanImprovedContent, jdbcType=VARCHAR}, #{logResultId}
+        )
+    </insert>
+
+    <select id="findByLogResultId" parameterType="long" resultType="LogActionPlanVO">
+        SELECT
+            ID                               AS id,
+            LOG_ACTION_PLAN_TYPE             AS logActionPlanType,
+            LOG_ACTION_PLAN_TITLE            AS logActionPlanTitle,
+            LOG_ACTION_PLAN_CONTENT          AS logActionPlanContent,
+            LOG_ACTION_PLAN_CURRENT_PATTERN  AS logActionPlanCurrentPattern,
+            LOG_ACTION_PLAN_CURRENT_CONTENT  AS logActionPlanCurrentContent,
+            LOG_ACTION_PLAN_IMPROVED_PATTERN AS logActionPlanImprovedPattern,
+            LOG_ACTION_PLAN_IMPROVED_CONTENT AS logActionPlanImprovedContent,
+            LOG_RESULT_ID                    AS logResultId
+        FROM TBL_LOG_ACTION_PLAN
+        WHERE LOG_RESULT_ID = #{logResultId}
+    </select>
+
+</mapper>

@@ -1,5 +1,7 @@
 package com.app.springapp.service;
 
+import com.app.springapp.domain.dto.request.LogCreateRequestDTO;
+
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
 
@@ -19,4 +21,12 @@ public interface LogService {
 
     // 회원 ID로 내 로그 목록 전체 조회 (프로젝트 생성 모달용)
     ApiResponseDTO getMyLogList(Long memberId);
+
+    // 로그 작성
+    ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId);
+
+    // 로그 상세 조회
+    ApiResponseDTO getLog(Long id);
+
+
 }

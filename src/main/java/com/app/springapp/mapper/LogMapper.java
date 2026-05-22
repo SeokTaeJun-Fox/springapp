@@ -1,10 +1,13 @@
 package com.app.springapp.mapper;
 
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogResponseDTO;
+import com.app.springapp.domain.vo.LogVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 // 로그 관련 SQL을 처리하는 Mapper 인터페이스
 @Mapper
@@ -35,4 +38,15 @@ public interface LogMapper {
 
     // 회원 ID로 내 로그 목록 전체 조회
     List<LogListResponseDTO> findAllByMemberId(Long memberId);
+    // 로그 작성
+    void insert(LogVO logVO);
+
+    // 로그 상세 조회
+    Optional<LogResponseDTO> selectById(Long id);
+
+
+
+    // 조회수 +1
+    void increaseReadCount(Long id);
+
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.mapper.RadarScoreMapper">
+
+    <insert id="insert" parameterType="RadarScoreVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_RADAR_SCORE.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_RADAR_SCORE (
+            ID, RADAR_COMPONENT, RADAR_SCORE, LOG_RESULT_ID
+        ) VALUES (
+            #{id}, #{radarComponent}, #{radarScore}, #{logResultId}
+        )
+    </insert>
+
+    <select id="findByLogResultId" parameterType="long" resultType="RadarScoreVO">
+        SELECT
+            ID              AS id,
+            RADAR_COMPONENT AS radarComponent,
+            RADAR_SCORE     AS radarScore,
+            LOG_RESULT_ID   AS logResultId
+        FROM TBL_RADAR_SCORE
+        WHERE LOG_RESULT_ID = #{logResultId}
+    </select>
+
+</mapper>

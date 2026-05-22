@@ -10,6 +10,9 @@ public interface LogResultMapper {
     // 로그 ID로 분석 결과 조회
     LogResultVO findByLogId(Long logId);
 
+    // 분석 결과 추가
+    void insert(LogResultVO logResultVO);
+
     // 분석 결과 ID로 조회
     LogResultVO findById(Long id);
 }

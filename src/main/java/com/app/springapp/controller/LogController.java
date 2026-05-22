@@ -1,5 +1,7 @@
 package com.app.springapp.controller;
 
+import com.app.springapp.domain.dto.request.LogCreateRequestDTO;
+import com.app.springapp.domain.dto.request.LogUpdateRequestDTO;
 import com.app.springapp.domain.dto.MemberDTO;
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.service.LogService;
@@ -58,4 +60,20 @@ public class LogController {
         MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
         return ResponseEntity.ok(logService.getMyLogList(memberDTO.getId()));
     }
+
+    // 로그 작성
+    @Operation(summary = "로그 작성", description = "새 페일로그를 작성합니다.")
+    @PostMapping
+    public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto) {
+        return ResponseEntity.ok(logService.createLog(dto, 1L)); // 로그인 구현 후 memberId 교체
+    }
+
+    // 로그 상세 조회
+    @Operation(summary = "로그 상세 조회", description = "로그 ID로 단건 조회 후 조회수를 증가합니다.")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id) {
+        return ResponseEntity.ok(logService.getLog(id));
+    }
+
+
 }
