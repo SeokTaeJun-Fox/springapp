@@ -57,5 +57,5 @@ public class PostResponseDTO {
                             @ExtensionProperty(name = "x-enum-values", value = "0: false(좋아요 안누름), 1: true(좋아요 누름)")
                     })
             })
-    private int isLike;
+    private int isLiked;
 }

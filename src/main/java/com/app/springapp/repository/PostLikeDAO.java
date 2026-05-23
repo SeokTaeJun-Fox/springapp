@@ -23,4 +23,8 @@ public class PostLikeDAO {
     public Optional<PostLikeResponseDTO> findPostLikeCountAndIsLiked(PostLikeRequestDTO postLikeRequestDTO) {
         return Optional.ofNullable(postLikeMapper.selectLikeCountAndIsLiked(postLikeRequestDTO));
     }
+
+    public void delete(PostLikeRequestDTO postLikeRequestDTO) {
+        postLikeMapper.delete(postLikeRequestDTO);
+    }
 }

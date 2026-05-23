@@ -26,8 +26,8 @@ public class PostReadResponseDTO {
     @Schema(description = "답글 목록(대댓글 포함)")
     private List<PostReadReplyResponseDTO> replies;
 
-    @Schema(description = "이미지 목록")
-    private List<String> postPictures;
+//    @Schema(description = "이미지 목록")
+//    private List<String> postPictures;
 
     @Schema(description = "이전 글")
     private PostBeforeResponseDTO beforePost;

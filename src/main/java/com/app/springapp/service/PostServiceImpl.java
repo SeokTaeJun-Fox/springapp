@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import retrofit2.http.POST;
 
 @Slf4j
 @Service
@@ -56,7 +55,7 @@ public class PostServiceImpl implements PostService {
 
         postReadResponseDTO.setPost(FindPost(postReadRequestDTO));  //게시글 정보 저장
         postReadResponseDTO.setReplies(replyService.getPostReplies(postReadRequestDTO));    //게시글에 달린 댓글 정보(대댓글포함) 저장
-        postReadResponseDTO.setPostPictures(postPictureService.findAll(postReadRequestDTO.getPostId()));    //게시글 첨부 이미지 목록 저장
+//        postReadResponseDTO.setPostPictures(postPictureService.findAll(postReadRequestDTO.getPostId()));    //게시글 첨부 이미지 목록 저장
         postReadResponseDTO.setBeforePost(findBeforePost(postReadRequestDTO.getPostId()));  //이전글 정보 저장
         postReadResponseDTO.setAfterPost(findAfterPost(postReadRequestDTO.getPostId()));    //다음글 정보 저장
 

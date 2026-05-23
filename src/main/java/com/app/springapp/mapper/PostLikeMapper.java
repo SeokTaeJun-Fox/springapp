@@ -8,4 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface PostLikeMapper {
     public void insert(PostLikeRequestDTO postLikeRequestDTO);
     public PostLikeResponseDTO selectLikeCountAndIsLiked(PostLikeRequestDTO postLikeRequestDTO);
+    public void delete(PostLikeRequestDTO postLikeRequestDTO);
 }

@@ -1,6 +1,8 @@
 package com.app.springapp.service;
 
+import com.app.springapp.domain.dto.request.PostLikeRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyLikeRequestDTO;
+import com.app.springapp.domain.dto.response.PostLikeResponseDTO;
 import com.app.springapp.domain.dto.response.ReplyLikeResponseDTO;
 import com.app.springapp.exception.ReplyLikeException;
 import com.app.springapp.repository.ReplyLikeDAO;
@@ -18,11 +20,13 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     private final ReplyLikeDAO replyLikeDAO;
 
+    // 게시글 좋아요
     @Override
     public void likeReply(ReplyLikeRequestDTO replyLikeRequestDTO) {
         replyLikeDAO.save(replyLikeRequestDTO);
     }
 
+    // 게시글 좋아요 조회
     @Override
     public ReplyLikeResponseDTO findReplyLikeCountAndIsLiked(ReplyLikeRequestDTO replyLikeRequestDTO) {
         return replyLikeDAO.findReplyLikeCountAndIsLiked(replyLikeRequestDTO).orElseThrow(() -> new ReplyLikeException("게시글 좋아요, 좋아요 여부를 불러오지 못했습니다.", HttpStatus.BAD_REQUEST));

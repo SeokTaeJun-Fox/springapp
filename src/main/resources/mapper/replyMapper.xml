@@ -8,7 +8,7 @@
             TBR.ID,
             TBR.POST_ID,
             TBR.REPLY_CONTENT,
-            TBR.REPLY_CREATED_AT,
+            TO_CHAR(TBR.REPLY_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS REPLY_CREATED_AT,
             TBM.ID                                                         AS MEMBER_ID,
             TBM.MEMBER_NICKNAME,
             TBM.MEMBER_PROFILE_IMAGE_URL,
