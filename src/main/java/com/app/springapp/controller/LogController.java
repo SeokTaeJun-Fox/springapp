@@ -62,10 +62,11 @@ public class LogController {
     }
 
     // 로그 작성
-    @Operation(summary = "로그 작성", description = "새 페일로그를 작성합니다.")
     @PostMapping
-    public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto) {
-        return ResponseEntity.ok(logService.createLog(dto, 1L)); // 로그인 구현 후 memberId 교체
+    public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto,
+                                                    Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.createLog(dto, memberDTO.getId()));
     }
 
     // 로그 상세 조회

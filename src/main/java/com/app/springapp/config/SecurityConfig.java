@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -58,6 +59,7 @@ public class SecurityConfig {
                     ).permitAll()
                     .requestMatchers("/api/ai/**").permitAll()
                     .requestMatchers("/api/project/**").permitAll() // SecurityConfig.java 내 permitAll 또는 authenticated 설정
+                    .requestMatchers(HttpMethod.POST, "/api/logs").authenticated()
                     .requestMatchers("/api/logs/my-list").authenticated()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
                     .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
