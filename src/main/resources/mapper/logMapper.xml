@@ -127,6 +127,25 @@
           AND TBL.LOG_DELETED_AT IS NULL
     </select>
 
+    <!-- 좋아요 10개 이상 인기 솔루션 조회 (로그 목록 페이지 노출용) -->
+    <select id="selectPopularSolutions" resultType="LogPopularSolutionResponseDTO">
+        SELECT
+        TBL.ID                              AS logId,
+        TBL.LOG_TITLE                       AS logTitle,
+        TBM.MEMBER_NICKNAME                 AS memberNickname,
+        TBM.MEMBER_PROFILE_IMAGE_URL        AS memberProfileImageUrl,
+        TLR.LOG_RESULT_FAILURE_TYPE         AS logResultFailureType,
+        TLR.LOG_RESULT_FAILURE_TITLE        AS logResultFailureTitle,
+        TLR.LOG_RESULT_FAILURE_DESC         AS logResultFailureDesc,
+        (SELECT COUNT(*) FROM TBL_LOG_LIKE TLL WHERE TLL.LOG_ID = TBL.ID) AS likeCount
+        FROM TBL_LOG TBL
+        JOIN TBL_MEMBER TBM      ON TBL.MEMBER_ID = TBM.ID
+        JOIN TBL_LOG_RESULT TLR  ON TBL.ID = TLR.LOG_ID
+        WHERE (SELECT COUNT(*) FROM TBL_LOG_LIKE TLL WHERE TLL.LOG_ID = TBL.ID) >= 10
+        AND TBL.LOG_DELETED_AT IS NULL
+        ORDER BY likeCount DESC
+    </select>
+
 
 
     <!-- 로그 조회수 +1 -->
@@ -136,5 +155,8 @@
         WHERE ID = #{id}
           AND LOG_DELETED_AT IS NULL
     </update>
+
+
+
 
 </mapper>

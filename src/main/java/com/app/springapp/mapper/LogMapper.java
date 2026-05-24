@@ -1,6 +1,7 @@
 package com.app.springapp.mapper;
 
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogPopularSolutionResponseDTO;
 import com.app.springapp.domain.dto.response.LogResponseDTO;
 import com.app.springapp.domain.vo.LogVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -44,6 +45,9 @@ public interface LogMapper {
     // 로그 상세 조회
     Optional<LogResponseDTO> selectById(Long id);
 
+
+    // 좋아요 10개 이상인 인기 솔루션 조회 (로그 목록 페이지 노출용)
+    List<LogPopularSolutionResponseDTO> selectPopularSolutions();
 
 
     // 조회수 +1

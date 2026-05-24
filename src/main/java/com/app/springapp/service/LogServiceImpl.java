@@ -4,6 +4,7 @@ import com.app.springapp.domain.dto.request.LogCreateRequestDTO;
 
 import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogPopularSolutionResponseDTO;
 import com.app.springapp.domain.dto.response.LogResponseDTO;
 import com.app.springapp.domain.vo.LogVO;
 import com.app.springapp.repository.LogDAO;
@@ -108,6 +109,13 @@ public class LogServiceImpl implements LogService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그입니다."));
         logDAO.increaseReadCount(id);
         return ApiResponseDTO.of(true, "로그 상세 조회 성공", log);
+    }
+
+    // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
+    @Override
+    public ApiResponseDTO getPopularSolutions() {
+        List<LogPopularSolutionResponseDTO> list = logDAO.findPopularSolutions();
+        return ApiResponseDTO.of(true, "인기 솔루션 조회 성공", list);
     }
 
 

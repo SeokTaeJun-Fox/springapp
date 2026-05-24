@@ -28,5 +28,8 @@ public interface LogService {
     // 로그 상세 조회
     ApiResponseDTO getLog(Long id);
 
+    // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
+    ApiResponseDTO getPopularSolutions();
+
 
 }

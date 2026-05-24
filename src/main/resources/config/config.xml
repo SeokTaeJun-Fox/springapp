@@ -67,6 +67,7 @@
         <typeAlias type="com.app.springapp.domain.dto.response.LogPatternResponseDTO" alias="LogPatternResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogResponseDTO" alias="LogResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogResultResponseDTO" alias="LogResultResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogPopularSolutionResponseDTO" alias="LogPopularSolutionResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.MemberResponseDTO" alias="MemberResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.PostAfterResponseDTO" alias="PostAfterResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.PostAiListResponseDTO" alias="PostAiListResponseDTO"/>

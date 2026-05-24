@@ -76,5 +76,12 @@ public class LogController {
         return ResponseEntity.ok(logService.getLog(id));
     }
 
+    // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
+    @Operation(summary = "인기 솔루션 조회", description = "좋아요 10개 이상인 로그의 분석 결과를 반환합니다.")
+    @GetMapping("/popular-solutions")
+    public ResponseEntity<ApiResponseDTO> getPopularSolutions() {
+        return ResponseEntity.ok(logService.getPopularSolutions());
+    }
+
 
 }

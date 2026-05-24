@@ -2,6 +2,7 @@ package com.app.springapp.repository;
 
 
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
+import com.app.springapp.domain.dto.response.LogPopularSolutionResponseDTO;
 import com.app.springapp.domain.dto.response.LogResponseDTO;
 import com.app.springapp.domain.vo.LogVO;
 import com.app.springapp.mapper.LogMapper;
@@ -48,6 +49,10 @@ public class LogDAO {
         return logMapper.selectById(id);
     }
 
+    // 좋아요 10개 이상인 인기 솔루션 조회 (로그 목록 페이지 노출용)
+    public List<LogPopularSolutionResponseDTO> findPopularSolutions() {
+        return logMapper.selectPopularSolutions();
+    }
 
 
     // 조회수 +1
