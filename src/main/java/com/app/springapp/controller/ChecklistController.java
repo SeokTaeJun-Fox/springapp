@@ -10,6 +10,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.app.springapp.domain.dto.MemberDTO;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -22,16 +24,21 @@ public class ChecklistController {
 
     private final ChecklistService checklistService;
 
-    // 체크리스트 추가 - POST /api/checklist/create (로그인 구현 전 임시로 memberId 1L 고정)
+    private Long getMemberId(Authentication authentication) {
+        return ((MemberDTO) authentication.getPrincipal()).getId();
+    }
+
+    // 체크리스트 추가
     @Operation(summary = "체크리스트 추가")
     @PostMapping("/create")
     public ResponseEntity<ApiResponseDTO<ChecklistResponseDTO>> createChecklist(
-            @RequestBody ChecklistCreateRequestDTO requestDTO) {
-        ChecklistResponseDTO response = checklistService.createChecklist(requestDTO, 1L);
+            @RequestBody ChecklistCreateRequestDTO requestDTO,
+            Authentication authentication) {
+        ChecklistResponseDTO response = checklistService.createChecklist(requestDTO, getMemberId(authentication));
         return ResponseEntity.ok(ApiResponseDTO.of(true, "체크리스트가 추가되었습니다.", response));
     }
 
-    // 프로젝트별 체크리스트 목록 조회 - GET /api/checklist/list/{projectId}
+    // 프로젝트별 체크리스트 목록 조회
     @Operation(summary = "체크리스트 목록 조회")
     @GetMapping("/list/{projectId}")
     public ResponseEntity<ApiResponseDTO<List<ChecklistResponseDTO>>> getChecklists(
@@ -40,7 +47,7 @@ public class ChecklistController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공", response));
     }
 
-    // 체크리스트 수정 - PUT /api/checklist/update
+    // 체크리스트 수정
     @Operation(summary = "체크리스트 수정")
     @PutMapping("/update")
     public ResponseEntity<ApiResponseDTO<ChecklistResponseDTO>> updateChecklist(
@@ -49,7 +56,7 @@ public class ChecklistController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "체크리스트가 수정되었습니다.", response));
     }
 
-    // 체크리스트 삭제 - DELETE /api/checklist/{id}
+    // 체크리스트 삭제
     @Operation(summary = "체크리스트 삭제")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDTO<?>> deleteChecklist(

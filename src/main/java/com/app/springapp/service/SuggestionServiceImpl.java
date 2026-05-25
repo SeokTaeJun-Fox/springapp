@@ -40,6 +40,8 @@ public class SuggestionServiceImpl implements SuggestionService {
                     dto.setChecklistId(vo.getChecklistId());
                     dto.setMemberId(vo.getMemberId());
                     dto.setProjectId(vo.getProjectId());
+                    dto.setMemberNickname(vo.getMemberNickname());
+                    dto.setMemberProfileImageUrl(vo.getMemberProfileImageUrl());
                     return dto;
                 })
                 .collect(Collectors.toList());

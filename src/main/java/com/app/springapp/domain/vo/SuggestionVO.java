@@ -22,4 +22,6 @@ public class SuggestionVO {
     private Long checklistId;
     private Long memberId;
     private Long projectId;
+    private String memberNickname;
+    private String memberProfileImageUrl;
 }
