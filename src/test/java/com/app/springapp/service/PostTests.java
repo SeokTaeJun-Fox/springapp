@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+
 @SpringBootTest
 @Slf4j
 public class PostTests {
@@ -76,5 +78,38 @@ public class PostTests {
     @Test
     public void deletePostTest() {
         postService.deletePost(28L);
+    }
+
+    @Test
+    public void findPostListTest() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("order", 1);
+        hashMap.put("page", 2);
+        hashMap.put("order2", 0);
+        hashMap.put("category", 0);
+        hashMap.put("content", "img");
+        log.info("{}",postService.getPostList(hashMap));
+    }
+
+    @Test
+    public void searchPostResultTest() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("order", 1);
+        hashMap.put("page", 1);
+        hashMap.put("order2", 0);
+        hashMap.put("category", 0);
+        hashMap.put("content", "img");
+        log.info("{}",postService.getSearchResult(hashMap));
+    }
+
+    @Test
+    public void findPostCountTest() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("order", 1);
+        hashMap.put("page", 2);
+        hashMap.put("order2", 0);
+        hashMap.put("category", 0);
+        hashMap.put("content", "img");
+        log.info("{}",postService.getPostCount(hashMap));
     }
 }

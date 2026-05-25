@@ -6,6 +6,7 @@ import com.app.springapp.domain.dto.response.ApiResponseDTO;
 import com.app.springapp.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +31,62 @@ public class PostAPI {
     private final ReplyLikeService replyLikeService;
     private final ReplyService replyService;
     private final RereplyService rereplyService;
+
+    @GetMapping("")
+    @Operation(summary = "게시글 목록 조회, 총 게시물 갯수를 알려주는 서비스", description = "게시글 목록을 조회해서 리스트로 반환하는 서비스")
+    @ApiResponse(responseCode = "200", description = "게시글 목록 조회 성공")
+    @ApiResponse(responseCode = "404", description = "게시글 목록 조회 실패")
+    @Parameters({
+            @Parameter(
+                    name = "order",
+                    description = "게시글 검색 필터 (제목:0, 제목+내용:1, 내용:2, 작성자:3, 댓글:4)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "0")
+            ),
+            @Parameter(
+                    name = "order2",
+                    description = "게시글 정렬 기준 (최신순:0, 좋아요순:1, 조회순:2)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "0")
+            ),
+            @Parameter(
+                    name = "page",
+                    description = "페이지 (쪽수)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "1")
+            ),
+            @Parameter(
+                    name = "category",
+                    description = "카테고리 필터 (전체:0, 공부/취업:1, 사업/창업:2, 인간관계:3, 건강/루틴:4, 기타:5)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "0")
+            ),
+            @Parameter(
+                    name = "content",
+                    description = "검색 내용",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "string", defaultValue = "")
+            )
+    })
+    public ResponseEntity<ApiResponseDTO> getPostList(
+            @RequestParam(defaultValue = "0")  int order,
+            @RequestParam(defaultValue = "0")  int order2,
+            @RequestParam(defaultValue = "1")  int page,
+            @RequestParam(defaultValue = "0")  int category,
+            @RequestParam(defaultValue = "") String content
+    ) {
+//        log.info("order1: {}, order2: {}, page: {}, category: {}, content: {}, contentSize: {}", order, order2, page, category, content, content.length());
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("order", order);
+        params.put("order2", order2);
+        params.put("page", page);
+        params.put("category", category);
+        params.put("content", content);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of(
+                true,
+                "게시글 목록 조회 성공",
+                postService.getSearchResult(params)));
+    }
 
     //게시글 열람
     @PostMapping("/read")

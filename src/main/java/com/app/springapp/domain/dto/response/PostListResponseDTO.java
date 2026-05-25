@@ -34,8 +34,8 @@ public class PostListResponseDTO {
     private String memberProfileImageUrl;
 
 
-    @Schema(description = "카테고리명", example = "자유게시판")
-    private String categoryName;
+    @Schema(description = "카테고리id", example = "자유게시판")
+    private int categoryId;
 
     @Schema(description = "좋아요 수", example = "25")
     private int likeCount;

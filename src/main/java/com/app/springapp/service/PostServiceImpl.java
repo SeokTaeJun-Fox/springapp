@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,27 @@ public class PostServiceImpl implements PostService {
     private final PostLikeService postLikeService;
     private final ReplyService replyService;
     private final PostPictureService postPictureService;
+
+    //검색 결과 만족하는 게시글 리스트로 반환
+    @Override
+    public List<PostListResponseDTO> getPostList(Map<String, Object> order) {
+        return postDAO.selectPostList(order);
+    }
+
+    //검색 결과 게시글 목록 갯수 (페이지 조건제외)
+    @Override
+    public Integer getPostCount(Map<String, Object> order) {
+        return postDAO.getPostCount(order);
+    }
+
+    //검색 결과 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
+    @Override
+    public CommunityPostListResponseDTO getSearchResult(Map<String, Object> order) {
+        CommunityPostListResponseDTO communityPostListResponseDTO = new CommunityPostListResponseDTO();
+        communityPostListResponseDTO.setTotal(getPostCount(order));
+        communityPostListResponseDTO.setPosts(getPostList(order));
+        return communityPostListResponseDTO;
+    }
 
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)
     //게시글 리스트, 게시글 열람페이지에서 사용된다.
