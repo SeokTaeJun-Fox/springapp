@@ -25,15 +25,18 @@
     <!--  프로젝트별 제안 목록 조회  -->
     <select id="findAllByProjectId" resultType="SuggestionVO">
         SELECT
-            ID               AS id,
-            SUGGESTION_TITLE AS suggestionTitle,
-            IS_ADDED_LIST    AS isAddedList,
-            CHECKLIST_ID     AS checklistId,
-            MEMBER_ID        AS memberId,
-            PROJECT_ID       AS projectId
-        FROM TBL_SUGGESTION
-        WHERE PROJECT_ID = #{projectId}
-        ORDER BY ID DESC
+            S.ID                        AS id,
+            S.SUGGESTION_TITLE          AS suggestionTitle,
+            S.IS_ADDED_LIST             AS isAddedList,
+            S.CHECKLIST_ID              AS checklistId,
+            S.MEMBER_ID                 AS memberId,
+            S.PROJECT_ID                AS projectId,
+            M.MEMBER_NICKNAME           AS memberNickname,
+            M.MEMBER_PROFILE_IMAGE_URL  AS memberProfileImageUrl
+        FROM TBL_SUGGESTION S
+                 JOIN TBL_MEMBER M ON S.MEMBER_ID = M.ID
+        WHERE S.PROJECT_ID = #{projectId}
+        ORDER BY S.ID DESC
     </select>
 
 </mapper>

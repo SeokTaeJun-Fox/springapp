@@ -26,4 +26,10 @@ public class SuggestionResponseDTO {
 
     @Schema(description = "프로젝트 ID", example = "1")
     private Long projectId;
+
+    @Schema(description = "제안 작성자 닉네임", example = "개복치 1단계")
+    private String memberNickname;
+
+    @Schema(description = "제안 작성자 프로필 이미지 URL", example = "https://...")
+    private String memberProfileImageUrl;
 }

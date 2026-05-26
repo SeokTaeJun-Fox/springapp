@@ -39,8 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (path.startsWith("/private")) return false;
         if (path.equals("/api/logs/my-list")) return false;
-        if (path.equals("/api/logs/analyze") && method.equals("POST")) return false;  // 추가
-        if (path.startsWith("/api/logs") && method.equals("POST")) return false;       // 추가
+        if (path.equals("/api/logs/analyze") && method.equals("POST")) return false;
+        if (path.startsWith("/api/logs") && method.equals("POST")) return false;
+        if (path.equals("/api/suggestion/create") && method.equals("POST")) return false;
+        if (path.startsWith("/api/project") && !path.startsWith("/api/project/public")) return false;
+        if (path.startsWith("/api/checklist") && (method.equals("POST") || method.equals("PUT") || method.equals("DELETE"))) return false;
         return true;
     }
 

@@ -59,9 +59,21 @@ public class SecurityConfig {
                     ).permitAll()
                     .requestMatchers("/api/ai/**").permitAll()
                     .requestMatchers("/api/project/**").permitAll() // SecurityConfig.java 내 permitAll 또는 authenticated 설정
+                    .requestMatchers(HttpMethod.GET, "/api/project/public/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/project/search").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/project/list").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/project/others").authenticated()
+                    .requestMatchers(HttpMethod.GET, "/api/project/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/project/**").authenticated()
+                    .requestMatchers(HttpMethod.PUT, "/api/project/**").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "/api/project/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/checklist/create").authenticated()
+                    .requestMatchers(HttpMethod.PUT, "/api/checklist/update").authenticated()
+                    .requestMatchers(HttpMethod.DELETE, "/api/checklist/**").authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/logs").authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/logs/analyze").authenticated()
                     .requestMatchers("/api/logs/my-list").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/suggestion/create").authenticated()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
                     .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
             ) // 모든 경로 해제
