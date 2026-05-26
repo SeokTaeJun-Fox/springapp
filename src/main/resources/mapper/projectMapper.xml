@@ -84,8 +84,10 @@
             TBP.PROGRESS_DAY                                            AS progressDay,
             TO_CHAR(TBP.PROJECT_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS')   AS projectCreatedAt,
             TBP.MEMBER_ID                                               AS memberId,
-            TBP.LOG_ID                                                  AS logId
+            TBP.LOG_ID                                                  AS logId,
+            TBL.VISION_TITLE                                            AS visionTitle
         FROM TBL_PROJECT TBP
+            JOIN TBL_LOG TBL ON TBP.LOG_ID = TBL.ID
         WHERE TBP.MEMBER_ID = #{memberId}
         ORDER BY TBP.PROJECT_CREATED_AT DESC
     </select>

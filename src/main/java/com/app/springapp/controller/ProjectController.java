@@ -109,6 +109,9 @@ public class ProjectController {
     }
 
     private Long getMemberId(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof MemberDTO)) {
+            throw new RuntimeException("로그인이 필요합니다.");
+        }
         return ((MemberDTO) authentication.getPrincipal()).getId();
     }
 }

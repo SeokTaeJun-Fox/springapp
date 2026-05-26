@@ -41,6 +41,9 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
     @Value("${openai.api-key}")
     private String openAiApiKey;
 
+    @Value("${openai.model:gpt-3.5-turbo}")
+    private String openAiModel;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ApiResponseDTO analyzeLog(LogAnalyzeRequestDTO request, Long memberId) {
@@ -95,8 +98,9 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
                 messages.add(new ChatMessage("user", humanPrompt));
 
                 ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
-                        .model("gpt-4o-mini") // Python과 동일
+                        .model(openAiModel)
                         .messages(messages)
+                        .maxTokens(2000)
                         .temperature(0.7)
                         .build();
 

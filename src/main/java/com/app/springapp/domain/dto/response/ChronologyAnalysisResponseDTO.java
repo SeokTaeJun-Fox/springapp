@@ -17,6 +17,7 @@ public class ChronologyAnalysisResponseDTO {
     private List<ChecklistStat> top3Checklists;
     private int avgDays;
     private int projectCount;
+    private String aiFeedback;
 
     @Data
     @AllArgsConstructor
