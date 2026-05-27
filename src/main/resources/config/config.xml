@@ -56,6 +56,7 @@
 
         <!-- DTO Response Alias -->
         <typeAlias type="com.app.springapp.domain.dto.response.AiChatResponseDTO" alias="AiChatResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ChronologyAnalysisResponseDTO" alias="ChronologyAnalysisResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.ApiResponseDTO" alias="ApiResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.ChecklistResponseDTO" alias="ChecklistResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.CommunityResponseDTO" alias="CommunityResponseDTO"/>

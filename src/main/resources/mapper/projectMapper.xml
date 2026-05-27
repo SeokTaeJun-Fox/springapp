@@ -84,8 +84,18 @@
             TBP.PROGRESS_DAY                                            AS progressDay,
             TO_CHAR(TBP.PROJECT_CREATED_AT, 'YYYY-MM-DD HH24:MI:SS')   AS projectCreatedAt,
             TBP.MEMBER_ID                                               AS memberId,
-            TBP.LOG_ID                                                  AS logId
+            TBP.LOG_ID                                                  AS logId,
+            TBL.VISION_TITLE                                            AS visionTitle,
+            TBP.AI_SUGGESTION_1_TITLE                                   AS aiSuggestion1Title,
+            TBP.AI_SUGGESTION_1_DESC                                    AS aiSuggestion1Desc,
+            TBP.AI_SUGGESTION_2_TITLE                                   AS aiSuggestion2Title,
+            TBP.AI_SUGGESTION_2_DESC                                    AS aiSuggestion2Desc,
+            TBP.AI_SUGGESTION_3_TITLE                                   AS aiSuggestion3Title,
+            TBP.AI_SUGGESTION_3_DESC                                    AS aiSuggestion3Desc,
+            TBP.AI_SUGGESTION_4_TITLE                                   AS aiSuggestion4Title,
+            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc
         FROM TBL_PROJECT TBP
+            JOIN TBL_LOG TBL ON TBP.LOG_ID = TBL.ID
         WHERE TBP.MEMBER_ID = #{memberId}
         ORDER BY TBP.PROJECT_CREATED_AT DESC
     </select>

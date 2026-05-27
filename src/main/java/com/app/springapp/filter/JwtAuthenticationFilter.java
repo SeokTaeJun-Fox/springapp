@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,19 +33,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
     private final MemberDAO memberDAO;
     private final ObjectMapper objectMapper;
+    private final RedisTemplate redisTemplate;
+
+    @Value("${jwt.token-blacklist-prefix}")
+    private String BLACKLIST_TOKEN_PREFIX;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
+        // 로그아웃은 토큰 만료/없어도 쿠키 삭제가 실행돼야 하므로 필터 제외
+        if (path.equals("/private/auth/logout") && "POST".equals(method)) return true;
+
         if (path.startsWith("/private")) return false;
+        if (path.startsWith("/api/project")) return false;
         if (path.equals("/api/logs/my-list")) return false;
         if (path.equals("/api/logs/analyze") && method.equals("POST")) return false;
         if (path.startsWith("/api/logs") && method.equals("POST")) return false;
         if (path.equals("/api/suggestion/create") && method.equals("POST")) return false;
         if (path.startsWith("/api/project") && !path.startsWith("/api/project/public")) return false;
         if (path.startsWith("/api/checklist") && (method.equals("POST") || method.equals("PUT") || method.equals("DELETE"))) return false;
+        if (path.equals("/api/logs/analyze") && method.equals("POST")) return false;
+        if (path.startsWith("/api/logs") && method.equals("POST")) return false;
         return true;
     }
 
@@ -68,18 +80,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String accessToken = getAccessTokenFromCookie(request);
         String memberEmail = null;
         String socialMemberProvider = null;
+        boolean isPrivatePath = request.getRequestURI().startsWith("/private");
 
-        if(accessToken == null){
-            sendErrorResponse(response, "토큰 없음 또는 인증 실패");
+        if (accessToken == null) {
+            if (isPrivatePath) {
+                sendErrorResponse(response, "토큰 없음 또는 인증 실패");
+                return;
+            }
+            filterChain.doFilter(request, response);
             return;
         }
 
         try {
-            if(accessToken != null){
-                Claims claims = jwtTokenUtil.parseToken(accessToken);
-                memberEmail = (String)claims.get("memberEmail");
-                socialMemberProvider = (String)claims.get("socialMemberProvider");
+            Claims claims = jwtTokenUtil.parseToken(accessToken);
+
+            // 블랙리스트 체크: 로그아웃된 토큰 차단
+            try {
+                String blacklistKey = BLACKLIST_TOKEN_PREFIX + claims.get("id");
+                Boolean isBlacklisted = redisTemplate.opsForSet().isMember(blacklistKey, accessToken);
+                if (Boolean.TRUE.equals(isBlacklisted)) {
+                    SecurityContextHolder.clearContext();
+                    sendErrorResponse(response, "이미 로그아웃된 토큰입니다.");
+                    return;
+                }
+            } catch (Exception e) {
+                log.warn("[JWT 필터] 블랙리스트 체크 실패 (Redis 오류): {}", e.getMessage());
             }
+
+            memberEmail = (String) claims.get("memberEmail");
+            socialMemberProvider = (String) claims.get("socialMemberProvider");
 
             if(memberEmail != null && socialMemberProvider != null){
                 MemberDTO memberDTO = new MemberDTO();

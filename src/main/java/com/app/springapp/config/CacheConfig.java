@@ -14,6 +14,7 @@ import java.time.Duration;
 
 @Configuration
 @EnableCaching
+@org.springframework.scheduling.annotation.EnableAsync
 public class CacheConfig {
 
     @Bean

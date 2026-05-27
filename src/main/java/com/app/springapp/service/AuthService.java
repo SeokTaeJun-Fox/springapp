@@ -46,4 +46,7 @@ public interface AuthService {
 
     // 이메일(아이디) 찾기 - 이름 + 전화번호로 조회
     public ApiResponseDTO findMemberEmail(String memberName, String memberPhone);
+
+    // 이메일 등록 여부 확인 (비밀번호 재설정용)
+    public boolean existsMemberByEmail(String email);
 }

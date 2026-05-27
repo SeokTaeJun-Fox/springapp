@@ -74,9 +74,11 @@ public class AuthPublicApi {
         response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
+        ApiResponseDTO memberInfo = memberService.me(jwtTokenDTO.getMemberId());
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(ApiResponseDTO.of(true, "로그인 성공"));
+                .body(ApiResponseDTO.of(true, "로그인 성공", memberInfo.getData()));
     }
 
     // Access Token 재발급
@@ -139,6 +141,9 @@ public class AuthPublicApi {
     @Operation(summary = "이메일 인증 코드 발송", description = "입력한 이메일로 6자리 인증 코드를 발송합니다.")
     @PostMapping("/email/send")
     public ResponseEntity<ApiResponseDTO> sendEmailCode(@RequestBody EmailVerificationSendRequestDTO dto) {
+        if ("FIND_PW".equals(dto.getPurpose()) && !authService.existsMemberByEmail(dto.getMemberEmail())) {
+            return ResponseEntity.ok(ApiResponseDTO.of(false, "등록되지 않은 이메일 입니다."));
+        }
         boolean result = authService.sendMemberEmailVerificationCode(dto.getMemberEmail());
         return ResponseEntity
                 .status(HttpStatus.OK)

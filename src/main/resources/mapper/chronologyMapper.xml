@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.app.springapp.mapper.ChronologyMapper">
+
+    <!-- 프로젝트 ID로 소유자 닉네임 조회 -->
+    <select id="findNicknameByProjectId" parameterType="Long" resultType="String">
+        SELECT m.MEMBER_NICKNAME
+        FROM TBL_MEMBER m
+        JOIN TBL_PROJECT p ON m.ID = p.MEMBER_ID
+        WHERE p.ID = #{projectId}
+    </select>
+
+    <!-- 해당 프로젝트 소유자가 완료한 체크리스트 총 수 -->
+    <select id="countCompletedChecklistsByProjectId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_CHECKLIST
+        WHERE MEMBER_ID = (SELECT MEMBER_ID FROM TBL_PROJECT WHERE ID = #{projectId})
+          AND CHECKLIST_COMPLETED = 'Y'
+    </select>
+
+    <!-- 전체 이용자 평균 완료 체크리스트 수 -->
+    <select id="findAvgCompletedChecklists" resultType="int">
+        SELECT NVL(ROUND(AVG(cnt)), 0)
+        FROM (
+            SELECT COUNT(*) cnt
+            FROM TBL_CHECKLIST
+            WHERE CHECKLIST_COMPLETED = 'Y'
+            GROUP BY MEMBER_ID
+        )
+    </select>
+
+    <!-- 해당 프로젝트 소유자의 완료 체크리스트 제목 Top 3 (많이 반복된 순) -->
+    <select id="findTop3ChecklistsByProjectId" parameterType="Long" resultType="map">
+        SELECT CHECKLIST_TITLE AS CHECKLIST_TEXT, COUNT(*) AS CHECKLIST_COUNT
+        FROM TBL_CHECKLIST
+        WHERE MEMBER_ID = (SELECT MEMBER_ID FROM TBL_PROJECT WHERE ID = #{projectId})
+          AND CHECKLIST_COMPLETED = 'Y'
+        GROUP BY CHECKLIST_TITLE
+        ORDER BY CHECKLIST_COUNT DESC
+        FETCH FIRST 3 ROWS ONLY
+    </select>
+
+    <!-- 전체 이용자 평균 프로젝트 진행 기간 (일) -->
+    <select id="findAvgProjectDays" resultType="int">
+        SELECT NVL(ROUND(AVG(CAST(PROJECT_END_DATE AS DATE) - CAST(PROJECT_START_DATE AS DATE))), 0)
+        FROM TBL_PROJECT
+        WHERE PROJECT_START_DATE IS NOT NULL
+          AND PROJECT_END_DATE IS NOT NULL
+    </select>
+
+    <!-- 전체 이용자 평균 프로젝트 수 -->
+    <select id="findAvgProjectCount" resultType="int">
+        SELECT NVL(ROUND(AVG(cnt)), 0)
+        FROM (
+            SELECT COUNT(*) cnt
+            FROM TBL_PROJECT
+            GROUP BY MEMBER_ID
+        )
+    </select>
+
+    <!-- 나보다 완료 체크리스트가 많은 이용자 수 (퍼센타일 계산용) -->
+    <select id="countMembersWithMoreChecklists" resultType="int">
+        SELECT COUNT(*)
+        FROM (
+            SELECT MEMBER_ID, COUNT(*) cnt
+            FROM TBL_CHECKLIST
+            WHERE CHECKLIST_COMPLETED = 'Y'
+            GROUP BY MEMBER_ID
+        )
+        WHERE cnt > #{totalChecklists}
+    </select>
+
+    <!-- 체크리스트를 하나라도 완료한 전체 이용자 수 -->
+    <select id="countMembersWithChecklists" resultType="int">
+        SELECT COUNT(DISTINCT MEMBER_ID)
+        FROM TBL_CHECKLIST
+        WHERE CHECKLIST_COMPLETED = 'Y'
+    </select>
+
+</mapper>
