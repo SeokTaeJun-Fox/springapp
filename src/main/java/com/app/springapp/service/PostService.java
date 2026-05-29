@@ -15,11 +15,20 @@ public interface PostService {
     //게시글 검색 결과 불러오기
     public List<PostListResponseDTO> getPostList(Map<String, Object> order);
 
+    //내 게시글 검색 리스트 불러오기
+    public List<PostListResponseDTO> getMyPostList(Map<String, Object> order);
+
     //검색 결과 게시글 리스트 갯수 반환
     public Integer getPostCount(Map<String, Object> order);
 
+    //검색 결과 내 게시글 리스트 갯수 반환
+    public Integer getMyPostCount(Map<String, Object> order);
+
     //검색 결과 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
     public CommunityPostListResponseDTO getSearchResult(Map<String, Object> order);
+
+    //검색 결과 내 게시글 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
+    public CommunityPostListResponseDTO getMyPostSearchResult(Map<String, Object> order);
 
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)
     //게시글 리스트, 게시글 열람페이지에서 사용된다.

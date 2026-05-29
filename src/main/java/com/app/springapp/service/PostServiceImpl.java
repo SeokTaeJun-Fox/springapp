@@ -33,10 +33,22 @@ public class PostServiceImpl implements PostService {
         return postDAO.selectPostList(order);
     }
 
+    //검색 결과 만족하는 내 게시글 리스트로 반환
+    @Override
+    public List<PostListResponseDTO> getMyPostList(Map<String, Object> order) {
+        return postDAO.findMyPostAll(order);
+    }
+
     //검색 결과 게시글 목록 갯수 (페이지 조건제외)
     @Override
     public Integer getPostCount(Map<String, Object> order) {
         return postDAO.getPostCount(order);
+    }
+
+    //검색 결과 내 게시글 목록 갯수 (페이지 조건제외)
+    @Override
+    public Integer getMyPostCount(Map<String, Object> order) {
+        return postDAO.getMyPostCount(order);
     }
 
     //검색 결과 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
@@ -45,6 +57,15 @@ public class PostServiceImpl implements PostService {
         CommunityPostListResponseDTO communityPostListResponseDTO = new CommunityPostListResponseDTO();
         communityPostListResponseDTO.setTotal(getPostCount(order));
         communityPostListResponseDTO.setPosts(getPostList(order));
+        return communityPostListResponseDTO;
+    }
+
+    //검색 결과 내 게시글 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
+    @Override
+    public CommunityPostListResponseDTO getMyPostSearchResult(Map<String, Object> order) {
+        CommunityPostListResponseDTO communityPostListResponseDTO = new CommunityPostListResponseDTO();
+        communityPostListResponseDTO.setTotal(getMyPostCount(order));
+        communityPostListResponseDTO.setPosts(getMyPostList(order));
         return communityPostListResponseDTO;
     }
 
