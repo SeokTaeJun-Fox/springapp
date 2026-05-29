@@ -37,6 +37,9 @@ public class GuestbookReplyResponseDTO {
     @Schema(description = "좋아요 여부 (1: 좋아요, 0: 미클릭)", example = "0")
     private int isLike;
 
+    @Schema(description = "대댓글 목록")
+    private java.util.List<GuestbookRereplyResponseDTO> rereplies;
+
     // 파라미터로 직접 생성
     public static GuestbookReplyResponseDTO of(Long id, String guestbookReplyContent, String guestbookReplyCreatedAt,
                                                Long guestbookId, Long writerMemberId, String writerNickname,
