@@ -9,6 +9,7 @@ import java.util.List;
 @Component
 @Data
 @Schema(description = "커뮤니티 게시글 검색 응답")
+//삭제예정
 public class SearchPostResponseDTO {
 
     @Schema(description = "검색 게시글 갯수" ,examples="100")

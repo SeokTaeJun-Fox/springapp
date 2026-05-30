@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,29 @@ public class PostServiceImpl implements PostService {
     private final ReplyService replyService;
 
     private final LogDAO logDAO;
+
+    @Override
+    public CommunityResponseDTO getCommunityInfo(Long id) {
+        CommunityResponseDTO communityResponseDTO = new CommunityResponseDTO();
+
+        //지난달 인기글 불러오기(지난달)
+        communityResponseDTO.setPostMonth(postDAO.findPopularPostAtLastMonth(id));
+
+        //실시간 인기글 불러오기(1개월전 ~ 현재)
+        communityResponseDTO.setPopularPosts(postDAO.findPopularPosts(id));
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("order", 0);
+        params.put("order2", 0);
+        params.put("page", 1);
+        params.put("category", 0);
+        params.put("content", "");
+        params.put("memberId", id);
+        //검색 게시글 초기화
+        communityResponseDTO.setPost(getSearchResult(params));
+
+        return communityResponseDTO;
+    }
 
     //검색 결과 만족하는 게시글 리스트로 반환
     @Override
@@ -82,6 +106,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostVO findPost(Long id) {
         return postDAO.find(id).orElseThrow(() -> new PostException("게시글을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public PostListResponseDTO findPopularPostAtLastMonth(Long id) {
+        return postDAO.findPopularPostAtLastMonth(id);
+    }
+
+
+    //인기글 목록 불러오기
+    @Override
+    public List<PostListResponseDTO> findPopularPosts(Long id) {
+        return postDAO.findPopularPosts(id);
     }
 
     // POST ID로 이전글 찾기

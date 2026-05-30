@@ -12,14 +12,14 @@ import java.util.List;
 public class CommunityResponseDTO {
 
     @Schema(description = "지난달 인기 게시글")
-    private PostMonthResponseDTO postMonth;
+    private PostListResponseDTO postMonth;
 
     @Schema(description = "검색 게시글 목록")
-    private SearchPostResponseDTO post;
+    private CommunityPostListResponseDTO post;
 
     @Schema(description = "실시간 인기 게시글 목록")
-    private List<PostPopularListResponseDTO> popularPosts;
+    private List<PostListResponseDTO> popularPosts;
 
     @Schema(description = "맞춤 게시글 목록")
-    private List<PostAiListResponseDTO> postAiList;
+    private List<PostListResponseDTO> postAiList;
 }

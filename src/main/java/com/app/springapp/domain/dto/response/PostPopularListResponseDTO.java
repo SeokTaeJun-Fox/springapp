@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 @Schema(description = "커뮤니티 인기 게시글 목록 응답 DTO")
+//삭제예정
 public class PostPopularListResponseDTO {
 
     @Schema(description = "게시글 ID", example = "1")

@@ -132,4 +132,22 @@ public class PostTests {
         hashMap.put("content", "img");
         log.info("{}",postService.getPostCount(hashMap));
     }
+
+    //인기글 목록 불러오기 테스트
+    @Test
+    public void findPopularPostsTest() {
+        log.info("{}", postService.findPopularPosts(1L));
+    }
+
+    //지난달 인기글 불러오기 테스트
+    @Test
+    public void findPopularPostsLastMonthTest() {
+        log.info("{}", postService.findPopularPostAtLastMonth(1L));
+    }
+
+    //메인 커뮤니티 초기 정보 불러오기 테스트
+    @Test
+    public void getCommunityInitialTest() {
+        log.info("{}", postService.getCommunityInfo(1L));
+    }
 }

@@ -32,6 +32,31 @@ public class PostAPI {
     private final ReplyService replyService;
     private final RereplyService rereplyService;
 
+    //메인 커뮤니티 초기정보
+    @PostMapping("/main")
+    @Operation(summary = "메인 커뮤니티 초기 정보 불러오기 서비스", description = "메인 커뮤니티 초기 정보 불러옵니다.")
+    @ApiResponse(responseCode = "201", description = "초기화 정보 불러오기 완료")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    @Parameters({
+            @Parameter(
+                    name = "id",
+                    description = "로그인 id",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "Long", defaultValue = "1")
+            ),
+    })
+    public ResponseEntity<ApiResponseDTO> getCommunityInitialInfo(
+            @RequestParam(defaultValue = "0") Long id
+    ) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponseDTO.of(
+                        true,
+                        "게시글 읽기 성공",
+                        postService.getCommunityInfo(id)));
+    }
+
     @GetMapping("")
     @Operation(summary = "게시글 목록 조회", description = "검색 조건(필터, 정렬, 카테고리, 키워드)에 맞는 게시글 목록과 전체 게시글 수를 반환합니다.")
     @ApiResponse(responseCode = "200", description = "게시글 목록 조회 성공")
