@@ -70,6 +70,7 @@ public class ReplyServiceImpl implements ReplyService {
         replyDAO.delete(replyId);
     }
 
+    //게시글 삭제
     @Override
     public void deleteReplies(Long postId) {
         List<Long> replyIds = findReplyIds(postId);

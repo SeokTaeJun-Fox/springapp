@@ -27,9 +27,19 @@ public class PostDAO {
         return postMapper.selectAll(order);
     }
 
+    //검색 후 자기가 쓴 게시글 목록 불러오기
+    public List<PostListResponseDTO> findMyPostAll(Map<String, Object> order) {
+        return postMapper.selectMyPostAll(order);
+    }
+
     //검색 결과 게시글 목록 갯수 반환
     public Integer getPostCount(Map<String, Object> order) {
        return postMapper.CountPost(order);
+    }
+
+    //검색 결과 내게시글 목록 갯수 반환
+    public Integer getMyPostCount(Map<String, Object> order) {
+        return postMapper.CountMyPost(order);
     }
 
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)

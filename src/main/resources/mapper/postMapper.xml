@@ -2,6 +2,101 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.springapp.mapper.PostMapper">
 
+    <!-- 내 게시글 리스트 목록 -->
+    <select id="selectMyPostAll" parameterType="Map" resultType="PostListResponseDTO">
+        SELECT
+        P.ID,
+        P.POST_TITLE,
+        P.POST_CONTENT,
+        S.POST_CREATED_AT,
+        S.POST_READ_COUNT,
+        S.MEMBER_ID,
+        S.MEMBER_NICKNAME,
+        S.MEMBER_PROFILE_IMAGE_URL,
+        S.CATEGORY_ID,
+        S.LIKE_COUNT,
+        S.IS_LIKED,
+        S.REPLY_COUNT
+        FROM TBL_POST P
+        JOIN (
+        SELECT
+        P.ID                                                                    AS POST_ID,
+        TO_CHAR(P.POST_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS')                 AS POST_CREATED_AT,
+        P.POST_READ_COUNT,
+        M.ID                                                                    AS MEMBER_ID,
+        M.MEMBER_NICKNAME,
+        M.MEMBER_PROFILE_IMAGE_URL,
+        P.CATEGORY_ID,
+        COUNT(DISTINCT PL.ID)                                                   AS LIKE_COUNT,
+        MAX(CASE WHEN PL.MEMBER_ID = #{memberId} THEN 1 ELSE 0 END)            AS IS_LIKED,
+        COUNT(DISTINCT R.ID)                                                    AS REPLY_COUNT
+        FROM TBL_POST P
+        JOIN TBL_MEMBER   M  ON P.MEMBER_ID   = M.ID
+        JOIN TBL_CATEGORY C  ON P.CATEGORY_ID = C.ID
+        LEFT JOIN TBL_POST_LIKE PL ON P.ID = PL.POST_ID
+        LEFT JOIN TBL_REPLY     R  ON P.ID = R.POST_ID
+        WHERE P.POST_DELETED_AT IS NULL
+        AND P.MEMBER_ID = #{memberId}
+
+        <!-- 검색 필터 -->
+        <if test="content != null and content != ''">
+            <choose>
+                <when test="order == 0">
+                    AND P.POST_TITLE LIKE '%' || #{content} || '%'
+                </when>
+                <when test="order == 1">
+                    AND (P.POST_TITLE LIKE '%' || #{content} || '%'
+                    OR DBMS_LOB.INSTR(P.POST_CONTENT, #{content}) > 0)
+                </when>
+                <when test="order == 2">
+                    AND DBMS_LOB.INSTR(P.POST_CONTENT, #{content}) > 0
+                </when>
+            </choose>
+        </if>
+
+        GROUP BY
+        P.ID,
+        P.POST_CREATED_AT,
+        P.POST_READ_COUNT,
+        M.ID,
+        M.MEMBER_NICKNAME,
+        M.MEMBER_PROFILE_IMAGE_URL,
+        P.CATEGORY_ID
+
+        ORDER BY P.ID DESC
+        <!-- 페이징 (1페이지당 6개) -->
+        OFFSET (#{page} - 1) * 6 ROWS FETCH NEXT 6 ROWS ONLY
+
+        ) S ON P.ID = S.POST_ID
+    </select>
+
+    <!-- 검색결과 내 게시글 갯수 구하기 -->
+    <select id="CountMyPost" parameterType="Map" resultType="Integer">
+        SELECT
+        COUNT(*)
+        FROM TBL_POST P
+        JOIN TBL_MEMBER M ON P.MEMBER_ID = M.ID
+        WHERE P.POST_DELETED_AT IS NULL
+        AND P.MEMBER_ID = #{memberId}
+
+        <!-- 검색 필터 -->
+        <if test="content != null and content != ''">
+            <choose>
+                <when test="order == 0">
+                    AND P.POST_TITLE LIKE '%' || #{content} || '%'
+                </when>
+                <when test="order == 1">
+                    AND (P.POST_TITLE LIKE '%' || #{content} || '%'
+                    OR DBMS_LOB.INSTR(P.POST_CONTENT, #{content}) > 0)
+                </when>
+                <when test="order == 2">
+                    AND DBMS_LOB.INSTR(P.POST_CONTENT, #{content}) > 0
+                </when>
+            </choose>
+        </if>
+
+    </select>
+
     <!-- 게시글 리스트 목록 -->
     <select id="selectAll" parameterType="Map" resultType="PostListResponseDTO">
         SELECT

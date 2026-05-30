@@ -6,6 +6,7 @@ import com.app.springapp.domain.dto.request.PostUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.*;
 import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.exception.PostException;
+import com.app.springapp.repository.LogDAO;
 import com.app.springapp.repository.PostDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class PostServiceImpl implements PostService {
     private final PostDAO postDAO;
     private final PostLikeService postLikeService;
     private final ReplyService replyService;
-    private final PostPictureService postPictureService;
+
+    private final LogDAO logDAO;
 
     //검색 결과 만족하는 게시글 리스트로 반환
     @Override
@@ -33,10 +35,22 @@ public class PostServiceImpl implements PostService {
         return postDAO.selectPostList(order);
     }
 
+    //검색 결과 만족하는 내 게시글 리스트로 반환
+    @Override
+    public List<PostListResponseDTO> getMyPostList(Map<String, Object> order) {
+        return postDAO.findMyPostAll(order);
+    }
+
     //검색 결과 게시글 목록 갯수 (페이지 조건제외)
     @Override
     public Integer getPostCount(Map<String, Object> order) {
         return postDAO.getPostCount(order);
+    }
+
+    //검색 결과 내 게시글 목록 갯수 (페이지 조건제외)
+    @Override
+    public Integer getMyPostCount(Map<String, Object> order) {
+        return postDAO.getMyPostCount(order);
     }
 
     //검색 결과 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
@@ -48,6 +62,15 @@ public class PostServiceImpl implements PostService {
         return communityPostListResponseDTO;
     }
 
+    //검색 결과 내 게시글 정보 DTO반환(게시글 총 갯수(페이지 조건제외) + 게시글 목록)
+    @Override
+    public CommunityPostListResponseDTO getMyPostSearchResult(Map<String, Object> order) {
+        CommunityPostListResponseDTO communityPostListResponseDTO = new CommunityPostListResponseDTO();
+        communityPostListResponseDTO.setTotal(getMyPostCount(order));
+        communityPostListResponseDTO.setPosts(getMyPostList(order));
+        return communityPostListResponseDTO;
+    }
+
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)
     //게시글 리스트, 게시글 열람페이지에서 사용된다.
     @Override
@@ -55,6 +78,7 @@ public class PostServiceImpl implements PostService {
         return postDAO.findById(postReadRequestDTO).orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
     }
 
+    //id로 게시글 검색
     @Override
     public PostVO findPost(Long id) {
         return postDAO.find(id).orElseThrow(() -> new PostException("게시글을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
@@ -85,14 +109,14 @@ public class PostServiceImpl implements PostService {
 
         postReadResponseDTO.setPost(findPost(postReadRequestDTO));  //게시글 정보 저장
         postReadResponseDTO.setReplies(replyService.getPostReplies(postReadRequestDTO));    //게시글에 달린 댓글 정보(대댓글포함) 저장
-//        postReadResponseDTO.setPostPictures(postPictureService.findAll(postReadRequestDTO.getPostId()));    //게시글 첨부 이미지 목록 저장
         postReadResponseDTO.setBeforePost(findBeforePost(postReadRequestDTO.getPostId()));  //이전글 정보 저장
         postReadResponseDTO.setAfterPost(findAfterPost(postReadRequestDTO.getPostId()));    //다음글 정보 저장
 
         Long memberId = postReadResponseDTO.getPost().getMemberId();
 
-        postReadResponseDTO.setMemberPostCount(countPost(memberId));
-        postReadResponseDTO.setMemberReplyCount(replyService.countReply(memberId));
+        postReadResponseDTO.setMemberPostCount(countPost(memberId));    //해당 멤버의 게시글 갯수
+        postReadResponseDTO.setMemberLogCount(logDAO.findAllByMemberId(memberId).toArray().length); //해당 멤버의 로그갯수
+        postReadResponseDTO.setMemberReplyCount(replyService.countReply(memberId)); //해당 멤버의 댓글 갯수
 
         //게시글 조회수 증가
         increaseReadCount(postReadRequestDTO.getPostId());

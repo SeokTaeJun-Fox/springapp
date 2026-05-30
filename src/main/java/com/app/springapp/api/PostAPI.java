@@ -89,6 +89,48 @@ public class PostAPI {
                 postService.getSearchResult(params)));
     }
 
+    //내 게시글 목록 조회
+    @GetMapping("/my-posts")
+    @Operation(summary = "내 게시글 목록 조회", description = "검색 조건(필터, 키워드)에 맞는 내 게시글 목록과 전체 게시글 수를 반환합니다.")
+    @ApiResponse(responseCode = "200", description = "내 게시글 목록 조회 성공")
+    @ApiResponse(responseCode = "404", description = "내 게시글 목록 조회 실패")
+    @Parameters({
+            @Parameter(
+                    name = "order",
+                    description = "게시글 검색 필터 (제목:0, 제목+내용:1, 내용:2)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "0")
+            ),
+            @Parameter(
+                    name = "page",
+                    description = "페이지 (쪽수)",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "integer", defaultValue = "1")
+            ),
+            @Parameter(
+                    name = "content",
+                    description = "검색 내용",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "string", defaultValue = "")
+            )
+    })
+    public ResponseEntity<ApiResponseDTO> getPostList(
+            @RequestParam(defaultValue = "1") Long memberId,
+            @RequestParam(defaultValue = "0")  int order,
+            @RequestParam(defaultValue = "1")  int page,
+            @RequestParam(defaultValue = "") String content
+    ) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("order", order);
+        params.put("page", page);
+        params.put("content", content);
+        params.put("memberId", memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of(
+                true,
+                "내 게시글 목록 조회 성공",
+                postService.getMyPostSearchResult(params)));
+    }
+
     //게시글 열람
     @PostMapping("/read")
     @Operation(summary = "게시글 열람 서비스(좋아요, 좋아요여부포함)", description = "게시글을 열람하는 서비스")

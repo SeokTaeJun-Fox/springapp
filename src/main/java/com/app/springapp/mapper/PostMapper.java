@@ -19,8 +19,14 @@ public interface PostMapper {
     //검색결과 게시글 리스트 반환
     public List<PostListResponseDTO> selectAll(Map<String, Object> order);
 
+    //자기가쓴 검색결과 게시글 리스트 반환
+    public List<PostListResponseDTO> selectMyPostAll(Map<String, Object> order);
+
     //검색결과 게시글 총갯수 반환
     public Integer CountPost(Map<String, Object> order);
+
+    //검색결과 내 게시글 총갯수 반환
+    public Integer CountMyPost(Map<String, Object> order);
 
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)
     //게시글 리스트, 게시글 열람페이지에서 사용된다.

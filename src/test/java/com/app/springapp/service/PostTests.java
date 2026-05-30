@@ -103,6 +103,26 @@ public class PostTests {
     }
 
     @Test
+    public void searchMyPostResultTest() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("order", 0);
+        hashMap.put("page", 1);
+        hashMap.put("content", "");
+        hashMap.put("memberId", 1L);
+        log.info("{}",postService.getMyPostSearchResult(hashMap));
+    }
+
+    @Test
+    public void searchMyPostALLTest() {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("order", 0);
+        hashMap.put("page", 1);
+        hashMap.put("content", "");
+        hashMap.put("memberId", 1L);
+        log.info("{}",postService.getMyPostList(hashMap));
+    }
+
+    @Test
     public void findPostCountTest() {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("order", 1);
