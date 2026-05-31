@@ -83,12 +83,13 @@ public class ProjectController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공", response));
     }
 
-    // 다른 사람의 프로젝트 복사 - POST /api/project/copy/{projectId}
-    @Operation(summary = "다른 사람의 프로젝트 복사", description = "다른 사람의 프로젝트를 내 프로젝트로 복사합니다.")
+    // 다른 사람의 프로젝트 복사 - POST /api/project/copy/{projectId}?logId={logId}
+    @Operation(summary = "다른 사람의 프로젝트 복사", description = "선택한 내 로그의 프로젝트로 복사합니다.")
     @PostMapping("/copy/{projectId}")
     public ResponseEntity<ApiResponseDTO<?>> copyProject(
-            @PathVariable Long projectId) {
-        projectService.copyProject(projectId, 1L); // 로그인 구현 후 memberVO.getId()로 교체
+            @PathVariable Long projectId,
+            @RequestParam Long logId) {
+        projectService.copyProject(projectId, 1L, logId); // 로그인 구현 후 memberVO.getId()로 교체
         return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 내 목록에 추가되었습니다."));
     }
 

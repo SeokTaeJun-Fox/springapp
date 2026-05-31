@@ -67,4 +67,9 @@ public class ProjectDAO {
     public List<ProjectVO> searchOtherProjects(Long memberId, String keyword) {
         return projectMapper.searchOtherProjects(memberId, keyword);
     }
+
+    // 같은 로그에 이미 존재하는 프로젝트 제목 목록 조회 (중복 방지용)
+    public List<String> findTitlesByLogIdAndMemberId(Long logId, Long memberId) {
+        return projectMapper.findTitlesByLogIdAndMemberId(logId, memberId);
+    }
 }

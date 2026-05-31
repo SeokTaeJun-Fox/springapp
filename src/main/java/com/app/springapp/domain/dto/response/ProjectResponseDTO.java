@@ -35,6 +35,9 @@ public class ProjectResponseDTO {
     @Schema(description = "프로젝트 내용", example = "이전 실패를 개선하기 위한 실천 계획")
     private String projectContent;
 
+    @Schema(description = "사용자가 입력한 세부 목표", example = "매일 30분씩 영어 회화 연습하기")
+    private String projectUserGoal;
+
     @Schema(description = "프로젝트 시작일", example = "2024-01-01")
     private String projectStartDate;
 

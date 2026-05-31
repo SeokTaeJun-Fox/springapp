@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 //PROJECT_CREATED_AT      TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
 //MEMBER_ID               NUMBER          NOT NULL,
 //LOG_ID                  NUMBER          NOT NULL,
+//PROJECT_USER_GOAL       VARCHAR2(500)   NULL,
 //AI_SUGGESTION_1_TITLE   VARCHAR2(255)   NULL,
 //AI_SUGGESTION_1_DESC    VARCHAR2(500)   NULL,
 //AI_SUGGESTION_2_TITLE   VARCHAR2(255)   NULL,
@@ -34,6 +35,7 @@ public class ProjectVO {
     private Long   memberId;
     private Long   logId;
     private String visionTitle;
+    private String projectUserGoal;
 
     private String aiSuggestion1Title;
     private String aiSuggestion1Desc;

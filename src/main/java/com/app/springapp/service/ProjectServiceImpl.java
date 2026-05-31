@@ -63,7 +63,8 @@ public class ProjectServiceImpl implements ProjectService {
             throw new RuntimeException("해당 로그의 분석 결과가 없습니다. 먼저 로그 분석을 완료해주세요.");
         }
 
-        AiProjectResult aiResult = generateProjectByAI(logResult);
+        List<String> existingTitles = projectDAO.findTitlesByLogIdAndMemberId(requestDTO.getLogId(), memberId);
+        AiProjectResult aiResult = generateProjectByAI(logResult, requestDTO.getUserGoal(), existingTitles);
 
         ProjectVO projectVO = new ProjectVO();
         projectVO.setMemberId(memberId);
@@ -73,6 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
         projectVO.setProgressDay(aiResult.getProgressDay());
         projectVO.setProjectStartDate(aiResult.getProjectStartDate());
         projectVO.setProjectEndDate(aiResult.getProjectEndDate());
+        projectVO.setProjectUserGoal(requestDTO.getUserGoal());
 
         // AI 행동 추천 저장
         List<ProjectResponseDTO.AiSuggestionItem> aiSuggestions = aiResult.getAiSuggestions();
@@ -90,6 +92,22 @@ public class ProjectServiceImpl implements ProjectService {
         log.info("INSERT 시작 - projectVO: {}", projectVO);
         projectDAO.insertProject(projectVO);
         log.info("INSERT 완료 - 생성된 ID: {}", projectVO.getId());
+
+        // AI가 생성한 체크리스트 자동 저장
+        List<AiChecklistItem> aiChecklists = aiResult.getChecklists();
+        if (aiChecklists != null && !aiChecklists.isEmpty()) {
+            for (AiChecklistItem item : aiChecklists) {
+                ChecklistVO checklistVO = new ChecklistVO();
+                checklistVO.setChecklistTitle(item.getTitle());
+                checklistVO.setChecklistPriority(item.getPriority());
+                checklistVO.setChecklistCompleted("N");
+                checklistVO.setChecklistFailed("N");
+                checklistVO.setProjectId(projectVO.getId());
+                checklistVO.setMemberId(memberId);
+                checklistDAO.insertChecklist(checklistVO);
+            }
+            log.info("AI 체크리스트 {}개 저장 완료", aiChecklists.size());
+        }
 
         ProjectResponseDTO result = toResponseDTO(projectDAO.findById(projectVO.getId()));
         log.info("프로젝트 조회 완료 - result: {}", result);
@@ -109,12 +127,12 @@ public class ProjectServiceImpl implements ProjectService {
      * @param logResult 로그 분석 결과 (LogResultVO)
      * @return AI가 생성한 프로젝트 정보 (AiProjectResult)
      */
-    private AiProjectResult generateProjectByAI(LogResultVO logResult) {
+    private AiProjectResult generateProjectByAI(LogResultVO logResult, String userGoal, List<String> existingTitles) {
 
         log.info("===== OpenAI API 호출 시작 - logId: {} =====", logResult.getLogId());
 
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String prompt = buildPrompt(logResult, today);
+        String prompt = buildPrompt(logResult, today, userGoal, existingTitles);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -129,7 +147,7 @@ public class ProjectServiceImpl implements ProjectService {
                         Map.of("role", "user", "content", prompt)
                 ),
                 "temperature", 0.7,
-                "max_tokens", 600
+                "max_tokens", 900
         );
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
@@ -146,11 +164,25 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
-    // 로그 분석 결과를 OpenAI 프롬프트로 변환
-    private String buildPrompt(LogResultVO logResult, String today) {
+    // 로그 분석 결과, 사용자 세부 목표, 기존 프로젝트 목록을 OpenAI 프롬프트로 변환
+    private String buildPrompt(LogResultVO logResult, String today, String userGoal, List<String> existingTitles) {
+        String goalLine = (userGoal != null && !userGoal.isBlank())
+                ? "[사용자 세부 목표] " + userGoal
+                : "[사용자 세부 목표] 없음 (실패 분석 결과를 바탕으로 적절히 설정)";
+
+        String existingLine;
+        if (existingTitles == null || existingTitles.isEmpty()) {
+            existingLine = "[기존 프로젝트] 없음 (이 로그의 첫 번째 프로젝트)";
+        } else {
+            String titles = existingTitles.stream()
+                    .map(t -> "  - \"" + t + "\"")
+                    .collect(java.util.stream.Collectors.joining("\n"));
+            existingLine = "[기존 프로젝트 — 이미 이 로그로 만든 프로젝트]\n" + titles;
+        }
+
         return String.format("""
-        아래는 사용자의 실패 분석 결과입니다.
-        
+        아래는 사용자의 실패 분석 결과와 세부 목표입니다.
+
         [실패 유형] %s
         [실패 제목] %s
         [실패 설명] %s
@@ -160,13 +192,19 @@ public class ProjectServiceImpl implements ProjectService {
         [내부 요인] %s
         [외부/내부 비율] 외부 %d%% / 내부 %d%%
         [오늘 날짜] %s
-        
-        위 분석을 바탕으로 사용자가 실행할 수 있는 개선 프로젝트와 행동 추천을 설계해주세요.
+        %s
+        %s
+
+        위 분석과 세부 목표를 바탕으로 사용자가 실행할 수 있는 개선 프로젝트, 행동 추천, 체크리스트를 설계해주세요.
+        - 기존 프로젝트가 있다면 반드시 그것과 다른 관점, 다른 접근 방식, 다른 기간의 프로젝트를 만들어주세요.
+        - 프로젝트 제목은 기존 프로젝트 제목과 겹치지 않아야 합니다.
         - 프로젝트 시작일은 오늘(%s)로 설정하세요.
         - 프로젝트 기간은 실패 유형과 목표 난이도에 따라 1개월~6개월 사이로 적절히 설정하세요.
         - progressDay는 시작일 기준 "D+0"으로 설정하세요.
         - 행동 추천은 실패 원인을 개선하기 위한 구체적인 행동 4개를 제시해주세요.
-        
+        - 체크리스트는 프로젝트를 실행하기 위한 구체적인 할 일 4~6개를 제시해주세요.
+        - 체크리스트 우선순위는 반드시 "높음", "중간", "낮음" 중 하나로 설정하세요.
+
         반드시 아래 JSON 형식으로만 응답하세요:
         {
           "projectTitle": "프로젝트 제목 (30자 이내)",
@@ -179,6 +217,11 @@ public class ProjectServiceImpl implements ProjectService {
             { "title": "행동 제목 (20자 이내)", "desc": "행동 설명 (50자 이내)" },
             { "title": "행동 제목 (20자 이내)", "desc": "행동 설명 (50자 이내)" },
             { "title": "행동 제목 (20자 이내)", "desc": "행동 설명 (50자 이내)" }
+          ],
+          "checklists": [
+            { "title": "할 일 제목 (30자 이내)", "priority": "높음" },
+            { "title": "할 일 제목 (30자 이내)", "priority": "중간" },
+            { "title": "할 일 제목 (30자 이내)", "priority": "낮음" }
           ]
         }
         """,
@@ -192,6 +235,8 @@ public class ProjectServiceImpl implements ProjectService {
                 logResult.getLogResultExternalRatio(),
                 logResult.getLogResultInternalRatio(),
                 today,
+                goalLine,
+                existingLine,
                 today
         );
     }
@@ -229,8 +274,21 @@ public class ProjectServiceImpl implements ProjectService {
         }
         aiResult.setAiSuggestions(aiSuggestions);
 
-        log.info("AI 생성 프로젝트 - title: {}, aiSuggestions: {}개",
-                aiResult.getProjectTitle(), aiSuggestions.size());
+        // checklists 파싱
+        List<AiChecklistItem> checklists = new ArrayList<>();
+        JsonNode checklistsNode = result.path("checklists");
+        if (checklistsNode.isArray()) {
+            for (JsonNode node : checklistsNode) {
+                AiChecklistItem item = new AiChecklistItem();
+                item.setTitle(node.path("title").asText());
+                item.setPriority(node.path("priority").asText("중간"));
+                checklists.add(item);
+            }
+        }
+        aiResult.setChecklists(checklists);
+
+        log.info("AI 생성 프로젝트 - title: {}, aiSuggestions: {}개, checklists: {}개",
+                aiResult.getProjectTitle(), aiSuggestions.size(), checklists.size());
 
         return aiResult;
     }
@@ -328,6 +386,14 @@ public class ProjectServiceImpl implements ProjectService {
         private String projectEndDate;
         private String progressDay;
         private List<ProjectResponseDTO.AiSuggestionItem> aiSuggestions;
+        private List<AiChecklistItem> checklists;
+    }
+
+    // AI가 생성한 체크리스트 아이템
+    @lombok.Data
+    private static class AiChecklistItem {
+        private String title;
+        private String priority;
     }
 
     // ProjectVO → ProjectResponseDTO 변환 헬퍼 메서드
@@ -340,6 +406,7 @@ public class ProjectServiceImpl implements ProjectService {
         dto.setLogId(vo.getLogId());
         dto.setProjectTitle(vo.getProjectTitle());
         dto.setProjectContent(vo.getProjectContent());
+        dto.setProjectUserGoal(vo.getProjectUserGoal());
         dto.setProjectStartDate(vo.getProjectStartDate());
         dto.setProjectEndDate(vo.getProjectEndDate());
         dto.setProgressDay(vo.getProgressDay());
@@ -469,14 +536,14 @@ public class ProjectServiceImpl implements ProjectService {
      * @param memberId  현재 로그인한 회원 ID
      */
     @Override
-    public void copyProject(Long projectId, Long memberId) {
+    public void copyProject(Long projectId, Long memberId, Long logId) {
         // 원본 프로젝트 조회
         ProjectVO original = projectDAO.findByIdPublic(projectId);
         if (original == null) {
             throw new RuntimeException("복사할 프로젝트를 찾을 수 없습니다.");
         }
 
-        // 내 프로젝트로 복사 (소유자를 현재 회원으로 변경)
+        // 내 프로젝트로 복사 (소유자와 로그를 사용자가 선택한 것으로 변경)
         ProjectVO copy = new ProjectVO();
         copy.setProjectTitle(original.getProjectTitle());
         copy.setProjectContent(original.getProjectContent());
@@ -484,7 +551,7 @@ public class ProjectServiceImpl implements ProjectService {
         copy.setProjectEndDate(original.getProjectEndDate());
         copy.setProgressDay(original.getProgressDay());
         copy.setMemberId(memberId);
-        copy.setLogId(original.getLogId());
+        copy.setLogId(logId);
         copy.setAiSuggestion1Title(original.getAiSuggestion1Title());
         copy.setAiSuggestion1Desc(original.getAiSuggestion1Desc());
         copy.setAiSuggestion2Title(original.getAiSuggestion2Title());

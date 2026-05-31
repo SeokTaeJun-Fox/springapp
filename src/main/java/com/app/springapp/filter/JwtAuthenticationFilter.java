@@ -47,6 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (path.equals("/private/auth/logout") && "POST".equals(method)) return true;
 
         if (path.startsWith("/private")) return false;
+        if (path.startsWith("/api/ai")) return false;
         if (path.startsWith("/api/project")) return false;
         if (path.equals("/api/logs/my-list")) return false;
         if (path.equals("/api/logs/analyze") && method.equals("POST")) return false;

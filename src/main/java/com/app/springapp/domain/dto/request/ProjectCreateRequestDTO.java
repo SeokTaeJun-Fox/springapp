@@ -12,6 +12,6 @@ public class ProjectCreateRequestDTO {
     @Schema(description = "연결할 로그 ID", example = "1", required = true)
     private Long logId;
 
-    // 아래 필드들은 AI가 생성하므로 요청 시 불필요 — 서비스 내부에서 채워짐
-    // projectTitle, projectContent, progressDay, projectStartDate, projectEndDate
+    @Schema(description = "사용자 세부 목표 (AI 프로젝트 생성에 활용)", example = "매일 30분씩 영어 회화 연습하기")
+    private String userGoal;
 }

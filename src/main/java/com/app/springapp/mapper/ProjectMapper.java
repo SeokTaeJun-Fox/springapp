@@ -41,4 +41,7 @@ public interface ProjectMapper {
 
     // 프로젝트 제목으로 검색 (내 프로젝트 제외)
     List<ProjectVO> searchOtherProjects(@Param("memberId") Long memberId, @Param("keyword") String keyword);
+
+    // 같은 로그에 이미 존재하는 프로젝트 제목 목록 조회 (중복 방지용)
+    List<String> findTitlesByLogIdAndMemberId(@Param("logId") Long logId, @Param("memberId") Long memberId);
 }
