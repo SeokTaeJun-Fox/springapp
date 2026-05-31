@@ -1,5 +1,6 @@
 package com.app.springapp.domain.dto.response;
 
+import com.app.springapp.domain.vo.GuestbookReplyVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -35,4 +36,35 @@ public class GuestbookReplyResponseDTO {
 
     @Schema(description = "좋아요 여부 (1: 좋아요, 0: 미클릭)", example = "0")
     private int isLike;
+
+    @Schema(description = "대댓글 목록")
+    private java.util.List<GuestbookRereplyResponseDTO> rereplies;
+
+    // 파라미터로 직접 생성
+    public static GuestbookReplyResponseDTO of(Long id, String guestbookReplyContent, String guestbookReplyCreatedAt,
+                                               Long guestbookId, Long writerMemberId, String writerNickname,
+                                               String writerProfileImageUrl, int likeCount, int isLike) {
+        GuestbookReplyResponseDTO guestbookReplyResponseDTO = new GuestbookReplyResponseDTO();
+        guestbookReplyResponseDTO.id = id;
+        guestbookReplyResponseDTO.guestbookReplyContent = guestbookReplyContent;
+        guestbookReplyResponseDTO.guestbookReplyCreatedAt = guestbookReplyCreatedAt;
+        guestbookReplyResponseDTO.guestbookId = guestbookId;
+        guestbookReplyResponseDTO.writerMemberId = writerMemberId;
+        guestbookReplyResponseDTO.writerNickname = writerNickname;
+        guestbookReplyResponseDTO.writerProfileImageUrl = writerProfileImageUrl;
+        guestbookReplyResponseDTO.likeCount = likeCount;
+        guestbookReplyResponseDTO.isLike = isLike;
+        return guestbookReplyResponseDTO;
+    }
+
+    // VO → DTO 변환
+    public static GuestbookReplyResponseDTO from(GuestbookReplyVO guestbookReplyVO) {
+        GuestbookReplyResponseDTO guestbookReplyResponseDTO = new GuestbookReplyResponseDTO();
+        guestbookReplyResponseDTO.id = guestbookReplyVO.getId();
+        guestbookReplyResponseDTO.guestbookReplyContent = guestbookReplyVO.getGuestbookReplyContent();
+        guestbookReplyResponseDTO.guestbookReplyCreatedAt = guestbookReplyVO.getGuestbookReplyCreatedAt();
+        guestbookReplyResponseDTO.guestbookId = guestbookReplyVO.getGuestbookId();
+        guestbookReplyResponseDTO.writerMemberId = guestbookReplyVO.getWriterMemberId();
+        return guestbookReplyResponseDTO;
+    }
 }

@@ -96,6 +96,9 @@ public class MemberServiceImpl implements MemberService {
         memberVO.setMemberNickname(memberUpdateRequestDTO.getMemberNickname());
         memberVO.setMemberProfileImageUrl(memberUpdateRequestDTO.getMemberProfileImageUrl());
         memberVO.setMemberPhone(memberUpdateRequestDTO.getMemberPhone());
+        if (Boolean.TRUE.equals(memberUpdateRequestDTO.getVerifyPhone())) {
+            memberVO.setMemberPhoneVerifiedAt("verified");
+        }
 
         memberDAO.update(memberVO);
         return ApiResponseDTO.of(true, "회원 정보가 수정되었습니다.");

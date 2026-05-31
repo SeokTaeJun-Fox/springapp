@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.app.springapp.mapper.ProfileVisitMapper">
+
+    <!-- 방문 기록 저장 -->
+    <insert id="insert" parameterType="ProfileVisitVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_PROFILE_VISIT.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_PROFILE_VISIT (ID, OWNER_MEMBER_ID, VISITOR_MEMBER_ID)
+        VALUES (#{id}, #{ownerMemberId}, #{visitorMemberId})
+    </insert>
+
+    <!-- 오늘 방문자 수 조회 (자기 자신 제외, 당일 unique 방문자) -->
+    <select id="countTodayVisitors" parameterType="Long" resultType="int">
+        SELECT COUNT(DISTINCT VISITOR_MEMBER_ID)
+        FROM TBL_PROFILE_VISIT
+        WHERE OWNER_MEMBER_ID = #{ownerId}
+          AND TRUNC(VISITED_AT) = TRUNC(SYSDATE)
+    </select>
+
+</mapper>

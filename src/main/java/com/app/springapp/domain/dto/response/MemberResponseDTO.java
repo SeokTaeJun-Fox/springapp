@@ -19,6 +19,8 @@ public class MemberResponseDTO {
     private Long memberId;
     private Long memberLoginStreak;
     private LocalDateTime memberLastLoginAt;
+    private String memberPhone;
+    private String memberPhoneVerifiedAt;
 
     public static MemberResponseDTO from(MemberDTO memberDTO){
         MemberResponseDTO memberResponseDTO = new MemberResponseDTO();
@@ -32,6 +34,8 @@ public class MemberResponseDTO {
         memberResponseDTO.setMemberId(memberDTO.getMemberId());
         memberResponseDTO.setMemberLoginStreak(memberDTO.getMemberLoginStreak());
         memberResponseDTO.setMemberLastLoginAt(memberDTO.getMemberLastLoginAt());
+        memberResponseDTO.setMemberPhone(memberDTO.getMemberPhone());
+        memberResponseDTO.setMemberPhoneVerifiedAt(memberDTO.getMemberPhoneVerifiedAt());
 
         return memberResponseDTO;
     }

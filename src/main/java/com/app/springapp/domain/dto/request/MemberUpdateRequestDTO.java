@@ -17,4 +17,7 @@ public class MemberUpdateRequestDTO {
 
     @Schema(description = "전화번호", example = "010-9876-5432", required = false)
     private String memberPhone;
+
+    @Schema(description = "전화번호 인증 여부 (true 시 MEMBER_PHONE_VERIFIED_AT 갱신)", required = false)
+    private Boolean verifyPhone;
 }

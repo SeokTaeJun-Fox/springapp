@@ -1,5 +1,6 @@
 package com.app.springapp.domain.vo;
 
+import com.app.springapp.domain.dto.response.GuestbookResponseDTO;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,6 @@
 package com.app.springapp.domain.dto.response;
 
+import com.app.springapp.domain.vo.GuestbookVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,9 @@ public class GuestbookResponseDTO {
     @Schema(description = "방명록 주인 회원 ID", example = "1")
     private Long ownerMemberId;
 
+    @Schema(description = "방명록 주인 닉네임", example = "주인장")
+    private String ownerNickname;
+
     @Schema(description = "작성자 회원 ID", example = "2")
     private Long writerMemberId;
 
@@ -40,4 +44,15 @@ public class GuestbookResponseDTO {
 
     @Schema(description = "방명록 댓글 목록")
     private List<GuestbookReplyResponseDTO> replies;
+
+    // VO → DTO 변환
+    public static GuestbookResponseDTO from(GuestbookVO guestbookVO) {
+        GuestbookResponseDTO guestbookResponseDTO = new GuestbookResponseDTO();
+        guestbookResponseDTO.id = guestbookVO.getId();
+        guestbookResponseDTO.guestbookContent = guestbookVO.getGuestbookContent();
+        guestbookResponseDTO.guestbookCreatedAt = guestbookVO.getGuestbookCreatedAt();
+        guestbookResponseDTO.ownerMemberId = guestbookVO.getOwnerMemberId();
+        guestbookResponseDTO.writerMemberId = guestbookVO.getWriterMemberId();
+        return guestbookResponseDTO;
+    }
 }
