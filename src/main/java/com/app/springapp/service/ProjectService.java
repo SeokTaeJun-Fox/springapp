@@ -29,8 +29,8 @@ public interface ProjectService {
     // 다른 사람들의 프로젝트 목록 조회 (내 프로젝트 제외, 체크리스트 포함)
     List<ProjectResponseDTO> getOtherProjects(Long memberId);
 
-    // 다른 사람의 프로젝트를 내 프로젝트로 복사
-    void copyProject(Long projectId, Long memberId);
+    // 다른 사람의 프로젝트를 내 프로젝트로 복사 (logId: 어느 로그의 프로젝트로 넣을지)
+    void copyProject(Long projectId, Long memberId, Long logId);
 
     // 프로젝트 제목으로 검색 (내 프로젝트 제외)
     List<ProjectResponseDTO> searchOtherProjects(Long memberId, String keyword);
