@@ -45,4 +45,10 @@ public class LogListResponseDTO {
 
     @Schema(description = "진행률 (0~100)", example = "0")
     private int logProgress;
+
+    @Schema(description = "외부 요인 비율 (AI 분석, 0~100)", example = "60")
+    private Long logResultExternalRatio;
+
+    @Schema(description = "내부 요인 비율 (AI 분석, 0~100)", example = "40")
+    private Long logResultInternalRatio;
 }

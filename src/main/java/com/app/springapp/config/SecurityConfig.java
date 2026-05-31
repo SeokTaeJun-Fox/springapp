@@ -73,6 +73,8 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.POST, "/api/logs").authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/logs/analyze").authenticated()
                     .requestMatchers("/api/logs/my-list").authenticated()
+                    .requestMatchers("/api/logs/liked-list").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/logs/*/like").authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/suggestion/create").authenticated()
                     .requestMatchers(HttpMethod.POST, "/private/auth/logout").permitAll()
                     .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
