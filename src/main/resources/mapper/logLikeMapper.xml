@@ -47,4 +47,13 @@
         ORDER BY TBL.LOG_CREATED_AT DESC
     </select>
 
+    <!-- 특정 로그의 총 좋아요 수 및 현재 사용자의 좋아요 여부 조회 (AI 결과용) -->
+    <select id="selectLikeCountAndIsLiked" parameterType="com.app.springapp.domain.dto.request.LogLikeRequestDTO" resultType="com.app.springapp.domain.dto.response.LogLikeResponseDTO">
+        SELECT
+            COUNT(*) AS LIKE_COUNT,
+            MAX(CASE WHEN MEMBER_ID = #{memberId} THEN 1 ELSE 0 END) AS IS_LIKED
+        FROM TBL_LOG_LIKE
+        WHERE LOG_ID = #{logId}
+    </select>
+
 </mapper>

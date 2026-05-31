@@ -5,5 +5,5 @@ import com.app.springapp.domain.dto.response.ApiResponseDTO;
 
 public interface LogAnalyzeService {
     ApiResponseDTO analyzeLog(LogAnalyzeRequestDTO request, Long memberId);
-    ApiResponseDTO getLogAnalyzeResult(Long logId);
+    ApiResponseDTO getLogAnalyzeResult(Long logId, Long memberId, boolean shouldIncreaseReadCount);
 }

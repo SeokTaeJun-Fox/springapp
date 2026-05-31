@@ -96,11 +96,9 @@ public class LogPromptConstants {
                "Analyze the user's self-reflection log and output a highly structured JSON report.\n" +
                "Language: Korean (한국어로 작성).\n" +
                "CRITICAL: Do NOT use any emojis. Use plain text only (e.g. '->' not '➡️'). 이모지 사용 절대 금지.\n" +
-               "CRITICAL: You MUST generate exactly 3 items for 'patterns'. If there is not enough content, infer or make up related patterns to ensure exactly 3 items are returned.\n" +
-               "CRITICAL: You MUST generate exactly 3 items for 'tryPlans'. Do not return just 1 item.\n" +
-               "CRITICAL: You MUST generate exactly 3 items for 'changePlans'. Do not return just 1 item.\n" +
+               "CRITICAL: Based on the content depth and complexity, generate between 1 and 4 highly relevant items for 'patterns', 'tryPlans', and 'changePlans'. Do not force unnecessary items if the content is simple, but provide up to 4 if the situation is complex.\n" +
                "Analysis Style Guideline: " + guideline + "\n\n" +
-               "You MUST respond with a single valid JSON object matching this exact schema. Ensure the arrays have EXACTLY 3 elements:\n" +
+               "You MUST respond with a single valid JSON object matching this exact schema. Ensure the arrays have 1 to 4 elements based on your analysis:\n" +
                JSON_SCHEMA;
     }
 

@@ -26,10 +26,13 @@ public interface LogService {
     ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId);
 
     // 로그 상세 조회
-    ApiResponseDTO getLog(Long id);
+    ApiResponseDTO getLog(Long id, Long memberId, boolean shouldIncreaseReadCount);
 
     // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
     ApiResponseDTO getPopularSolutions();
+
+    // 로그 좋아요 토글
+    ApiResponseDTO toggleLike(Long logId, Long memberId);
 
 
 }

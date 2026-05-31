@@ -69,11 +69,36 @@ public class LogController {
         return ResponseEntity.ok(logService.createLog(dto, memberDTO.getId()));
     }
 
-    // 로그 상세 조회
     @Operation(summary = "로그 상세 조회", description = "로그 ID로 단건 조회 후 조회수를 증가합니다.")
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id) {
-        return ResponseEntity.ok(logService.getLog(id));
+    public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id,
+                                                 jakarta.servlet.http.HttpServletRequest request,
+                                                 jakarta.servlet.http.HttpServletResponse response,
+                                                 Authentication authentication) {
+        Long memberId = null;
+        if (authentication != null && authentication.getPrincipal() instanceof MemberDTO) {
+            memberId = ((MemberDTO) authentication.getPrincipal()).getId();
+        }
+
+        boolean shouldIncreaseReadCount = true;
+        jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (jakarta.servlet.http.Cookie cookie : cookies) {
+                if (cookie.getName().equals("viewed_log_basic_" + id)) {
+                    shouldIncreaseReadCount = false;
+                    break;
+                }
+            }
+        }
+
+        if (shouldIncreaseReadCount) {
+            jakarta.servlet.http.Cookie newCookie = new jakarta.servlet.http.Cookie("viewed_log_basic_" + id, "true");
+            newCookie.setMaxAge(60 * 60 * 24);
+            newCookie.setPath("/");
+            response.addCookie(newCookie);
+        }
+
+        return ResponseEntity.ok(logService.getLog(id, memberId, shouldIncreaseReadCount));
     }
 
     // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
@@ -83,5 +108,11 @@ public class LogController {
         return ResponseEntity.ok(logService.getPopularSolutions());
     }
 
-
+    // 로그 좋아요 토글
+    @Operation(summary = "로그 좋아요 토글", description = "특정 로그의 좋아요를 추가하거나 취소합니다.")
+    @PostMapping("/like/{logId}")
+    public ResponseEntity<ApiResponseDTO> toggleLike(@PathVariable Long logId, Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.toggleLike(logId, memberDTO.getId()));
+    }
 }

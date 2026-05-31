@@ -7,6 +7,10 @@ import com.app.springapp.domain.dto.response.LogListResponseDTO;
 import com.app.springapp.domain.dto.response.LogPopularSolutionResponseDTO;
 import com.app.springapp.domain.dto.response.LogResponseDTO;
 import com.app.springapp.domain.vo.LogVO;
+import com.app.springapp.domain.vo.LogLikeVO;
+import com.app.springapp.domain.dto.request.LogLikeRequestDTO;
+import com.app.springapp.domain.dto.response.LogLikeResponseDTO;
+import com.app.springapp.mapper.LogLikeMapper;
 import com.app.springapp.repository.LogDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ import java.util.List;
 public class LogServiceImpl implements LogService {
 
     private final LogDAO logDAO;
+    private final LogLikeMapper logLikeMapper;
 
     /**
      * 전체 로그 목록 조회
@@ -101,13 +106,19 @@ public class LogServiceImpl implements LogService {
         return ApiResponseDTO.of(true, "로그 작성 성공", logVO.getId());
     }
 
-    // 로그 상세 조회 (조회수 +1)
+    // 로그 상세 조회 (조건부 조회수 +1)
     @Override
     @Transactional
-    public ApiResponseDTO getLog(Long id) {
+    public ApiResponseDTO getLog(Long id, Long memberId, boolean shouldIncreaseReadCount) {
         LogResponseDTO log = logDAO.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그입니다."));
-        logDAO.increaseReadCount(id);
+        
+        // 본인이 아니고 쿠키가 없을 때만 조회수 증가
+        if (shouldIncreaseReadCount && (memberId == null || !memberId.equals(log.getMemberId()))) {
+            logDAO.increaseReadCount(id);
+            log.setLogReadCount(log.getLogReadCount() + 1);
+        }
+        
         return ApiResponseDTO.of(true, "로그 상세 조회 성공", log);
     }
 
@@ -118,5 +129,28 @@ public class LogServiceImpl implements LogService {
         return ApiResponseDTO.of(true, "인기 솔루션 조회 성공", list);
     }
 
+    // 로그 좋아요 토글
+    @Override
+    public ApiResponseDTO toggleLike(Long logId, Long memberId) {
+        LogLikeRequestDTO requestDTO = new LogLikeRequestDTO(logId, memberId);
+        LogLikeResponseDTO responseDTO = logLikeMapper.selectLikeCountAndIsLiked(requestDTO);
 
+        LogLikeVO vo = new LogLikeVO();
+        vo.setLogId(logId);
+        vo.setMemberId(memberId);
+
+        if (responseDTO.getIsLiked() == 1) {
+            // 이미 좋아요를 누른 상태라면 취소
+            logLikeMapper.delete(vo);
+            responseDTO.setIsLiked(0);
+            responseDTO.setLikeCount(responseDTO.getLikeCount() - 1);
+        } else {
+            // 좋아요를 누르지 않은 상태라면 추가
+            logLikeMapper.insert(vo);
+            responseDTO.setIsLiked(1);
+            responseDTO.setLikeCount(responseDTO.getLikeCount() + 1);
+        }
+
+        return ApiResponseDTO.of(true, "좋아요 토글 성공", responseDTO);
+    }
 }

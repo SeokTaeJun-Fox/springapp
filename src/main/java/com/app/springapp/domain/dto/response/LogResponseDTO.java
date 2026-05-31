@@ -51,4 +51,7 @@ public class LogResponseDTO {
 
     @Schema(description = "진행률 (0~100)", example = "0")
     private int logProgress;
+
+    @Schema(description = "현재 로그인된 사용자의 좋아요 여부", example = "true")
+    private boolean isLiked;
 }

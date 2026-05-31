@@ -24,6 +24,7 @@
         <typeAlias type="com.app.springapp.domain.dto.request.GuestbookReplyCreateRequestDTO" alias="GuestbookReplyCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogActionPlanCreateRequestDTO" alias="LogActionPlanCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogCreateRequestDTO" alias="LogCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.LogLikeRequestDTO" alias="LogLikeRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogPatternCreateRequestDTO" alias="LogPatternCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogResultCreateRequestDTO" alias="LogResultCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogUpdateRequestDTO" alias="LogUpdateRequestDTO"/>
@@ -64,6 +65,7 @@
         <typeAlias type="com.app.springapp.domain.dto.response.GuestbookResponseDTO" alias="GuestbookResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.GuestbookRereplyResponseDTO" alias="GuestbookRereplyResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogActionPlanResponseDTO" alias="LogActionPlanResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.LogLikeResponseDTO" alias="LogLikeResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogListResponseDTO" alias="LogListResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogPatternResponseDTO" alias="LogPatternResponseDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.response.LogResponseDTO" alias="LogResponseDTO"/>

@@ -38,3 +38,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Local file uploads (should not be tracked) ###
+uploads/

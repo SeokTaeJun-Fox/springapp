@@ -58,6 +58,8 @@ public class SecurityConfig {
                             "/swagger-ui.html"
                     ).permitAll()
                     .requestMatchers("/api/ai/**").authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/upload").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/uploads/**").permitAll()
                     .requestMatchers("/api/project/**").permitAll() // SecurityConfig.java 내 permitAll 또는 authenticated 설정
                     .requestMatchers(HttpMethod.GET, "/api/project/public/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/project/search").authenticated()

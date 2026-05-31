@@ -33,6 +33,7 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
     private final RadarScoreMapper radarScoreMapper;
     private final LogPatternMapper logPatternMapper;
     private final LogActionPlanMapper logActionPlanMapper;
+    private final LogLikeMapper logLikeMapper;
     private final ObjectMapper objectMapper;
 
     @Value("${langchain.server.url:http://localhost:8000}")
@@ -229,11 +230,26 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public ApiResponseDTO getLogAnalyzeResult(Long logId) {
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResponseDTO getLogAnalyzeResult(Long logId, Long memberId, boolean shouldIncreaseReadCount) {
         // 1. 기본 로그 정보 조회
         com.app.springapp.domain.dto.response.LogResponseDTO logInfo = 
             logMapper.selectById(logId).orElseThrow(() -> new RuntimeException("로그를 찾을 수 없습니다."));
+
+        // 본인이 아니며 쿠키상 조회 내역이 없을 때만 조회수 증가
+        if (shouldIncreaseReadCount && (memberId == null || !memberId.equals(logInfo.getMemberId()))) {
+            logMapper.increaseReadCount(logId);
+            logInfo.setLogReadCount(logInfo.getLogReadCount() + 1);
+        }
+
+        // 좋아요 여부 세팅
+        if (memberId != null) {
+            com.app.springapp.domain.dto.request.LogLikeRequestDTO likeReq = new com.app.springapp.domain.dto.request.LogLikeRequestDTO(logId, memberId);
+            com.app.springapp.domain.dto.response.LogLikeResponseDTO likeRes = logLikeMapper.selectLikeCountAndIsLiked(likeReq);
+            if (likeRes != null) {
+                logInfo.setLiked(likeRes.getIsLiked() == 1);
+            }
+        }
 
         // 2. 분석 결과 (TBL_LOG_RESULT) 조회
         LogResultVO aiResult = logResultMapper.findByLogId(logId);

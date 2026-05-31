@@ -1,5 +1,7 @@
 package com.app.springapp.mapper;
 
+import com.app.springapp.domain.dto.request.LogLikeRequestDTO;
+import com.app.springapp.domain.dto.response.LogLikeResponseDTO;
 import com.app.springapp.domain.dto.response.LogListResponseDTO;
 import com.app.springapp.domain.vo.LogLikeVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,4 +14,7 @@ public interface LogLikeMapper {
     void delete(LogLikeVO logLikeVO);
     int isLiked(LogLikeVO logLikeVO);
     List<LogListResponseDTO> selectLikedLogsByMemberId(Long memberId);
+    
+    // For LogAnalyzeService
+    LogLikeResponseDTO selectLikeCountAndIsLiked(LogLikeRequestDTO request);
 }
