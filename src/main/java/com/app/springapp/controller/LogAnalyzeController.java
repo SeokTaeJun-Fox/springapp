@@ -34,7 +34,34 @@ public class LogAnalyzeController {
 
     @Operation(summary = "로그 분석 결과 조회", description = "로그 ID를 기반으로 AI 분석 결과를 포함한 전체 데이터를 조회합니다.")
     @GetMapping("/analyze/{logId}")
-    public ResponseEntity<ApiResponseDTO> getLogAnalyzeResult(@org.springframework.web.bind.annotation.PathVariable Long logId) {
-        return ResponseEntity.ok(logAnalyzeService.getLogAnalyzeResult(logId));
+    public ResponseEntity<ApiResponseDTO> getLogAnalyzeResult(@org.springframework.web.bind.annotation.PathVariable Long logId,
+                                                              jakarta.servlet.http.HttpServletRequest request,
+                                                              jakarta.servlet.http.HttpServletResponse response,
+                                                              Authentication authentication) {
+        Long memberId = null;
+        if (authentication != null && authentication.getPrincipal() instanceof MemberDTO) {
+            memberId = ((MemberDTO) authentication.getPrincipal()).getId();
+        }
+        boolean shouldIncreaseReadCount = true;
+
+        // 쿠키 검사 (동일 사용자의 중복 조회 방지)
+        jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (jakarta.servlet.http.Cookie cookie : cookies) {
+                if (cookie.getName().equals("viewed_log_" + logId)) {
+                    shouldIncreaseReadCount = false;
+                    break;
+                }
+            }
+        }
+
+        if (shouldIncreaseReadCount) {
+            jakarta.servlet.http.Cookie newCookie = new jakarta.servlet.http.Cookie("viewed_log_" + logId, "true");
+            newCookie.setMaxAge(60 * 60 * 24); // 24시간 유지
+            newCookie.setPath("/");
+            response.addCookie(newCookie);
+        }
+
+        return ResponseEntity.ok(logAnalyzeService.getLogAnalyzeResult(logId, memberId, shouldIncreaseReadCount));
     }
 }
