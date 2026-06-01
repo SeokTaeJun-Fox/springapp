@@ -35,6 +35,12 @@ public interface PostMapper {
     //게시글 id로 게시글 정보 불러오기
     public PostVO select(Long id);
 
+    //베스트 게시글 목록 불러오기
+    public PostListResponseDTO selectPopularPostAtLastMonth(Long id);
+
+    //인기 게시글 목록 불러오기
+    public List<PostListResponseDTO> selectPopularPosts(Long id);
+
     // POST ID로 이전글 찾기
     public PostBeforeResponseDTO selectBeforePost(Long postId);
 

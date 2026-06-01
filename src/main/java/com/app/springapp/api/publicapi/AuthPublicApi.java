@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/public/auth")
+@Slf4j
 public class AuthPublicApi {
 
     private final MemberService memberService;
@@ -35,6 +37,9 @@ public class AuthPublicApi {
         memberDTO.setMemberName(dto.getMemberName());
         memberDTO.setMemberPhone(dto.getMemberPhone());
         memberDTO.setMemberNickname(dto.getMemberNickname());
+
+        log.info("{}", memberDTO);
+
         memberDTO.setSocialMemberProvider("local");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
