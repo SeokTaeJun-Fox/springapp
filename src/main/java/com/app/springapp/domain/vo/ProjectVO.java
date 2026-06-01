@@ -34,6 +34,7 @@ public class ProjectVO {
     private String projectCreatedAt;
     private Long   memberId;
     private Long   logId;
+    private String logTitle;
     private String visionTitle;
     private String projectUserGoal;
 

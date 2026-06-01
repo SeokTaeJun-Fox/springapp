@@ -40,6 +40,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Value("${openai.api-key}")
     private String openAiApiKey;
 
+    @Value("${langchain.server.url:http://localhost:8000}")
+    private String langchainServerUrl;
+
     private static final String OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
     // ────────────────────────────────────────────────
@@ -128,10 +131,44 @@ public class ProjectServiceImpl implements ProjectService {
      * @return AI가 생성한 프로젝트 정보 (AiProjectResult)
      */
     private AiProjectResult generateProjectByAI(LogResultVO logResult, String userGoal, List<String> existingTitles) {
-
-        log.info("===== OpenAI API 호출 시작 - logId: {} =====", logResult.getLogId());
-
         String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        // 1. Python LangChain 서버로 요청 시도
+        try {
+            String url = langchainServerUrl + "/api/project/create";
+            
+            Map<String, Object> payload = new java.util.HashMap<>();
+            payload.put("logResultFailureType", logResult.getLogResultFailureType());
+            payload.put("logResultFailureTitle", logResult.getLogResultFailureTitle());
+            payload.put("logResultFailureDesc", logResult.getLogResultFailureDesc());
+            payload.put("logResultOneLineSummary", logResult.getLogResultOneLineSummary());
+            payload.put("logResultLogKeyDecision", logResult.getLogResultLogKeyDecision());
+            payload.put("logResultLogExternalFactor", logResult.getLogResultLogExternalFactor());
+            payload.put("logResultLogInternalFactor", logResult.getLogResultLogInternalFactor());
+            payload.put("logResultExternalRatio", logResult.getLogResultExternalRatio());
+            payload.put("logResultInternalRatio", logResult.getLogResultInternalRatio());
+            payload.put("today", today);
+            payload.put("userGoal", userGoal != null ? userGoal : "");
+            payload.put("existingTitles", existingTitles != null ? existingTitles : List.of());
+
+            log.info("Sending request to LangChain (Project Create): {}", url);
+            ResponseEntity<AiProjectResult> response = restTemplate.postForEntity(url, payload, AiProjectResult.class);
+            AiProjectResult result = response.getBody();
+            if (result != null) {
+                return result;
+            } else {
+                throw new RuntimeException("LangChain 응답이 비어있습니다.");
+            }
+        } catch (Exception ex) {
+            log.warn("Python LangChain server failed or unreachable. Falling back to Spring Boot OpenAI API...", ex);
+            // 2. Fallback: Spring Boot에서 직접 OpenAI 호출
+            return generateProjectByAIFallback(logResult, userGoal, existingTitles, today);
+        }
+    }
+
+    private AiProjectResult generateProjectByAIFallback(LogResultVO logResult, String userGoal, List<String> existingTitles, String today) {
+        log.info("===== OpenAI API 직통 호출 시작 (Fallback) - logId: {} =====", logResult.getLogId());
+
         String prompt = buildPrompt(logResult, today, userGoal, existingTitles);
 
         HttpHeaders headers = new HttpHeaders();
