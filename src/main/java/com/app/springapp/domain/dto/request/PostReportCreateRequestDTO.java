@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 @Schema(description = "게시글 신고 요청 DTO")
 public class PostReportCreateRequestDTO {
 
+    @Schema(description = "신고자", example = "1", required = true)
+    private Long memberId;
+
     @Schema(description = "신고할 게시글 ID", example = "1", required = true)
     private Long postId;
 

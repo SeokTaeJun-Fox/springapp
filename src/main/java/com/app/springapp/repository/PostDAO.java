@@ -53,6 +53,16 @@ public class PostDAO {
         return Optional.ofNullable(postMapper.select(id));
     }
 
+    //지난달 베스트 글 불러오기
+    public PostListResponseDTO findPopularPostAtLastMonth(Long id) {
+        return postMapper.selectPopularPostAtLastMonth(id);
+    }
+
+    //인기글 목록 불러오기
+    public List<PostListResponseDTO> findPopularPosts(Long id) {
+        return postMapper.selectPopularPosts(id);
+    }
+
     // POST ID로 이전글 찾기
     public PostBeforeResponseDTO findBeforePost(Long postId) {
         return postMapper.selectBeforePost(postId);

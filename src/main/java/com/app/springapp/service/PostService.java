@@ -12,6 +12,9 @@ import java.util.Map;
 
 public interface PostService {
 
+    //커뮤니티 메인 페이지 초기화 정보 불러오기
+    public CommunityResponseDTO getCommunityInfo(Long id);
+
     //게시글 검색 결과 불러오기
     public List<PostListResponseDTO> getPostList(Map<String, Object> order);
 
@@ -36,6 +39,12 @@ public interface PostService {
 
     //게시글 id로 게시글 정보 불러오기
     public PostVO findPost(Long id);
+
+    //지난달 인기글 정보 불러오기
+    public PostListResponseDTO findPopularPostAtLastMonth(Long id);
+
+    //인기글 목록 불러오기
+    public List<PostListResponseDTO> findPopularPosts(Long id);
 
     // POST ID로 이전글 찾기
     public PostBeforeResponseDTO findBeforePost(Long postId);
