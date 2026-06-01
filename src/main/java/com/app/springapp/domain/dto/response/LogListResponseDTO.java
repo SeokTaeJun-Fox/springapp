@@ -46,14 +46,12 @@ public class LogListResponseDTO {
     @Schema(description = "진행률 (0~100)", example = "0")
     private int logProgress;
 
-<<<<<<< HEAD
+    @Schema(description = "현재 로그인된 사용자의 좋아요 여부", example = "true")
+    private boolean isLiked;
+
     @Schema(description = "외부 요인 비율 (AI 분석, 0~100)", example = "60")
     private Long logResultExternalRatio;
 
     @Schema(description = "내부 요인 비율 (AI 분석, 0~100)", example = "40")
     private Long logResultInternalRatio;
-=======
-    @Schema(description = "현재 로그인된 사용자의 좋아요 여부", example = "true")
-    private boolean isLiked;
->>>>>>> aa316ad143c21c09ce2dd3ebd76d0be95609c5c9
 }
