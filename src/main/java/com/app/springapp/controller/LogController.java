@@ -92,10 +92,14 @@ public class LogController {
         }
 
         if (shouldIncreaseReadCount) {
-            jakarta.servlet.http.Cookie newCookie = new jakarta.servlet.http.Cookie("viewed_log_basic_" + id, "true");
-            newCookie.setMaxAge(60 * 60 * 24);
-            newCookie.setPath("/");
-            response.addCookie(newCookie);
+            org.springframework.http.ResponseCookie newCookie = org.springframework.http.ResponseCookie.from("viewed_log_basic_" + id, "true")
+                    .maxAge(60 * 60 * 24)
+                    .path("/")
+                    .sameSite("Lax")
+                    .secure(false)
+                    .httpOnly(true)
+                    .build();
+            response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, newCookie.toString());
         }
 
         return ResponseEntity.ok(logService.getLog(id, memberId, shouldIncreaseReadCount));

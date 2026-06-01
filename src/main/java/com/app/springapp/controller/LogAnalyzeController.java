@@ -56,10 +56,14 @@ public class LogAnalyzeController {
         }
 
         if (shouldIncreaseReadCount) {
-            jakarta.servlet.http.Cookie newCookie = new jakarta.servlet.http.Cookie("viewed_log_" + logId, "true");
-            newCookie.setMaxAge(60 * 60 * 24); // 24시간 유지
-            newCookie.setPath("/");
-            response.addCookie(newCookie);
+            org.springframework.http.ResponseCookie newCookie = org.springframework.http.ResponseCookie.from("viewed_log_" + logId, "true")
+                    .maxAge(60 * 60 * 24)
+                    .path("/")
+                    .sameSite("Lax")
+                    .secure(false)
+                    .httpOnly(true)
+                    .build();
+            response.addHeader(org.springframework.http.HttpHeaders.SET_COOKIE, newCookie.toString());
         }
 
         return ResponseEntity.ok(logAnalyzeService.getLogAnalyzeResult(logId, memberId, shouldIncreaseReadCount));
