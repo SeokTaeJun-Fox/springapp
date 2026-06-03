@@ -22,6 +22,9 @@ public interface LogService {
     // 회원 ID로 내 로그 목록 전체 조회 (프로젝트 생성 모달용)
     ApiResponseDTO getMyLogList(Long memberId);
 
+    // 회원 ID로 내 휴지통 로그 목록 전체 조회
+    ApiResponseDTO getTrashedLogList(Long memberId);
+
     // 로그 작성
     ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId);
 
@@ -34,5 +37,12 @@ public interface LogService {
     // 로그 좋아요 토글
     ApiResponseDTO toggleLike(Long logId, Long memberId);
 
+    // 로그 다중 소프트 삭제 (휴지통 이동)
+    ApiResponseDTO deleteLogs(List<Long> ids, Long memberId);
 
+    // 로그 다중 복원
+    ApiResponseDTO restoreLogs(List<Long> ids, Long memberId);
+
+    // 로그 다중 영구 삭제
+    ApiResponseDTO hardDeleteLogs(List<Long> ids, Long memberId);
 }

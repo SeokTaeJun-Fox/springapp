@@ -39,6 +39,11 @@ public class LogDAO {
         return logMapper.findAllByMemberId(memberId);
     }
 
+    // 회원 ID로 내 휴지통 로그 목록 전체 조회
+    public List<LogListResponseDTO> findAllTrashedByMemberId(Long memberId) {
+        return logMapper.findAllTrashedByMemberId(memberId);
+    }
+
     // 로그 작성
     public void save(LogVO logVO) {
         logMapper.insert(logVO);
@@ -55,8 +60,23 @@ public class LogDAO {
     }
 
 
-    // 조회수 +1
+    // 조회수 증가
     public void increaseReadCount(Long id) {
         logMapper.increaseReadCount(id);
+    }
+
+    // 다중 로그 소프트 삭제 (휴지통으로 이동)
+    public void deleteLogs(List<Long> ids) {
+        logMapper.deleteLogs(ids);
+    }
+
+    // 다중 로그 복원
+    public void restoreLogs(List<Long> ids) {
+        logMapper.restoreLogs(ids);
+    }
+
+    // 다중 로그 영구 삭제
+    public void hardDeleteLogs(List<Long> ids) {
+        logMapper.hardDeleteLogs(ids);
     }
 }

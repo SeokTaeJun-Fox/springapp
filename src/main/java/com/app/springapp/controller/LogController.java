@@ -61,6 +61,14 @@ public class LogController {
         return ResponseEntity.ok(logService.getMyLogList(memberDTO.getId()));
     }
 
+    // 휴지통 로그 목록 조회 - GET /api/logs/trashed
+    @Operation(summary = "휴지통 로그 목록 조회", description = "로그인한 사용자의 휴지통(소프트 삭제된) 로그 목록을 반환합니다.")
+    @GetMapping("/trashed")
+    public ResponseEntity<ApiResponseDTO> getTrashedLogList(Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.getTrashedLogList(memberDTO.getId()));
+    }
+
     // 로그 작성
     @PostMapping
     public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto,
@@ -118,5 +126,29 @@ public class LogController {
     public ResponseEntity<ApiResponseDTO> toggleLike(@PathVariable Long logId, Authentication authentication) {
         MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
         return ResponseEntity.ok(logService.toggleLike(logId, memberDTO.getId()));
+    }
+
+    // 로그 다중 삭제 (휴지통으로 이동)
+    @Operation(summary = "로그 다중 소프트 삭제", description = "여러 로그를 휴지통으로 이동(소프트 삭제)합니다.")
+    @DeleteMapping("/trash")
+    public ResponseEntity<ApiResponseDTO> deleteLogs(@RequestBody java.util.List<Long> ids, Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.deleteLogs(ids, memberDTO.getId()));
+    }
+
+    // 로그 복원
+    @Operation(summary = "로그 다중 복원", description = "휴지통에 있는 로그들을 복원합니다.")
+    @PostMapping("/restore")
+    public ResponseEntity<ApiResponseDTO> restoreLogs(@RequestBody java.util.List<Long> ids, Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.restoreLogs(ids, memberDTO.getId()));
+    }
+
+    // 로그 영구 삭제
+    @Operation(summary = "로그 다중 영구 삭제", description = "여러 로그를 DB에서 영구 삭제합니다.")
+    @DeleteMapping("/permanent")
+    public ResponseEntity<ApiResponseDTO> hardDeleteLogs(@RequestBody java.util.List<Long> ids, Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.hardDeleteLogs(ids, memberDTO.getId()));
     }
 }

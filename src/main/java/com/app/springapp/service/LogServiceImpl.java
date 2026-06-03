@@ -78,7 +78,7 @@ public class LogServiceImpl implements LogService {
     }
 
     /**
-     * 회원 ID로 내 로그 목록 전체 조회
+     * 회원 ID로 내 로그 목록 전체 조회 (삭제된 로그 제외)
      * - 프로젝트 생성 모달에서 사용자의 로그 목록을 표시할 때 사용
      *
      * @param memberId 현재 로그인한 회원 ID
@@ -87,7 +87,14 @@ public class LogServiceImpl implements LogService {
     @Override
     public ApiResponseDTO getMyLogList(Long memberId) {
         List<LogListResponseDTO> list = logDAO.findAllByMemberId(memberId);
-        return ApiResponseDTO.of(true, "내 로그 목록 조회 성공", list);
+        return new ApiResponseDTO(true, "내 로그 목록 조회 성공", list);
+    }
+
+    // 회원 ID로 내 휴지통 로그 목록 전체 조회
+    @Override
+    public ApiResponseDTO getTrashedLogList(Long memberId) {
+        List<LogListResponseDTO> list = logDAO.findAllTrashedByMemberId(memberId);
+        return new ApiResponseDTO(true, "내 휴지통 로그 목록 조회 성공", list);
     }
 
     // 로그 작성
@@ -114,9 +121,14 @@ public class LogServiceImpl implements LogService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그입니다."));
         
         // 본인이 아니고 쿠키가 없을 때만 조회수 증가
-        if (shouldIncreaseReadCount && (memberId == null || !memberId.equals(log.getMemberId()))) {
-            logDAO.increaseReadCount(id);
-            log.setLogReadCount(log.getLogReadCount() + 1);
+        if (memberId != null && memberId.equals(log.getMemberId())) {
+            log.setAuthor(true);
+        } else {
+            log.setAuthor(false);
+            if (shouldIncreaseReadCount) {
+                logDAO.increaseReadCount(id);
+                log.setLogReadCount(log.getLogReadCount() + 1);
+            }
         }
         
         return ApiResponseDTO.of(true, "로그 상세 조회 성공", log);
@@ -152,5 +164,59 @@ public class LogServiceImpl implements LogService {
         }
 
         return ApiResponseDTO.of(true, "좋아요 토글 성공", responseDTO);
+    }
+
+    // 로그 다중 소프트 삭제
+    @Override
+    public ApiResponseDTO deleteLogs(List<Long> ids, Long memberId) {
+        if (ids == null || ids.isEmpty()) {
+            return new ApiResponseDTO(false, "휴지통으로 이동할 로그 ID가 없습니다.", null);
+        }
+        
+        for (Long id : ids) {
+            LogResponseDTO log = logDAO.findById(id).orElse(null);
+            if (log != null && !log.getMemberId().equals(memberId)) {
+                return new ApiResponseDTO(false, "본인이 작성한 로그만 휴지통으로 이동할 수 있습니다.", null);
+            }
+        }
+
+        logDAO.deleteLogs(ids);
+        return new ApiResponseDTO(true, "선택한 로그들이 휴지통으로 이동되었습니다.", null);
+    }
+
+    // 로그 다중 복원
+    @Override
+    public ApiResponseDTO restoreLogs(List<Long> ids, Long memberId) {
+        if (ids == null || ids.isEmpty()) {
+            return new ApiResponseDTO(false, "복원할 로그 ID가 없습니다.", null);
+        }
+        
+        for (Long id : ids) {
+            LogResponseDTO log = logDAO.findById(id).orElse(null);
+            if (log != null && !log.getMemberId().equals(memberId)) {
+                return new ApiResponseDTO(false, "본인이 작성한 로그만 복원할 수 있습니다.", null);
+            }
+        }
+
+        logDAO.restoreLogs(ids);
+        return new ApiResponseDTO(true, "선택한 로그들이 복원되었습니다.", null);
+    }
+
+    // 로그 다중 영구 삭제
+    @Override
+    public ApiResponseDTO hardDeleteLogs(List<Long> ids, Long memberId) {
+        if (ids == null || ids.isEmpty()) {
+            return new ApiResponseDTO(false, "삭제할 로그 ID가 없습니다.", null);
+        }
+        
+        for (Long id : ids) {
+            LogResponseDTO log = logDAO.findById(id).orElse(null);
+            if (log != null && !log.getMemberId().equals(memberId)) {
+                return new ApiResponseDTO(false, "본인이 작성한 로그만 삭제할 수 있습니다.", null);
+            }
+        }
+
+        logDAO.hardDeleteLogs(ids);
+        return new ApiResponseDTO(true, "선택한 로그들이 영구 삭제되었습니다.", null);
     }
 }
