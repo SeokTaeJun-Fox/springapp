@@ -36,6 +36,9 @@ public class LogResponseDTO {
     @Schema(description = "작성자 닉네임", example = "길동이")
     private String memberNickname;
 
+    @Schema(description = "작성자 프로필 이미지 URL", example = "https://example.com/profile.png")
+    private String memberProfileImageUrl;
+
     @Schema(description = "카테고리 ID", example = "1")
     private Long categoryId;
 
@@ -53,5 +56,10 @@ public class LogResponseDTO {
     private int logProgress;
 
     @Schema(description = "현재 로그인된 사용자의 좋아요 여부", example = "true")
+    @com.fasterxml.jackson.annotation.JsonProperty("isLiked")
     private boolean isLiked;
+
+    @Schema(description = "현재 접속한 사용자가 작성자인지 여부", example = "true")
+    @com.fasterxml.jackson.annotation.JsonProperty("isAuthor")
+    private boolean isAuthor;
 }

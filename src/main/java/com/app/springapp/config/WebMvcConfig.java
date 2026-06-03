@@ -12,7 +12,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 클라이언트에서 /uploads/** 로 요청이 오면 D 드라이브의 폴더에서 파일을 찾음
+        String path = java.nio.file.Paths.get(System.getProperty("user.dir"), "uploads").toUri().toString();
         registry.addResourceHandler("/uploads/**")
-                .addResourceLocations("file:///" + uploadDir);
+                .addResourceLocations(path);
     }
 }

@@ -79,7 +79,7 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
                 throw new RuntimeException("LangChain 응답이 비어있습니다.");
             }
         } catch (Exception ex) {
-            log.warn("Python LangChain server failed or unreachable. Falling back to Spring Boot OpenAI API...", ex);
+            log.warn("Python LangChain server failed or unreachable ({}). Falling back to Spring Boot OpenAI API...", ex.getMessage());
             // 3. Fallback: Spring Boot에서 직접 OpenAI 호출
             try {
                 OpenAiService openAiService = new OpenAiService(openAiApiKey, java.time.Duration.ofSeconds(60));
@@ -237,9 +237,14 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
             logMapper.selectById(logId).orElseThrow(() -> new RuntimeException("로그를 찾을 수 없습니다."));
 
         // 본인이 아니며 쿠키상 조회 내역이 없을 때만 조회수 증가
-        if (shouldIncreaseReadCount && (memberId == null || !memberId.equals(logInfo.getMemberId()))) {
-            logMapper.increaseReadCount(logId);
-            logInfo.setLogReadCount(logInfo.getLogReadCount() + 1);
+        if (memberId != null && memberId.equals(logInfo.getMemberId())) {
+            logInfo.setAuthor(true);
+        } else {
+            logInfo.setAuthor(false);
+            if (shouldIncreaseReadCount) {
+                logMapper.increaseReadCount(logId);
+                logInfo.setLogReadCount(logInfo.getLogReadCount() + 1);
+            }
         }
 
         // 좋아요 여부 세팅
