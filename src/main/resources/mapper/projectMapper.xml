@@ -71,9 +71,12 @@
             TBP.AI_SUGGESTION_3_TITLE                                   AS aiSuggestion3Title,
             TBP.AI_SUGGESTION_3_DESC                                    AS aiSuggestion3Desc,
             TBP.AI_SUGGESTION_4_TITLE                                   AS aiSuggestion4Title,
-            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc
+            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc,
+            TBM.MEMBER_NICKNAME                                         AS memberNickname,
+            TBM.MEMBER_PROFILE_IMAGE_URL                                AS memberProfileImageUrl
         FROM TBL_PROJECT TBP
                  JOIN TBL_LOG TBL ON TBP.LOG_ID = TBL.ID
+                 JOIN TBL_MEMBER TBM ON TBP.MEMBER_ID = TBM.ID
         WHERE TBP.ID = #{id}
     </select>
 
@@ -98,9 +101,12 @@
             TBP.AI_SUGGESTION_3_TITLE                                   AS aiSuggestion3Title,
             TBP.AI_SUGGESTION_3_DESC                                    AS aiSuggestion3Desc,
             TBP.AI_SUGGESTION_4_TITLE                                   AS aiSuggestion4Title,
-            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc
+            TBP.AI_SUGGESTION_4_DESC                                    AS aiSuggestion4Desc,
+            TBM.MEMBER_NICKNAME                                         AS memberNickname,
+            TBM.MEMBER_PROFILE_IMAGE_URL                                AS memberProfileImageUrl
         FROM TBL_PROJECT TBP
             JOIN TBL_LOG TBL ON TBP.LOG_ID = TBL.ID
+            JOIN TBL_MEMBER TBM ON TBP.MEMBER_ID = TBM.ID
         WHERE TBP.MEMBER_ID = #{memberId}
         ORDER BY TBP.PROJECT_CREATED_AT DESC
     </select>
