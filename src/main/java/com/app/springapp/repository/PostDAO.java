@@ -103,8 +103,12 @@ public class PostDAO {
         return postMapper.selectIdAndPostContentExceptMemberId(id);
     }
 
-    //id로 id와 게시글 불러오기
-    public PostVO findIdAndPostContentById(Long id) {
-        return postMapper.selectIdAndPostContentById(id);
+    //멤버id가 쓴게시글의 id와 게시글 내용 불러오기 (최신 1개만)
+    public PostVO findIdAndPostContentByMemberId(Long id) {
+        return postMapper.selectIdAndPostContentByMemberId(id);
+    }
+
+    public PostListResponseDTO findByMemberIdAndPostId(PostVO postVO) {
+        return postMapper.selectByMemberIdAndPostId(postVO);
     }
 }

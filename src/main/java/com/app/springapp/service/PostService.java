@@ -75,4 +75,6 @@ public interface PostService {
 
     //id로 해당 게시글 불러오기(id, content)
     public PostVO findIdAndPostContentById(Long id);
+
+    public List<PostListResponseDTO> getPostAiRecommand(Long memberId);
 }

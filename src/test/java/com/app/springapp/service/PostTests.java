@@ -3,6 +3,8 @@ package com.app.springapp.service;
 import com.app.springapp.domain.dto.PostCreateDTO;
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
 import com.app.springapp.domain.dto.request.PostUpdateRequestDTO;
+import com.app.springapp.domain.vo.PostVO;
+import com.app.springapp.repository.PostDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ public class PostTests {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private PostDAO postDAO;
 
     @Test
     public void findPostByMemberIdandIdTest() {
@@ -158,6 +162,20 @@ public class PostTests {
 
     @Test
     public void findIdAndPostContentByIdTest() {
-        log.info("{}", postService.findIdAndPostContentById(1L));
+
+        log.info("{}",postService.findIdAndPostContentById(1L));
+    }
+
+    @Test
+    public void aiTest() {
+        postService.getPostAiRecommand(1L);
+    }
+
+    @Test
+    public void test2() {
+        PostVO postVO = new PostVO();
+        postVO.setMemberId(1L);
+        postVO.setId(1L);
+        log.info("{}", postDAO.findByMemberIdAndPostId(postVO));
     }
 }
