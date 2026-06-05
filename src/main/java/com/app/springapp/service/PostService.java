@@ -69,4 +69,10 @@ public interface PostService {
 
     //게시글 삭제
     public void deletePost(Long postId);
+
+    //해당 게시글을 제외한 모든 게시글 불러오기
+    public List<PostVO> findIdAndPostContentsExceptMemberId(Long id);
+
+    //id로 해당 게시글 불러오기(id, content)
+    public PostVO findIdAndPostContentById(Long id);
 }

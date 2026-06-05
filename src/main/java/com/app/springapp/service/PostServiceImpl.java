@@ -196,4 +196,16 @@ public class PostServiceImpl implements PostService {
         //게시글 삭제
         postDAO.delete(postId);
     }
+
+    //해당 게시글을 제외한 모든 게시글 불러오기
+    @Override
+    public List<PostVO> findIdAndPostContentsExceptMemberId(Long id) {
+        return postDAO.findIdAndPostContentExceptMemberId(id);
+    }
+
+    //id로 해당 게시글 불러오기(id, content)
+    @Override
+    public PostVO findIdAndPostContentById(Long id) {
+        return postDAO.findIdAndPostContentById(id);
+    }
 }

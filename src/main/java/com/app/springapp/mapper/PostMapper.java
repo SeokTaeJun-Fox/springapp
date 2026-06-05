@@ -61,4 +61,10 @@ public interface PostMapper {
 
     //게시글 삭제
     public void delete(Long id);
+
+    //멤버의 게시글을 제외한 게시글 id, 게시글 내용 불러오기
+    public List<PostVO> selectIdAndPostContentExceptMemberId(long id);
+
+    //id 로 id와 게시글 내용 불러오기
+    public PostVO selectIdAndPostContentById(long id);
 }

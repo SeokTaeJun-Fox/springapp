@@ -97,4 +97,14 @@ public class PostDAO {
     public void delete(Long postId) {
         postMapper.delete(postId);
     }
+
+    //멤버의 게시글을 제외한 게시글 id, 게시글 내용 불러오기
+    public List<PostVO> findIdAndPostContentExceptMemberId(Long id) {
+        return postMapper.selectIdAndPostContentExceptMemberId(id);
+    }
+
+    //id로 id와 게시글 불러오기
+    public PostVO findIdAndPostContentById(Long id) {
+        return postMapper.selectIdAndPostContentById(id);
+    }
 }

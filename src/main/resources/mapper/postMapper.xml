@@ -444,4 +444,16 @@
         DELETE FROM TBL_POST
         WHERE ID = #{id}
     </delete>
+
+    <!-- 멤버id로 게시글 id, 게시글 내용 불러오기 -->
+    <select id="selectIdAndPostContentById" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE ID = #{id}
+    </select>
+
+    <!-- 멤버의 게시글을 제외한 게시글 id, 게시글 내용 불러오기-->
+    <select id="selectIdAndPostContentExceptMemberId" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE MEMBER_ID != #{id}
+    </select>
 </mapper>

@@ -150,4 +150,14 @@ public class PostTests {
     public void getCommunityInitialTest() {
         log.info("{}", postService.getCommunityInfo(1L));
     }
+
+    @Test
+    public void findPostsExceptIdTest() {
+        log.info("{}", postService.findIdAndPostContentsExceptMemberId(1L));
+    }
+
+    @Test
+    public void findIdAndPostContentByIdTest() {
+        log.info("{}", postService.findIdAndPostContentById(1L));
+    }
 }
