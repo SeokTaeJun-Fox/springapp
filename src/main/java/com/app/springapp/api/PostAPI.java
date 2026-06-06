@@ -428,4 +428,51 @@ public class PostAPI {
                         true,
                         "대댓글 삭제 성공"));
     }
+
+    @PostMapping("/aiPost/main")
+    @Operation(summary = "ai 게시글 추천 조회(메인 커뮤니티)", description = "자기가 쓴 최신글을 기반으로 ai가 추천한 게시글 목록을 보여주는 서비스")
+    @ApiResponse(responseCode = "200", description = "게시글 추천 조회 성공")
+    @Parameters({
+            @Parameter(
+                    name = "memberId",
+                    description = "로그인 멤버id",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "Long", defaultValue = "0")
+            ),
+    })
+    public ResponseEntity<ApiResponseDTO> getAiPostListOnMain(
+            @RequestParam(defaultValue = "0")  Long memberId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of(
+                true,
+                "게시글 추천 조회 성공",
+                postService.getPostAiRecommand(memberId)));
+    }
+
+    @PostMapping("/aiPost/read")
+    @Operation(summary = "ai 게시글 추천 조회(게시글 페이지)", description = "열람중인 게시글내용 기반으로 ai가 추천한 게시글 목록을 보여주는 서비스")
+    @ApiResponse(responseCode = "200", description = "게시글 추천 조회 성공")
+    @Parameters({
+            @Parameter(
+                    name = "memberId",
+                    description = "로그인 멤버id",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "Long", defaultValue = "0")
+            ),
+            @Parameter(
+                    name = "postId",
+                    description = "게시글id",
+                    in = ParameterIn.QUERY,
+                    schema = @Schema(type = "Long", defaultValue = "0")
+            ),
+    })
+    public ResponseEntity<ApiResponseDTO> getAiPostListOnReadPage(
+            @RequestParam(defaultValue = "0")  Long memberId,
+            @RequestParam(defaultValue = "0")  Long postId
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of(
+                true,
+                "게시글 추천 조회 성공",
+                postService.getPostAiRecommand(memberId, postId)));
+    }
 }

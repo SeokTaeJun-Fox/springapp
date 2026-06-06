@@ -444,4 +444,79 @@
         DELETE FROM TBL_POST
         WHERE ID = #{id}
     </delete>
+
+    <!-- 멤버id로 게시글 id, 게시글 내용 1개 불러오기 (최신순) -->
+    <select id="selectIdAndPostContentByMemberId" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE MEMBER_ID = #{id}
+        ORDER BY ID DESC
+        FETCH FIRST ROWS ONLY
+    </select>
+
+    <!-- 멤버의 게시글을 제외한 게시글 id, 게시글 내용 불러오기-->
+    <select id="selectIdAndPostContentExceptMemberId" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE MEMBER_ID != #{id}
+        ORDER BY ID ASC
+    </select>
+
+    <!-- 게시글id로 게시글id, 게시글 내용 불러오기 -->
+    <select id="selectIdAndPostContentById" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE ID = #{id}
+    </select>
+
+    <!-- 게시글id를 제외한 모든 게시글 id, 내용 불러오기 -->
+    <select id="selectIdAndPostContentExceptId" parameterType="Long" resultType="PostVO">
+        SELECT ID, POST_CONTENT FROM TBL_POST
+        WHERE ID != #{id}
+        ORDER BY ID ASC
+    </select>
+
+
+    <!-- memberId, postid로 게시글 불러온다 (좋아요 정보포함)-->
+    <select id="selectByMemberIdAndPostId" parameterType="PostVO" resultType="PostListResponseDTO">
+        SELECT
+            TBP.ID,
+            TBP.POST_TITLE,
+            TBP.POST_CONTENT,
+            TBS.POST_CREATED_AT,
+            TBS.POST_READ_COUNT,
+            TBS.MEMBER_ID,
+            TBS.MEMBER_NICKNAME,
+            TBS.MEMBER_PROFILE_IMAGE_URL,
+            TBS.CATEGORY_ID,
+            TBS.LIKE_COUNT,
+            TBS.IS_LIKED,
+            TBS.REPLY_COUNT
+        FROM TBL_POST TBP
+                 JOIN (
+            SELECT
+                TBP.ID                                                            AS POST_ID,
+                TO_CHAR(TBP.POST_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS')         AS POST_CREATED_AT,
+                TBP.POST_READ_COUNT,
+                TBM.ID                                                            AS MEMBER_ID,
+                TBM.MEMBER_NICKNAME,
+                TBM.MEMBER_PROFILE_IMAGE_URL,
+                TBP.CATEGORY_ID,
+                COUNT(DISTINCT TBPL.ID)                                           AS LIKE_COUNT,
+                MAX(CASE WHEN TBPL.MEMBER_ID = #{memberId} THEN 1 ELSE 0 END)    AS IS_LIKED,
+                COUNT(DISTINCT TBR.ID)                                            AS REPLY_COUNT
+            FROM TBL_POST TBP
+                     JOIN TBL_MEMBER   TBM  ON TBP.MEMBER_ID   = TBM.ID
+                     JOIN TBL_CATEGORY TBC  ON TBP.CATEGORY_ID = TBC.ID
+                     LEFT JOIN TBL_POST_LIKE TBPL ON TBP.ID = TBPL.POST_ID
+                     LEFT JOIN TBL_REPLY     TBR  ON TBP.ID = TBR.POST_ID
+            WHERE TBP.POST_DELETED_AT IS NULL
+              AND TBP.ID = #{id}
+            GROUP BY
+                TBP.ID,
+                TBP.POST_CREATED_AT,
+                TBP.POST_READ_COUNT,
+                TBM.ID,
+                TBM.MEMBER_NICKNAME,
+                TBM.MEMBER_PROFILE_IMAGE_URL,
+                TBP.CATEGORY_ID
+        ) TBS ON TBP.ID = TBS.POST_ID
+    </select>
 </mapper>

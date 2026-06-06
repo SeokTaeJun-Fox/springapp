@@ -8,12 +8,19 @@ import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.exception.PostException;
 import com.app.springapp.repository.LogDAO;
 import com.app.springapp.repository.PostDAO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.service.OpenAiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +36,13 @@ public class PostServiceImpl implements PostService {
     private final ReplyService replyService;
 
     private final LogDAO logDAO;
+    private final PostVO postVO;
+
+    @Value("${openai.api-key}")
+    private String apiKey;
+
+    @Value("${openai.model}")
+    private String model;
 
     @Override
     public CommunityResponseDTO getCommunityInfo(Long id) {
@@ -195,5 +209,196 @@ public class PostServiceImpl implements PostService {
 
         //게시글 삭제
         postDAO.delete(postId);
+    }
+
+    @Override
+    public PostVO findIdAndPostContentById(Long postId) {
+        return postDAO.findIdAndPostContentByPostId(postId);
+    }
+
+    //ai 추천글 (메인 커뮤니티)
+    @Override
+    public List<PostListResponseDTO> getPostAiRecommand(Long memberId) {
+        List<PostListResponseDTO> postListResponseDTOs = new ArrayList<PostListResponseDTO>();
+        PostVO postVO = postDAO.findIdAndPostContentByMemberId(memberId);
+        if (postVO == null) {
+            return postListResponseDTOs;
+        }
+
+        // 게시글 내용 (HTML 태그 제거)
+        String target = postVO.getPostContent().replaceAll("<[^>]*>", "");
+
+        // 비교 대상 게시글 목록 (HTML 태그 제거)
+        List<PostVO> posts = postDAO.findIdAndPostContentExceptMemberId(memberId);
+        posts = posts.stream()
+                .peek(x -> x.setPostContent(x.getPostContent().replaceAll("<[^>]*>", "")))
+                .toList();
+        log.info("{}", posts);
+
+        if (posts.isEmpty()) {
+            log.info("추천할 게시글이 없습니다.");
+            return postListResponseDTOs;
+        }
+
+        // OpenAI에 전달할 게시글 목록 문자열 생성
+        StringBuilder postsBuilder = new StringBuilder();
+        for (PostVO post : posts) {
+            postsBuilder.append("ID: ").append(post.getId())
+                    .append(", 내용: ").append(post.getPostContent())
+                    .append("\n");
+        }
+
+        // 프롬프트 구성
+        String prompt = "아래는 기준 게시글과 비교 게시글 목록입니다.\n\n"
+                + "기준 게시글 내용:\n" + target + "\n\n"
+                + "비교 게시글 목록 (ID: 내용):\n" + postsBuilder
+                + "\n기준 게시글과 내용이 가장 유사하거나 관련성이 높은 게시글의 ID를 최대 3개 골라주세요. "
+                + "반드시 아래 JSON 형식으로만 응답하세요. 다른 설명은 절대 포함하지 마세요.\n"
+                + "{\"ids\": [1, 2, 3]}";
+
+        List<Long> results = new ArrayList<>();
+
+        try {
+            // OpenAI 메시지 구성
+            List<ChatMessage> messages = new ArrayList<>();
+            messages.add(new ChatMessage("system",
+                    "당신은 게시글 내용을 분석하여 관련성 높은 게시글을 추천하는 어시스턴트입니다. " +
+                            "항상 지정된 JSON 형식으로만 응답합니다."));
+            messages.add(new ChatMessage("user", prompt));
+
+            // OpenAI API 호출
+            OpenAiService openAiService = new OpenAiService(apiKey);
+            ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
+                    .model(model)
+                    .messages(messages)
+                    .maxTokens(256)
+                    .temperature(0.0)   // 결정적 응답을 위해 temperature 0
+                    .build();
+
+            String aiResponse = openAiService.createChatCompletion(completionRequest)
+                    .getChoices().get(0).getMessage().getContent();
+
+            log.info("AI 추천 원문: {}", aiResponse);
+
+            // JSON 파싱하여 ids 추출
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode idsNode = objectMapper.readTree(aiResponse).path("ids");
+
+            if (idsNode.isArray()) {
+                for (JsonNode idNode : idsNode) {
+                    results.add(idNode.asLong());
+                }
+            }
+
+            log.info("AI 추천 게시글 IDs: {}", results);
+            // 이후 results를 DB 저장 또는 반환 처리
+
+        } catch (Exception e) {
+            log.error("OpenAI AI 추천 실패: {}", e.getMessage(), e);
+            return postListResponseDTOs;
+        }
+
+        //ai가 선택한 id > postListResponseDTO로 변환
+        postListResponseDTOs = results.stream().map(x -> {
+            PostVO requestVO = new PostVO();
+            requestVO.setId(x);
+            requestVO.setMemberId(memberId);
+            return postDAO.findByMemberIdAndPostId(requestVO);
+        }).toList();
+
+        return postListResponseDTOs;
+    }
+
+    //ai 추천글 (게시글 상세 페이지)
+    @Override
+    public List<PostListResponseDTO> getPostAiRecommand(Long memberId, Long postId) {
+        List<PostListResponseDTO> postListResponseDTOs = new ArrayList<PostListResponseDTO>();
+        PostVO postVO = postDAO.findIdAndPostContentByPostId(postId);
+        if (postVO == null) {
+            return postListResponseDTOs;
+        }
+
+        // 게시글 내용 (HTML 태그 제거)
+        String target = postVO.getPostContent().replaceAll("<[^>]*>", "");
+
+        // 비교 대상 게시글 목록 (HTML 태그 제거)
+        List<PostVO> posts = postDAO.findIdAndPostContentExceptId(postId);
+        posts = posts.stream()
+                .peek(x -> x.setPostContent(x.getPostContent().replaceAll("<[^>]*>", "")))
+                .toList();
+        log.info("{}", posts);
+
+        if (posts.isEmpty()) {
+            log.info("추천할 게시글이 없습니다.");
+            return postListResponseDTOs;
+        }
+
+        // OpenAI에 전달할 게시글 목록 문자열 생성
+        StringBuilder postsBuilder = new StringBuilder();
+        for (PostVO post : posts) {
+            postsBuilder.append("ID: ").append(post.getId())
+                    .append(", 내용: ").append(post.getPostContent())
+                    .append("\n");
+        }
+
+        // 프롬프트 구성
+        String prompt = "아래는 기준 게시글과 비교 게시글 목록입니다.\n\n"
+                + "기준 게시글 내용:\n" + target + "\n\n"
+                + "비교 게시글 목록 (ID: 내용):\n" + postsBuilder
+                + "\n기준 게시글과 내용이 가장 유사하거나 관련성이 높은 게시글의 ID를 최대 4개 골라주세요. "
+                + "반드시 아래 JSON 형식으로만 응답하세요. 다른 설명은 절대 포함하지 마세요.\n"
+                + "{\"ids\": [1, 2, 3, 4]}";
+
+        List<Long> results = new ArrayList<>();
+
+        try {
+            // OpenAI 메시지 구성
+            List<ChatMessage> messages = new ArrayList<>();
+            messages.add(new ChatMessage("system",
+                    "당신은 게시글 내용을 분석하여 관련성 높은 게시글을 추천하는 어시스턴트입니다. " +
+                            "항상 지정된 JSON 형식으로만 응답합니다."));
+            messages.add(new ChatMessage("user", prompt));
+
+            // OpenAI API 호출
+            OpenAiService openAiService = new OpenAiService(apiKey);
+            ChatCompletionRequest completionRequest = ChatCompletionRequest.builder()
+                    .model(model)
+                    .messages(messages)
+                    .maxTokens(256)
+                    .temperature(0.0)   // 결정적 응답을 위해 temperature 0
+                    .build();
+
+            String aiResponse = openAiService.createChatCompletion(completionRequest)
+                    .getChoices().get(0).getMessage().getContent();
+
+            log.info("AI 추천 원문: {}", aiResponse);
+
+            // JSON 파싱하여 ids 추출
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode idsNode = objectMapper.readTree(aiResponse).path("ids");
+
+            if (idsNode.isArray()) {
+                for (JsonNode idNode : idsNode) {
+                    results.add(idNode.asLong());
+                }
+            }
+
+            log.info("AI 추천 게시글 IDs: {}", results);
+            // 이후 results를 DB 저장 또는 반환 처리
+
+        } catch (Exception e) {
+            log.error("OpenAI AI 추천 실패: {}", e.getMessage(), e);
+            return postListResponseDTOs;
+        }
+
+        //ai가 선택한 id > postListResponseDTO로 변환
+        postListResponseDTOs = results.stream().map(x -> {
+            PostVO requestVO = new PostVO();
+            requestVO.setId(x);
+            requestVO.setMemberId(memberId);
+            return postDAO.findByMemberIdAndPostId(requestVO);
+        }).toList();
+
+        return postListResponseDTOs;
     }
 }

@@ -69,4 +69,10 @@ public interface PostService {
 
     //게시글 삭제
     public void deletePost(Long postId);
+
+    public PostVO findIdAndPostContentById(Long postId);
+
+    public List<PostListResponseDTO> getPostAiRecommand(Long memberId);
+
+    public List<PostListResponseDTO> getPostAiRecommand(Long memberId, Long postId);
 }
