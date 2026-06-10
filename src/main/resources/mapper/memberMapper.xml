@@ -12,6 +12,7 @@
         MEMBER_PHONE,
         MEMBER_NICKNAME,
         MEMBER_PROFILE_IMAGE_URL
+        <if test="memberPhone != null and memberPhone != ''">, MEMBER_PHONE_VERIFIED_AT</if>
         ) VALUES (
         SEQ_MEMBER.NEXTVAL,
         #{memberEmail},
@@ -20,6 +21,7 @@
         #{memberPhone},
         #{memberNickname},
         #{memberProfileImageUrl}
+        <if test="memberPhone != null and memberPhone != ''">, CURRENT_TIMESTAMP</if>
         )
         <selectKey keyProperty="id" resultType="Long" order="AFTER">
             SELECT SEQ_MEMBER.CURRVAL FROM DUAL

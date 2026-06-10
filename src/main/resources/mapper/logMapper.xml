@@ -78,6 +78,8 @@
         TBM.MEMBER_NICKNAME AS memberNickname,
         TBM.MEMBER_PROFILE_IMAGE_URL AS memberProfileImageUrl,
         TBC.CATEGORY_NAME AS categoryName,
+        TBL.LOG_STATUS AS logStatus,
+        TBL.LOG_PROGRESS AS logProgress,
         (SELECT COUNT(*) FROM TBL_LOG_LIKE TBL_LIKE WHERE TBL_LIKE.LOG_ID = TBL.ID) AS likeCount,
         TLR.LOG_RESULT_EXTERNAL_RATIO AS logResultExternalRatio,
         TLR.LOG_RESULT_INTERNAL_RATIO AS logResultInternalRatio
