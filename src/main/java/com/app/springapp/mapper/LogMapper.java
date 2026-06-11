@@ -46,6 +46,9 @@ public interface LogMapper {
     // 로그 작성
     void insert(LogVO logVO);
 
+    // 로그 수정
+    void updateLog(LogVO logVO);
+
     // 로그 상세 조회
     Optional<LogResponseDTO> selectById(Long id);
 

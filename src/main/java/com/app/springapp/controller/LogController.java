@@ -78,6 +78,16 @@ public class LogController {
         return ResponseEntity.ok(logService.createLog(dto, memberDTO.getId()));
     }
 
+    // 로그 수정
+    @Operation(summary = "로그 수정", description = "임시저장 상태인 페일로그를 덮어쓰기합니다.")
+    @org.springframework.web.bind.annotation.PutMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> updateLog(@PathVariable Long id,
+                                                    @RequestBody com.app.springapp.domain.dto.request.LogUpdateRequestDTO dto,
+                                                    Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.updateLog(id, dto, memberDTO.getId()));
+    }
+
     @Operation(summary = "로그 상세 조회", description = "로그 ID로 단건 조회합니다. 쿠키 기반 중복 조회를 방지하며 조회수를 1 증가시킵니다.")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id,
