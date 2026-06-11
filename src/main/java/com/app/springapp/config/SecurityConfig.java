@@ -84,9 +84,9 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.DELETE, "/api/logs/permanent").authenticated()
                     .requestMatchers(HttpMethod.POST, "/api/suggestion/create").authenticated()
                     .requestMatchers(HttpMethod.POST, "/private/auth/logout").permitAll()
-                    .requestMatchers("/private/**").authenticated() // "/private" -> 보호된 라우트
-                    .anyRequest().permitAll() // 위 경로를 제외한 나머지 경로는 허용된 라우트
-            ) // 모든 경로 해제
+                    .requestMatchers("/private/**").authenticated()
+                    .anyRequest().permitAll()
+            )
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint(jwtAuthenticationEntryPoint))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
