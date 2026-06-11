@@ -38,4 +38,13 @@ public class SuggestionController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공",
                 suggestionService.getSuggestionsByProjectId(projectId)));
     }
+
+    // 초기 추천 제안 조회 - 프로젝트 생성 직후 제안이 없을 때 AI가 선별한 다른 사용자 제안 최대 3개 반환
+    @Operation(summary = "초기 추천 제안 조회")
+    @GetMapping("/recommend/{projectId}")
+    public ResponseEntity<ApiResponseDTO<?>> getRecommendedSuggestions(
+            @PathVariable Long projectId) {
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "추천 제안 조회 성공",
+                suggestionService.getRecommendedSuggestions(projectId)));
+    }
 }
