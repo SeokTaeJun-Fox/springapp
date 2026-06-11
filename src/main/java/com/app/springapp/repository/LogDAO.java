@@ -49,6 +49,11 @@ public class LogDAO {
         logMapper.insert(logVO);
     }
 
+    // 로그 수정
+    public void update(LogVO logVO) {
+        logMapper.updateLog(logVO);
+    }
+
     // 로그 상세 조회
     public Optional<LogResponseDTO> findById(Long id) {
         return logMapper.selectById(id);

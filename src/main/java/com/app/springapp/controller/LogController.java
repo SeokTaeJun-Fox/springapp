@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 // 로그 관련 요청을 처리하는 컨트롤러 (목록 조회, 검색, 카테고리 필터, 내 로그 조회) - 기본 URL: /api/logs
-@Tag(name = "로그 API", description = "페일로그 목록 조회")
+@Tag(name = "로그 API", description = "페일로그 목록 조회, 작성, 삭제, 좋아요, 인기 솔루션")
 @RestController
 @RequestMapping("/api/logs")
 @RequiredArgsConstructor
@@ -70,6 +70,7 @@ public class LogController {
     }
 
     // 로그 작성
+    @Operation(summary = "로그 작성", description = "새로운 페일로그를 작성합니다.")
     @PostMapping
     public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto,
                                                     Authentication authentication) {
@@ -77,7 +78,17 @@ public class LogController {
         return ResponseEntity.ok(logService.createLog(dto, memberDTO.getId()));
     }
 
-    @Operation(summary = "로그 상세 조회", description = "로그 ID로 단건 조회 후 조회수를 증가합니다.")
+    // 로그 수정
+    @Operation(summary = "로그 수정", description = "임시저장 상태인 페일로그를 덮어쓰기합니다.")
+    @org.springframework.web.bind.annotation.PutMapping("/{id}")
+    public ResponseEntity<ApiResponseDTO> updateLog(@PathVariable Long id,
+                                                    @RequestBody com.app.springapp.domain.dto.request.LogUpdateRequestDTO dto,
+                                                    Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.updateLog(id, dto, memberDTO.getId()));
+    }
+
+    @Operation(summary = "로그 상세 조회", description = "로그 ID로 단건 조회합니다. 쿠키 기반 중복 조회를 방지하며 조회수를 1 증가시킵니다.")
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id,
                                                  jakarta.servlet.http.HttpServletRequest request,

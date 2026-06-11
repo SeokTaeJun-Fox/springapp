@@ -113,6 +113,31 @@ public class LogServiceImpl implements LogService {
         return ApiResponseDTO.of(true, "로그 작성 성공", logVO.getId());
     }
 
+    // 로그 수정 (임시저장 덮어쓰기)
+    @Override
+    public ApiResponseDTO updateLog(Long id, com.app.springapp.domain.dto.request.LogUpdateRequestDTO dto, Long memberId) {
+        LogResponseDTO existingLog = logDAO.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 로그입니다."));
+
+        if (!existingLog.getMemberId().equals(memberId)) {
+            return new ApiResponseDTO(false, "본인이 작성한 로그만 수정할 수 있습니다.", null);
+        }
+
+        LogVO logVO = new LogVO();
+        logVO.setId(id);
+        logVO.setMemberId(memberId);
+        logVO.setLogTitle(dto.getLogTitle() != null ? dto.getLogTitle() : existingLog.getLogTitle());
+        logVO.setVisionTitle(dto.getVisionTitle() != null ? dto.getVisionTitle() : existingLog.getVisionTitle());
+        logVO.setLogContent(dto.getLogContent() != null ? dto.getLogContent() : existingLog.getLogContent());
+        logVO.setLogThumbnailUrl(dto.getLogThumbnailUrl() != null ? dto.getLogThumbnailUrl() : existingLog.getLogThumbnailUrl());
+        logVO.setCategoryId(dto.getCategoryId() != null ? dto.getCategoryId() : existingLog.getCategoryId());
+        logVO.setLogStatus(dto.getLogStatus() != null ? dto.getLogStatus() : existingLog.getLogStatus());
+        logVO.setLogProgress(dto.getLogProgress() != null ? dto.getLogProgress() : existingLog.getLogProgress());
+
+        logDAO.update(logVO);
+        return ApiResponseDTO.of(true, "로그 수정 성공", logVO.getId());
+    }
+
     // 로그 상세 조회 (조건부 조회수 +1)
     @Override
     @Transactional

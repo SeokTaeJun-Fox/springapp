@@ -136,17 +136,34 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
             }
             
             LogVO logVO = new LogVO();
-            logVO.setLogTitle(request.getTitle());
-            logVO.setVisionTitle(request.getVision());
-            logVO.setLogContent(request.getContent());
-            logVO.setLogThumbnailUrl(request.getLogThumbnailUrl());
-            logVO.setCategoryId(request.getCategoryId());
-            logVO.setLogStatus("PUBLISHED");
-            logVO.setLogProgress(0); // TODO: 추후 프로그레스 로직
-            logVO.setMemberId(memberId);
-            
-            logMapper.insert(logVO);
-            Long savedLogId = logVO.getId();
+            Long savedLogId = null;
+
+            if (request.getLogId() != null) {
+                // 기존 임시저장 로그 업데이트 (DRAFT -> PUBLISHED)
+                logVO.setId(request.getLogId());
+                logVO.setLogTitle(request.getTitle());
+                logVO.setVisionTitle(request.getVision());
+                logVO.setLogContent(request.getContent());
+                logVO.setLogThumbnailUrl(request.getLogThumbnailUrl());
+                logVO.setCategoryId(request.getCategoryId());
+                logVO.setLogStatus("PUBLISHED");
+                logVO.setLogProgress(0); // TODO: 추후 프로그레스 로직
+                logVO.setMemberId(memberId);
+                logMapper.updateLog(logVO);
+                savedLogId = logVO.getId();
+            } else {
+                // 신규 로그 생성
+                logVO.setLogTitle(request.getTitle());
+                logVO.setVisionTitle(request.getVision());
+                logVO.setLogContent(request.getContent());
+                logVO.setLogThumbnailUrl(request.getLogThumbnailUrl());
+                logVO.setCategoryId(request.getCategoryId());
+                logVO.setLogStatus("PUBLISHED");
+                logVO.setLogProgress(0); // TODO: 추후 프로그레스 로직
+                logVO.setMemberId(memberId);
+                logMapper.insert(logVO);
+                savedLogId = logVO.getId();
+            }
 
             // 4. 분석 결과 마스터 (TBL_LOG_RESULT) 저장
             LogResultVO logResultVO = new LogResultVO();

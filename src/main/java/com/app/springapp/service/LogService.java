@@ -28,6 +28,9 @@ public interface LogService {
     // 로그 작성
     ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId);
 
+    // 로그 수정 (임시저장 덮어쓰기)
+    ApiResponseDTO updateLog(Long id, com.app.springapp.domain.dto.request.LogUpdateRequestDTO dto, Long memberId);
+
     // 로그 상세 조회
     ApiResponseDTO getLog(Long id, Long memberId, boolean shouldIncreaseReadCount);
 
