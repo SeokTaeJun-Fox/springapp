@@ -39,4 +39,26 @@
         ORDER BY S.ID DESC
     </select>
 
+
+    <!--  다른 프로젝트의 인기 제안 목록 조회 (IS_ADDED_LIST='Y' 우선, 최대 limit개)  -->
+    <select id="findTopSuggestionsExcludingProject" resultType="SuggestionVO">
+        SELECT * FROM (
+            SELECT
+                S.ID                        AS id,
+                S.SUGGESTION_TITLE          AS suggestionTitle,
+                S.IS_ADDED_LIST             AS isAddedList,
+                S.CHECKLIST_ID              AS checklistId,
+                S.MEMBER_ID                 AS memberId,
+                S.PROJECT_ID                AS projectId,
+                M.MEMBER_NICKNAME           AS memberNickname,
+                M.MEMBER_PROFILE_IMAGE_URL  AS memberProfileImageUrl
+            FROM TBL_SUGGESTION S
+                     JOIN TBL_MEMBER M ON S.MEMBER_ID = M.ID
+            WHERE S.PROJECT_ID != #{projectId}
+            ORDER BY
+                CASE WHEN S.IS_ADDED_LIST = 'Y' THEN 0 ELSE 1 END ASC,
+                S.ID DESC
+        ) WHERE ROWNUM &lt;= #{limit}
+    </select>
+
 </mapper>
