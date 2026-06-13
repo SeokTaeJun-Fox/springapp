@@ -22,4 +22,9 @@ public class SuggestionDAO {
     public List<SuggestionVO> findAllByProjectId(Long projectId) {
         return suggestionMapper.findAllByProjectId(projectId);
     }
+
+    // 다른 프로젝트의 인기 제안 조회 (추천용)
+    public List<SuggestionVO> findTopSuggestionsExcludingProject(Long projectId, int limit) {
+        return suggestionMapper.findTopSuggestionsExcludingProject(projectId, limit);
+    }
 }

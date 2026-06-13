@@ -5,6 +5,7 @@ import java.util.List;
 
 @Data
 public class LogAnalyzeRequestDTO {
+    private Long logId;             // (선택) 업데이트할 기존 DRAFT 로그 ID
     private String title;           // 로그 제목 (화면의 title)
     private Long categoryId;        // 카테고리 ID
     private String category;        // 카테고리 이름

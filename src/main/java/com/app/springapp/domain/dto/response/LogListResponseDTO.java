@@ -48,4 +48,10 @@ public class LogListResponseDTO {
 
     @Schema(description = "현재 로그인된 사용자의 좋아요 여부", example = "true")
     private boolean isLiked;
+
+    @Schema(description = "외부 요인 비율 (AI 분석, 0~100)", example = "60")
+    private Long logResultExternalRatio;
+
+    @Schema(description = "내부 요인 비율 (AI 분석, 0~100)", example = "40")
+    private Long logResultInternalRatio;
 }
