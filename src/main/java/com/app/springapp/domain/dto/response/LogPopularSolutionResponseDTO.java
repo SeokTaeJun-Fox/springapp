@@ -13,6 +13,9 @@ public class LogPopularSolutionResponseDTO {
     @Schema(description = "로그 제목")
     private String logTitle;
 
+    @Schema(description = "멤버 ID")
+    private Long memberId;
+
     @Schema(description = "멤버 닉네임")
     private String memberNickname;
 

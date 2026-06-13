@@ -185,6 +185,7 @@
             SELECT
                 TBL.ID                          AS logId,
                 TBL.LOG_TITLE                   AS logTitle,
+                TBM.ID                          AS memberId,
                 TBM.MEMBER_NICKNAME             AS memberNickname,
                 TBM.MEMBER_PROFILE_IMAGE_URL    AS memberProfileImageUrl,
                 TBR.LOG_RESULT_FAILURE_TYPE     AS logResultFailureType,
@@ -199,7 +200,7 @@
               AND TBL.LOG_STATUS = 'PUBLISHED'
             GROUP BY
                 TBL.ID, TBL.LOG_TITLE,
-                TBM.MEMBER_NICKNAME, TBM.MEMBER_PROFILE_IMAGE_URL,
+                TBM.ID, TBM.MEMBER_NICKNAME, TBM.MEMBER_PROFILE_IMAGE_URL,
                 TBR.LOG_RESULT_FAILURE_TYPE, TBR.LOG_RESULT_FAILURE_TITLE, TBR.LOG_RESULT_FAILURE_DESC
             HAVING COUNT(TLL.ID) >= 1
             ORDER BY likeCount DESC
