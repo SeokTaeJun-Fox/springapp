@@ -157,8 +157,9 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new MemberException("존재하지 않는 회원입니다.", HttpStatus.NOT_FOUND));
 
         socialMemberDAO.findByMemberId(id).ifPresent(this::unlinkSocialMember);
+        socialMemberDAO.invalidateByMemberId(id);
 
-        memberDAO.delete(id);
+        memberDAO.withdrawMember(id);
         return ApiResponseDTO.of(true, "회원 탈퇴가 완료되었습니다.");
     }
 

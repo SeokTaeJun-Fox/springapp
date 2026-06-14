@@ -29,6 +29,7 @@ public class MemberDTO {
     private Long memberId;
     private Long memberLoginStreak;
     private LocalDateTime memberLastLoginAt;
+    private String memberWithdrawnAt;
 
 
 //    {

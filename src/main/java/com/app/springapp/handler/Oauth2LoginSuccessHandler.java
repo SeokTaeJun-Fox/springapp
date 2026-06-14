@@ -2,6 +2,7 @@ package com.app.springapp.handler;
 
 import com.app.springapp.domain.dto.JwtTokenDTO;
 import com.app.springapp.domain.dto.MemberDTO;
+import com.app.springapp.exception.MemberException;
 import com.app.springapp.service.AuthService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -83,7 +84,14 @@ public class Oauth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 }
             }
 
-            JwtTokenDTO jwtTokenDTO = authService.socialLogin(memberDTO);
+            JwtTokenDTO jwtTokenDTO;
+            try {
+                jwtTokenDTO = authService.socialLogin(memberDTO);
+            } catch (MemberException e) {
+                log.warn("[소셜 로그인 실패]: {}", e.getMessage());
+                getRedirectStrategy().sendRedirect(request, response, "http://localhost:3000/login?error=withdrawn");
+                return;
+            }
 
             ResponseCookie accessTokenCookie = ResponseCookie
                     .from("accessToken", jwtTokenDTO.getAccessToken())

@@ -23,6 +23,9 @@ public interface MemberMapper {
 //    회원 삭제
     public void delete(Long id);
 
+//    회원 탈퇴 (논리적 삭제)
+    public void withdrawMember(Long id);
+
 //    이름 + 전화번호로 회원 조회 (이메일 찾기)
     public MemberDTO selectByMemberNameAndMemberPhone(MemberDTO memberDTO);
 

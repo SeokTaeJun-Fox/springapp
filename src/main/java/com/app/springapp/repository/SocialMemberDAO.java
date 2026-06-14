@@ -26,4 +26,9 @@ public class SocialMemberDAO {
     public void updateTokens(SocialMemberVO socialMemberVO){
         socialMemberMapper.updateTokens(socialMemberVO);
     }
+
+//    회원 탈퇴 시 소셜 식별자 무력화
+    public void invalidateByMemberId(Long memberId){
+        socialMemberMapper.invalidateByMemberId(memberId);
+    }
 }

@@ -43,4 +43,13 @@
           AND SOCIAL_MEMBER_PROVIDER = #{socialMemberProvider}
     </update>
 
+    <!-- 회원 탈퇴 시 소셜 식별자 무력화 (재가입 시 새 ID 발급을 위함) -->
+    <update id="invalidateByMemberId" parameterType="Long">
+        UPDATE TBL_SOCIAL_MEMBER
+        SET SOCIAL_MEMBER_PROVIDER_ID = SOCIAL_MEMBER_PROVIDER_ID || '_withdrawn_' || MEMBER_ID,
+            SOCIAL_ACCESS_TOKEN = NULL,
+            SOCIAL_REFRESH_TOKEN = NULL
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
 </mapper>

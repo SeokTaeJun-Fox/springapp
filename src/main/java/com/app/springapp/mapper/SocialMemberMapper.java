@@ -13,4 +13,7 @@ public interface SocialMemberMapper {
 
 //    소셜 로그인 토큰 갱신
     public void updateTokens(SocialMemberVO socialMemberVO);
+
+//    회원 탈퇴 시 소셜 식별자 무력화
+    public void invalidateByMemberId(Long memberId);
 }

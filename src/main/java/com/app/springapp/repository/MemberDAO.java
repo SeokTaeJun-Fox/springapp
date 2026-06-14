@@ -48,6 +48,11 @@ public class MemberDAO {
         memberMapper.delete(id);
     }
 
+//    회원 탈퇴 (논리적 삭제)
+    public void withdrawMember(Long id){
+        memberMapper.withdrawMember(id);
+    }
+
 //    이름 + 전화번호로 회원 조회 (이메일 찾기)
     public Optional<MemberDTO> findMemberByNameAndPhone(String memberName, String memberPhone){
         MemberDTO memberDTO = new MemberDTO();
