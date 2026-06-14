@@ -47,6 +47,9 @@ public class ProjectVO {
     private String aiSuggestion4Title;
     private String aiSuggestion4Desc;
 
+    // 연결된 로그의 썸네일 이미지 URL
+    private String logThumbnailUrl;
+
     // 다른 사람 프로젝트 목록 조회 시 필요한 필드
     private String memberNickname;
     private String memberProfileImageUrl;

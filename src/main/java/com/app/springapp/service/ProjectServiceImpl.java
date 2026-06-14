@@ -450,6 +450,7 @@ public class ProjectServiceImpl implements ProjectService {
         dto.setProjectCreatedAt(vo.getProjectCreatedAt());
         dto.setLogTitle(vo.getLogTitle());
         dto.setVisionTitle(vo.getVisionTitle());
+        dto.setLogThumbnailUrl(vo.getLogThumbnailUrl());
 
         List<ProjectResponseDTO.AiSuggestionItem> aiSuggestions = new ArrayList<>();
         if (vo.getAiSuggestion1Title() != null) {

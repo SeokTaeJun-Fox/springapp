@@ -94,6 +94,7 @@
             TBP.LOG_ID                                                  AS logId,
             TBL.VISION_TITLE                                            AS visionTitle,
             TBL.LOG_TITLE                                               AS logTitle,
+            TBL.LOG_THUMBNAIL_URL                                       AS logThumbnailUrl,
             TBP.AI_SUGGESTION_1_TITLE                                   AS aiSuggestion1Title,
             TBP.AI_SUGGESTION_1_DESC                                    AS aiSuggestion1Desc,
             TBP.AI_SUGGESTION_2_TITLE                                   AS aiSuggestion2Title,

@@ -12,11 +12,11 @@
         WHERE p.ID = #{projectId}
     </select>
 
-    <!-- 해당 프로젝트 소유자가 완료한 체크리스트 총 수 -->
+    <!-- 해당 프로젝트의 완료된 체크리스트 총 수 -->
     <select id="countCompletedChecklistsByProjectId" parameterType="Long" resultType="int">
         SELECT COUNT(*)
         FROM TBL_CHECKLIST
-        WHERE MEMBER_ID = (SELECT MEMBER_ID FROM TBL_PROJECT WHERE ID = #{projectId})
+        WHERE PROJECT_ID = #{projectId}
           AND CHECKLIST_COMPLETED = 'Y'
     </select>
 
@@ -31,11 +31,11 @@
         )
     </select>
 
-    <!-- 해당 프로젝트 소유자의 완료 체크리스트 제목 Top 3 (많이 반복된 순) -->
+    <!-- 해당 프로젝트의 완료 체크리스트 제목 Top 3 (많이 반복된 순) -->
     <select id="findTop3ChecklistsByProjectId" parameterType="Long" resultType="map">
         SELECT CHECKLIST_TITLE AS CHECKLIST_TEXT, COUNT(*) AS CHECKLIST_COUNT
         FROM TBL_CHECKLIST
-        WHERE MEMBER_ID = (SELECT MEMBER_ID FROM TBL_PROJECT WHERE ID = #{projectId})
+        WHERE PROJECT_ID = #{projectId}
           AND CHECKLIST_COMPLETED = 'Y'
         GROUP BY CHECKLIST_TITLE
         ORDER BY CHECKLIST_COUNT DESC

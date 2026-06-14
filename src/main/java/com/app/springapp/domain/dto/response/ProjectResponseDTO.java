@@ -32,6 +32,9 @@ public class ProjectResponseDTO {
     @Schema(description = "연결된 로그의 비전 제목", example = "개발자로 성장하기")
     private String visionTitle;
 
+    @Schema(description = "연결된 로그의 썸네일 이미지 URL", example = "https://...")
+    private String logThumbnailUrl;
+
     @Schema(description = "프로젝트 제목", example = "2024 상반기 목표 달성 프로젝트")
     private String projectTitle;
 
