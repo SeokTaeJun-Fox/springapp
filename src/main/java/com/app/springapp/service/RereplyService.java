@@ -10,6 +10,9 @@ public interface RereplyService {
     //댓글id로 대댓글 목록 보여준다
     public List<RereplyResponseDTO> findAll(Long replyId);
 
+    //대댓글id로 대댓글 목록 보여준다
+    public RereplyResponseDTO find(Long reReplyId);
+
     //대댓글 작성
     public void writeRereply(RereplyCreateRequestDTO rereplyCreateRequestDTO);
 

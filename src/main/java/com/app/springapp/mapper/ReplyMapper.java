@@ -3,6 +3,7 @@ package com.app.springapp.mapper;
 import com.app.springapp.domain.dto.ReplyDTO;
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyCreateRequestDTO;
+import com.app.springapp.domain.dto.request.ReplyReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyUpdateRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +14,9 @@ public interface ReplyMapper {
 
     // 게시글id와 멤버id로 댓글 정보 목록 불러오기
     public List<ReplyDTO> selectAll(PostReadRequestDTO postReadRequestDTO);
+
+    // 댓글id와 멤버id로 댓글 정보 목록 불러오기
+    public ReplyDTO select(ReplyReadRequestDTO replyReadRequestDTO);
 
     //게시글 id로 모든 댓글id 불러오기
     public List<Long> selectAllIdByPostId(Long id);

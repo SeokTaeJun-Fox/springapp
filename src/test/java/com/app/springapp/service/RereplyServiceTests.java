@@ -20,6 +20,11 @@ public class RereplyServiceTests {
     }
 
     @Test
+    public void findTest() {
+        log.info("findAll : {}", rereplyService.find(2L));
+    }
+
+    @Test
     public void writeRereplyTest() {
         RereplyCreateRequestDTO rereplyCreateRequestDTO = new RereplyCreateRequestDTO();
         rereplyCreateRequestDTO.setReplyId(51L);

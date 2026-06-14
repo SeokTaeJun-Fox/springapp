@@ -20,6 +20,11 @@ public class RereplyDAO {
         return rereplyMapper.selectAll(id);
     }
 
+    //대댓글id로 대댓글 목록 보여준다
+    public RereplyResponseDTO find(Long id) {
+        return rereplyMapper.select(id);
+    }
+
     //대댓글 작성
     public void save(RereplyCreateRequestDTO rereplyCreateRequestDTO) {
         rereplyMapper.insert(rereplyCreateRequestDTO);

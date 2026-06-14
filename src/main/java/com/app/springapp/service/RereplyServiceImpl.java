@@ -27,6 +27,12 @@ public class RereplyServiceImpl implements RereplyService {
         return rereplyDAO.findAll(replyId);
     }
 
+    //대댓글id로 대댓글 목록 보여준다
+    @Override
+    public RereplyResponseDTO find(Long reReplyId) {
+        return rereplyDAO.find(reReplyId);
+    }
+
     // 대댓글 작성
     @Override
     public void writeRereply(RereplyCreateRequestDTO rereplyCreateRequestDTO) {

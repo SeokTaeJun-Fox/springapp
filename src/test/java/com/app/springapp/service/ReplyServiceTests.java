@@ -2,6 +2,7 @@ package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyCreateRequestDTO;
+import com.app.springapp.domain.dto.request.ReplyReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyUpdateRequestDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,14 @@ public class ReplyServiceTests {
         postReadRequestDTO.setPostId(20L);
         postReadRequestDTO.setMemberId(1L);
         log.info("getReplies={}", replyService.getPostReplies(postReadRequestDTO));
+    }
+
+    @Test
+    public void getReplyTest() {
+        ReplyReadRequestDTO replyReadRequestDTO = new ReplyReadRequestDTO();
+        replyReadRequestDTO.setReplyId(2L);
+        replyReadRequestDTO.setMemberId(1L);
+        log.info("getReplies={}", replyService.getPostReply(replyReadRequestDTO));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyCreateRequestDTO;
+import com.app.springapp.domain.dto.request.ReplyReadRequestDTO;
 import com.app.springapp.domain.dto.request.ReplyUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.PostReadReplyResponseDTO;
 
@@ -11,6 +12,9 @@ public interface ReplyService {
 
     // 게시글id와 멤버id로 댓글 정보(댓글에 달린 대댓글포함) 목록 불러오기
     public List<PostReadReplyResponseDTO> getPostReplies(PostReadRequestDTO postReadRequestDTO);
+
+    // 댓글id와 멤버id로 댓글 정보(댓글에 달린 대댓글포함) 목록 불러오기
+    public PostReadReplyResponseDTO getPostReply(ReplyReadRequestDTO replyReadRequestDTO);
 
     //게시글 id로 모든 댓글id 불러오기
     public List<Long> findReplyIds(Long postId);

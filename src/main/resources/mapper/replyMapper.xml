@@ -29,6 +29,32 @@
         ORDER BY TBR.REPLY_CREATED_AT DESC
     </select>
 
+    <!-- 댓글id와 멤버id로 댓글 정보 불러오기 -->
+    <select id="select" parameterType="ReplyReadRequestDTO" resultType="ReplyDTO">
+        SELECT
+            TBR.ID,
+            TBR.POST_ID,
+            TBR.REPLY_CONTENT,
+            TO_CHAR(TBR.REPLY_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS REPLY_CREATED_AT,
+            TBM.ID                                                         AS MEMBER_ID,
+            TBM.MEMBER_NICKNAME,
+            TBM.MEMBER_PROFILE_IMAGE_URL,
+            COUNT(TBRL.ID)                                                 AS LIKE_COUNT,
+            MAX(CASE WHEN TBRL.MEMBER_ID = #{memberId} THEN 1 ELSE 0 END) AS IS_LIKED
+        FROM TBL_REPLY TBR
+                 JOIN TBL_MEMBER TBM          ON TBR.MEMBER_ID = TBM.ID
+                 LEFT JOIN TBL_REPLY_LIKE TBRL ON TBR.ID        = TBRL.REPLY_ID
+        WHERE TBR.ID = #{replyId}
+        GROUP BY
+            TBR.ID,
+            TBR.POST_ID,
+            TBR.REPLY_CONTENT,
+            TBR.REPLY_CREATED_AT,
+            TBM.ID,
+            TBM.MEMBER_NICKNAME,
+            TBM.MEMBER_PROFILE_IMAGE_URL
+    </select>
+
     <!-- 게시글 id로 모든 댓글id 불러오기 -->
     <select id="selectAllIdByPostId" parameterType="Long" resultType="Long">
         SELECT ID

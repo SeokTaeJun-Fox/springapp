@@ -14,6 +14,17 @@
         ORDER BY REREPLY_CREATED_AT DESC
     </select>
 
+    <!-- 대댓글id로 대댓글 보여주기 -->
+    <select id="select" parameterType="Long" resultType="RereplyResponseDTO">
+        SELECT TBR.ID, TBR.REPLY_ID, TBR.REREPLY_CONTENT,
+               TO_CHAR(TBR.REREPLY_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS') AS REREPLY_CREATED_AT,
+               TBR.MEMBER_ID, TBM.MEMBER_NICKNAME, TBM.MEMBER_PROFILE_IMAGE_URL
+        FROM TBL_REREPLY TBR
+                 JOIN TBL_MEMBER TBM
+                      ON TBR.MEMBER_ID = TBM.ID
+        WHERE TBR.ID = #{id}
+    </select>
+
     <!-- 대댓글 작성 -->
     <insert id="insert" parameterType="RereplyCreateRequestDTO">
         INSERT INTO TBL_REREPLY

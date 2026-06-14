@@ -50,6 +50,7 @@
         <typeAlias type="com.app.springapp.domain.dto.request.RadarScoreCreateRequestDTO" alias="RadarScoreCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.ReplyCreateRequestDTO" alias="ReplyCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.ReplyLikeRequestDTO" alias="ReplyLikeRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyReadRequestDTO" alias="ReplyReadRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.ReplyReportCreateRequestDTO" alias="ReplyReportCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.ReplyUpdateRequestDTO" alias="ReplyUpdateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.RereplyCreateRequestDTO" alias="RereplyCreateRequestDTO"/>
