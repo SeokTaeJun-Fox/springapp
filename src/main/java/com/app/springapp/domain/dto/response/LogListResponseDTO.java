@@ -21,6 +21,9 @@ public class LogListResponseDTO {
     @Schema(description = "작성 일시", example = "2024-01-01T10:00:00")
     private String logCreatedAt;
 
+    @Schema(description = "작성자 ID", example = "1")
+    private Long memberId;
+
     @Schema(description = "작성자 닉네임", example = "길동이")
     private String memberNickname;
 

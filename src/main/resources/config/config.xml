@@ -20,8 +20,11 @@
         <typeAlias type="com.app.springapp.domain.dto.request.EmailVerificationConfirmRequestDTO" alias="EmailVerificationConfirmRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.EmailVerificationSendRequestDTO" alias="EmailVerificationSendRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.GuestbookCreateRequestDTO" alias="GuestbookCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.GuestbookReportCreateRequestDTO" alias="GuestbookReportCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.GuestbookRereplyCreateRequestDTO" alias="GuestbookRereplyCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.GuestbookRereplyReportCreateRequestDTO" alias="GuestbookRereplyReportCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.GuestbookReplyCreateRequestDTO" alias="GuestbookReplyCreateRequestDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.request.GuestbookReplyReportCreateRequestDTO" alias="GuestbookReplyReportCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogActionPlanCreateRequestDTO" alias="LogActionPlanCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogCreateRequestDTO" alias="LogCreateRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.LogLikeRequestDTO" alias="LogLikeRequestDTO"/>
