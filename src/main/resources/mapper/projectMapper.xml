@@ -178,7 +178,10 @@
     </select>
 
     <!-- 다른 사람의 프로젝트를 내 프로젝트로 복사 (제목, 내용, AI추천 복사) -->
-    <insert id="copyProject" parameterType="ProjectVO" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+    <insert id="copyProject" parameterType="ProjectVO">
+        <selectKey keyProperty="id" resultType="Long" order="BEFORE">
+            SELECT SEQ_PROJECT.NEXTVAL FROM DUAL
+        </selectKey>
         INSERT INTO TBL_PROJECT (
             ID,
             PROJECT_TITLE,
@@ -198,7 +201,7 @@
             AI_SUGGESTION_4_TITLE,
             AI_SUGGESTION_4_DESC
         ) VALUES (
-                     SEQ_PROJECT.NEXTVAL,
+                     #{id},
                      #{projectTitle},
                      #{projectContent},
                      TO_TIMESTAMP(#{projectStartDate}, 'YYYY-MM-DD'),

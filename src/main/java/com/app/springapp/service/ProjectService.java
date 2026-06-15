@@ -30,7 +30,7 @@ public interface ProjectService {
     List<ProjectResponseDTO> getOtherProjects(Long memberId);
 
     // 다른 사람의 프로젝트를 내 프로젝트로 복사 (logId: 어느 로그의 프로젝트로 넣을지)
-    void copyProject(Long projectId, Long memberId, Long logId);
+    Long copyProject(Long projectId, Long memberId, Long logId);
 
     // 프로젝트 제목으로 검색 (내 프로젝트 제외)
     List<ProjectResponseDTO> searchOtherProjects(Long memberId, String keyword);
