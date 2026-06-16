@@ -207,7 +207,7 @@
             HAVING COUNT(TLL.ID) >= 1
             ORDER BY likeCount DESC
         )
-        WHERE ROWNUM &lt;= 5
+        WHERE ROWNUM &lt;= 10
     </select>
 
     <!-- 로그 조회수 +1 -->

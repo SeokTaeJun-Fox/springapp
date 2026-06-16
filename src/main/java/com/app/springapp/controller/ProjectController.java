@@ -87,8 +87,8 @@ public class ProjectController {
             @PathVariable Long projectId,
             @RequestParam Long logId,
             Authentication authentication) {
-        projectService.copyProject(projectId, getMemberId(authentication), logId);
-        return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 내 목록에 추가되었습니다."));
+        Long newProjectId = projectService.copyProject(projectId, getMemberId(authentication), logId);
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 내 목록에 추가되었습니다.", newProjectId));
     }
 
     @Operation(summary = "프로젝트 검색", description = "프로젝트 제목으로 검색합니다.")

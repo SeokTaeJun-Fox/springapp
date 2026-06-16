@@ -575,7 +575,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param memberId  현재 로그인한 회원 ID
      */
     @Override
-    public void copyProject(Long projectId, Long memberId, Long logId) {
+    public Long copyProject(Long projectId, Long memberId, Long logId) {
         // 원본 프로젝트 조회
         ProjectVO original = projectDAO.findByIdPublic(projectId);
         if (original == null) {
@@ -614,6 +614,7 @@ public class ProjectServiceImpl implements ProjectService {
             copyChecklist.setMemberId(memberId);
             projectDAO.copyChecklist(copyChecklist);
         }
+        return copy.getId();
     }
 
     // ────────────────────────────────────────────────
