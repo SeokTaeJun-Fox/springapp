@@ -11,11 +11,13 @@ public interface ChronologyMapper {
 
     String findNicknameByProjectId(Long projectId);
 
-    int countCompletedChecklistsByProjectId(Long projectId);
+    Long findMemberIdByProjectId(Long projectId);
+
+    int countCompletedChecklistsByMemberId(Long memberId);
 
     int findAvgCompletedChecklists();
 
-    List<Map<String, Object>> findTop3ChecklistsByProjectId(Long projectId);
+    List<Map<String, Object>> findTop3ChecklistsByMemberId(Long memberId);
 
     int findAvgProjectDays();
 

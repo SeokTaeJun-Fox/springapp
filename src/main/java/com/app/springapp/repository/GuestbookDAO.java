@@ -46,4 +46,24 @@ public class GuestbookDAO {
     public void deleteGuestbookByWriterMemberIdAndOwnerMemberId(GuestbookVO guestbookVO) {
         guestbookMapper.deleteByGuestbookByWriterMemberIdAndOwnerMemberId(guestbookVO);
     }
+
+    public void deleteRereplyLikesByGuestbookId(Long guestbookId) {
+        guestbookMapper.deleteRereplyLikesByGuestbookId(guestbookId);
+    }
+
+    public void deleteRerepliesByGuestbookId(Long guestbookId) {
+        guestbookMapper.deleteRerepliesByGuestbookId(guestbookId);
+    }
+
+    public void deleteReplyLikesByGuestbookId(Long guestbookId) {
+        guestbookMapper.deleteReplyLikesByGuestbookId(guestbookId);
+    }
+
+    public void deleteRepliesByGuestbookId(Long guestbookId) {
+        guestbookMapper.deleteRepliesByGuestbookId(guestbookId);
+    }
+
+    public void deleteLikesByGuestbookId(Long guestbookId) {
+        guestbookMapper.deleteLikesByGuestbookId(guestbookId);
+    }
 }

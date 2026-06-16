@@ -39,4 +39,9 @@
         AND WRITER_MEMBER_ID = #{writerMemberId}
     </delete>
 
+    <delete id="deleteLikeByRereplyId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REREPLY_LIKE
+        WHERE GUESTBOOK_REREPLY_ID = #{rereplyId}
+    </delete>
+
 </mapper>

@@ -7,6 +7,7 @@ import com.app.springapp.exception.GuestbookException;
 import com.app.springapp.repository.GuestbookReplyDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +34,12 @@ public class GuestbookReplyServiceImpl implements GuestbookReplyService {
     }
 
     @Override
+    @Transactional
     public void deleteReply(GuestbookReplyVO guestbookReplyVO) {
+        Long replyId = guestbookReplyVO.getId();
+        guestbookReplyDAO.deleteRereplyLikesByReplyId(replyId);
+        guestbookReplyDAO.deleteRerepliesByReplyId(replyId);
+        guestbookReplyDAO.deleteLikeByReplyId(replyId);
         guestbookReplyDAO.deleteReply(guestbookReplyVO);
     }
 }

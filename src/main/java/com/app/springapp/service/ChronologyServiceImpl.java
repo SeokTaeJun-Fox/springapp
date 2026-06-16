@@ -40,18 +40,25 @@ public class ChronologyServiceImpl implements ChronologyService {
         String nickname = chronologyDAO.findNicknameByProjectId(projectId);
         if (nickname == null) nickname = "사용자";
 
-        int totalChecklists  = chronologyDAO.countCompletedChecklistsByProjectId(projectId);
+        Long memberId = chronologyDAO.findMemberIdByProjectId(projectId);
+
+        // 멤버의 전체 프로젝트 완료 체크리스트 수 (member 기준으로 avg와 스코프 통일)
+        int totalChecklists   = memberId != null ? chronologyDAO.countCompletedChecklistsByMemberId(memberId) : 0;
         int avgUserChecklists = chronologyDAO.findAvgCompletedChecklists();
         int avgDays           = chronologyDAO.findAvgProjectDays();
         int projectCount      = chronologyDAO.findAvgProjectCount();
 
+        // 퍼센타일: 나보다 완료 체크리스트 많은 멤버 수 / 전체 멤버 수
         int membersWithMore = chronologyDAO.countMembersWithMoreChecklists(totalChecklists);
         int totalMembers    = chronologyDAO.countMembersWithChecklists();
         double percentile   = totalMembers > 0
                 ? Math.round((double) membersWithMore / totalMembers * 100 * 10) / 10.0
                 : 50.0;
 
-        List<Map<String, Object>> rawTop3 = chronologyDAO.findTop3ChecklistsByProjectId(projectId);
+        // 멤버의 전체 프로젝트에서 가장 많이 반복된 체크리스트 Top 3
+        List<Map<String, Object>> rawTop3 = memberId != null
+                ? chronologyDAO.findTop3ChecklistsByMemberId(memberId)
+                : Collections.emptyList();
         List<ChronologyAnalysisResponseDTO.ChecklistStat> top3 = rawTop3 == null
                 ? Collections.emptyList()
                 : rawTop3.stream()
@@ -63,7 +70,6 @@ public class ChronologyServiceImpl implements ChronologyService {
                         })
                         .collect(Collectors.toList());
 
-        // AI 피드백 없이 즉시 반환
         return new ChronologyAnalysisResponseDTO(
                 nickname, percentile, totalChecklists, avgUserChecklists, top3, avgDays, projectCount, null
         );

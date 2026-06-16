@@ -31,7 +31,7 @@
             TBL.VISION_TITLE        AS visionTitle,
             TO_CHAR(TBL.LOG_CREATED_AT, 'YYYY.MM.DD') AS logCreatedAt,
             TBL.LOG_READ_COUNT      AS logReadCount,
-            TBL.LOG_THUMBNAIL_URL   AS logThumbnailUrl,
+            TBL.LOG_THUMBNAIL_URL   AS thumbnailUrl,
             TBL.LOG_STATUS          AS logStatus,
             TBL.LOG_PROGRESS        AS logProgress,
             TBM.MEMBER_NICKNAME     AS memberNickname,

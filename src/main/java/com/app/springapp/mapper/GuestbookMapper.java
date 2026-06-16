@@ -22,4 +22,13 @@ public interface GuestbookMapper {
     //  방명록 삭제
     public void deleteByGuestbookByWriterMemberIdAndOwnerMemberId(GuestbookVO guestbookVO);
 
+    void deleteRereplyLikesByGuestbookId(Long guestbookId);
+
+    void deleteRerepliesByGuestbookId(Long guestbookId);
+
+    void deleteReplyLikesByGuestbookId(Long guestbookId);
+
+    void deleteRepliesByGuestbookId(Long guestbookId);
+
+    void deleteLikesByGuestbookId(Long guestbookId);
 }

@@ -17,4 +17,6 @@ public interface GuestbookRereplyMapper {
     void updateGuestbookRereplyContentByWriterMemberId(GuestbookRereplyVO guestbookRereplyVO);
 
     void deleteRereply(GuestbookRereplyVO guestbookRereplyVO);
+
+    void deleteLikeByRereplyId(Long rereplyId);
 }

@@ -56,4 +56,7 @@ public class PostListResponseDTO {
 
     @Schema(description = "댓글 수", example = "5")
     private int replyCount;
+
+    @Schema(description = "게시글 썸네일 URL", example = "http://")
+    private String postThumbnailUrl;
 }

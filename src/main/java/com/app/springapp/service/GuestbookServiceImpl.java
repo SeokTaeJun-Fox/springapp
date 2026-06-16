@@ -9,6 +9,7 @@ import com.app.springapp.repository.GuestbookReplyDAO;
 import com.app.springapp.repository.GuestbookRereplyDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +58,14 @@ public class GuestbookServiceImpl implements GuestbookService {
     }
 
     @Override
+    @Transactional
     public void deleteGuestbook(GuestbookVO guestbookVO) {
+        Long guestbookId = guestbookVO.getId();
+        guestbookDAO.deleteRereplyLikesByGuestbookId(guestbookId);
+        guestbookDAO.deleteRerepliesByGuestbookId(guestbookId);
+        guestbookDAO.deleteReplyLikesByGuestbookId(guestbookId);
+        guestbookDAO.deleteRepliesByGuestbookId(guestbookId);
+        guestbookDAO.deleteLikesByGuestbookId(guestbookId);
         guestbookDAO.deleteGuestbookByWriterMemberIdAndOwnerMemberId(guestbookVO);
     }
 }

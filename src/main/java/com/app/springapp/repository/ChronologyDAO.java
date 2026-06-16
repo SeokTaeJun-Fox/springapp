@@ -17,16 +17,20 @@ public class ChronologyDAO {
         return chronologyMapper.findNicknameByProjectId(projectId);
     }
 
-    public int countCompletedChecklistsByProjectId(Long projectId) {
-        return chronologyMapper.countCompletedChecklistsByProjectId(projectId);
+    public Long findMemberIdByProjectId(Long projectId) {
+        return chronologyMapper.findMemberIdByProjectId(projectId);
+    }
+
+    public int countCompletedChecklistsByMemberId(Long memberId) {
+        return chronologyMapper.countCompletedChecklistsByMemberId(memberId);
     }
 
     public int findAvgCompletedChecklists() {
         return chronologyMapper.findAvgCompletedChecklists();
     }
 
-    public List<Map<String, Object>> findTop3ChecklistsByProjectId(Long projectId) {
-        return chronologyMapper.findTop3ChecklistsByProjectId(projectId);
+    public List<Map<String, Object>> findTop3ChecklistsByMemberId(Long memberId) {
+        return chronologyMapper.findTop3ChecklistsByMemberId(memberId);
     }
 
     public int findAvgProjectDays() {

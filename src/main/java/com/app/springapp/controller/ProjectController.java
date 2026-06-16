@@ -91,6 +91,13 @@ public class ProjectController {
         return ResponseEntity.ok(ApiResponseDTO.of(true, "프로젝트가 내 목록에 추가되었습니다.", newProjectId));
     }
 
+    @Operation(summary = "특정 회원의 프로젝트 목록 조회 (마이페이지 공개)")
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<ApiResponseDTO<?>> getProjectsByMemberId(@PathVariable Long memberId) {
+        return ResponseEntity.ok(ApiResponseDTO.of(true, "조회 성공",
+                projectService.getMyProjects(memberId)));
+    }
+
     @Operation(summary = "프로젝트 검색", description = "프로젝트 제목으로 검색합니다.")
     @GetMapping("/search")
     public ResponseEntity<ApiResponseDTO<?>> searchOtherProjects(

@@ -14,4 +14,10 @@ public interface GuestbookReplyMapper {
     public List<GuestbookReplyResponseDTO> selectRepliesByGuestbookId(Long guestbookId);
     public void updateGuestbookReplyContentByWriterMemberId(GuestbookReplyVO guestbookReplyVO);
     public void deleteReply(GuestbookReplyVO guestbookReplyVO);
+
+    void deleteRereplyLikesByReplyId(Long replyId);
+
+    void deleteRerepliesByReplyId(Long replyId);
+
+    void deleteLikeByReplyId(Long replyId);
 }

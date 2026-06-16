@@ -44,4 +44,25 @@
         WHERE ID = #{id}
         AND (WRITER_MEMBER_ID = #{writerMemberId})
     </delete>
+
+    <!-- 답글에 속한 대댓글 좋아요 일괄 삭제 -->
+    <delete id="deleteRereplyLikesByReplyId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REREPLY_LIKE
+        WHERE GUESTBOOK_REREPLY_ID IN (
+            SELECT ID FROM TBL_GUESTBOOK_REREPLY
+            WHERE GUESTBOOK_REPLY_ID = #{replyId}
+        )
+    </delete>
+
+    <!-- 답글에 속한 대댓글 일괄 삭제 -->
+    <delete id="deleteRerepliesByReplyId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REREPLY
+        WHERE GUESTBOOK_REPLY_ID = #{replyId}
+    </delete>
+
+    <!-- 답글 좋아요 삭제 -->
+    <delete id="deleteLikeByReplyId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REPLY_LIKE
+        WHERE GUESTBOOK_REPLY_ID = #{replyId}
+    </delete>
 </mapper>

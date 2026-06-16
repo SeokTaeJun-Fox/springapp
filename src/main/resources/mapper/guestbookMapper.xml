@@ -81,4 +81,44 @@
         OR OWNER_MEMBER_ID = #{ownerMemberId})
     </delete>
 
+    <!-- 방명록에 속한 대댓글 좋아요 일괄 삭제 -->
+    <delete id="deleteRereplyLikesByGuestbookId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REREPLY_LIKE
+        WHERE GUESTBOOK_REREPLY_ID IN (
+            SELECT RR.ID FROM TBL_GUESTBOOK_REREPLY RR
+            JOIN TBL_GUESTBOOK_REPLY R ON RR.GUESTBOOK_REPLY_ID = R.ID
+            WHERE R.GUESTBOOK_ID = #{guestbookId}
+        )
+    </delete>
+
+    <!-- 방명록에 속한 대댓글 일괄 삭제 -->
+    <delete id="deleteRerepliesByGuestbookId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REREPLY
+        WHERE GUESTBOOK_REPLY_ID IN (
+            SELECT ID FROM TBL_GUESTBOOK_REPLY
+            WHERE GUESTBOOK_ID = #{guestbookId}
+        )
+    </delete>
+
+    <!-- 방명록에 속한 답글 좋아요 일괄 삭제 -->
+    <delete id="deleteReplyLikesByGuestbookId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REPLY_LIKE
+        WHERE GUESTBOOK_REPLY_ID IN (
+            SELECT ID FROM TBL_GUESTBOOK_REPLY
+            WHERE GUESTBOOK_ID = #{guestbookId}
+        )
+    </delete>
+
+    <!-- 방명록에 속한 답글 일괄 삭제 -->
+    <delete id="deleteRepliesByGuestbookId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_REPLY
+        WHERE GUESTBOOK_ID = #{guestbookId}
+    </delete>
+
+    <!-- 방명록 좋아요 삭제 -->
+    <delete id="deleteLikesByGuestbookId" parameterType="Long">
+        DELETE FROM TBL_GUESTBOOK_LIKE
+        WHERE GUESTBOOK_ID = #{guestbookId}
+    </delete>
+
 </mapper>

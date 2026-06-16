@@ -31,4 +31,16 @@ public class GuestbookReplyDAO {
     public void deleteReply(GuestbookReplyVO guestbookReplyVO) {
         guestbookReplyMapper.deleteReply(guestbookReplyVO);
     }
+
+    public void deleteRereplyLikesByReplyId(Long replyId) {
+        guestbookReplyMapper.deleteRereplyLikesByReplyId(replyId);
+    }
+
+    public void deleteRerepliesByReplyId(Long replyId) {
+        guestbookReplyMapper.deleteRerepliesByReplyId(replyId);
+    }
+
+    public void deleteLikeByReplyId(Long replyId) {
+        guestbookReplyMapper.deleteLikeByReplyId(replyId);
+    }
 }
