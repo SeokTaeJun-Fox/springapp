@@ -51,7 +51,7 @@
     <select id="selectLikeCountAndIsLiked" parameterType="com.app.springapp.domain.dto.request.LogLikeRequestDTO" resultType="com.app.springapp.domain.dto.response.LogLikeResponseDTO">
         SELECT
             COUNT(*) AS LIKE_COUNT,
-            MAX(CASE WHEN MEMBER_ID = #{memberId} THEN 1 ELSE 0 END) AS IS_LIKED
+            NVL(MAX(CASE WHEN MEMBER_ID = #{memberId} THEN 1 ELSE 0 END), 0) AS IS_LIKED
         FROM TBL_LOG_LIKE
         WHERE LOG_ID = #{logId}
     </select>
