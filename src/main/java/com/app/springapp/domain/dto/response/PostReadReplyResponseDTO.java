@@ -61,6 +61,7 @@ public class PostReadReplyResponseDTO {
         replyResponseDTO.setMemberId(replyDTO.getMemberId());
         replyResponseDTO.setReplyCreatedAt(replyDTO.getReplyCreatedAt());
         replyResponseDTO.setMemberNickname(replyDTO.getMemberNickname());
+        replyResponseDTO.setMemberProfileImageUrl(replyDTO.getMemberProfileImageUrl());
         replyResponseDTO.setLikeCount(replyDTO.getLikeCount());
         replyResponseDTO.setIsLiked(replyDTO.getIsLiked());
         return replyResponseDTO;
