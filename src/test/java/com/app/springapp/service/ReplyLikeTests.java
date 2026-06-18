@@ -17,7 +17,7 @@ public class ReplyLikeTests {
     public void ReplyLikeTest() {
         for(int i = 1; i <= 10; i++) {
             for(int j = 1; j <= 55; j++) {
-                if(Math.random() < 0.6) {
+                if(Math.random() < 0.4) {
                     Long l1 = (long)i;
                     Long l2 = (long)j;
                     ReplyLikeRequestDTO replyLikeRequestDTO = new ReplyLikeRequestDTO();

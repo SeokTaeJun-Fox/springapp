@@ -17,7 +17,7 @@ public class PostLikeTests {
     public void likePostTest() {
         for(int i = 1; i <= 10; i++) {
             for(int j = 1; j <= 20; j++) {
-                if(Math.random() < 0.6) {
+                if(Math.random() < 0.5) {
                     Long l1 = (long)i;
                     Long l2 = (long)j;
                     PostLikeRequestDTO postLikeRequestDTO = new PostLikeRequestDTO();
