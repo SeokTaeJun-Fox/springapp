@@ -100,13 +100,22 @@ public class LogServiceImpl implements LogService {
     // 로그 작성
     @Override
     public ApiResponseDTO createLog(LogCreateRequestDTO dto, Long memberId) {
+        String status = dto.getLogStatus() != null ? dto.getLogStatus() : "PUBLISHED";
+        
+        if ("DRAFT".equals(status)) {
+            int draftCount = logDAO.countDraftsByMemberId(memberId);
+            if (draftCount >= 3) {
+                return new ApiResponseDTO(false, "임시저장은 최대 3개까지만 가능합니다.", null);
+            }
+        }
+        
         LogVO logVO = new LogVO();
         logVO.setLogTitle(dto.getLogTitle());
         logVO.setVisionTitle(dto.getVisionTitle());
         logVO.setLogContent(dto.getLogContent());
         logVO.setLogThumbnailUrl(dto.getLogThumbnailUrl());
         logVO.setCategoryId(dto.getCategoryId());
-        logVO.setLogStatus(dto.getLogStatus() != null ? dto.getLogStatus() : "PUBLISHED");
+        logVO.setLogStatus(status);
         logVO.setLogProgress(dto.getLogProgress() != null ? dto.getLogProgress() : 0);
         logVO.setMemberId(memberId);
         logDAO.save(logVO);

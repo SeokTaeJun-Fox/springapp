@@ -43,6 +43,9 @@ public interface LogMapper {
     // 회원 ID로 내 휴지통 로그 목록 전체 조회
     List<LogListResponseDTO> findAllTrashedByMemberId(Long memberId);
     
+    // 회원의 임시저장 로그 개수 조회
+    int countDraftsByMemberId(Long memberId);
+
     // 로그 작성
     void insert(LogVO logVO);
 

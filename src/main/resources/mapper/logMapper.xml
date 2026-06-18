@@ -126,6 +126,15 @@
         ORDER BY TBL.LOG_DELETED_AT DESC, TBL.ID DESC
     </select>
 
+    <!-- 회원의 임시저장 로그 개수 조회 -->
+    <select id="countDraftsByMemberId" parameterType="long" resultType="int">
+        SELECT COUNT(*)
+        FROM TBL_LOG
+        WHERE MEMBER_ID = #{memberId}
+          AND LOG_STATUS = 'DRAFT'
+          AND LOG_DELETED_AT IS NULL
+    </select>
+
     <!-- AI 회고 기본 정보 저장 -->
     <insert id="insert" parameterType="com.app.springapp.domain.vo.LogVO">
         <selectKey keyProperty="id" resultType="Long" order="BEFORE">

@@ -44,6 +44,11 @@ public class LogDAO {
         return logMapper.findAllTrashedByMemberId(memberId);
     }
 
+    // 회원의 임시저장 로그 개수 조회
+    public int countDraftsByMemberId(Long memberId) {
+        return logMapper.countDraftsByMemberId(memberId);
+    }
+
     // 로그 작성
     public void save(LogVO logVO) {
         logMapper.insert(logVO);

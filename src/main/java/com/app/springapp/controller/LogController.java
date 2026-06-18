@@ -147,7 +147,7 @@ public class LogController {
 
     // 로그 좋아요 토글
     @Operation(summary = "로그 좋아요 토글", description = "특정 로그의 좋아요를 추가하거나 취소합니다.")
-    @PostMapping("/like/{logId}")
+    @PostMapping("/{logId}/like")
     public ResponseEntity<ApiResponseDTO> toggleLike(@PathVariable Long logId, Authentication authentication) {
         MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
         return ResponseEntity.ok(logService.toggleLike(logId, memberDTO.getId()));
